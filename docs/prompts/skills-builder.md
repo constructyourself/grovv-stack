@@ -7,19 +7,21 @@ Use this prompt to create a comprehensive development best practices repository 
 ## Initial Prompt
 
 ```
-Create a repository of Claude code skills including a Claude.md that focuses on development best practices, security, and test driven development. 
+Create a repository of Claude code skills including a Claude.md that focuses on development best practices, security, and test driven development.
 
-Notably planning, frontend design, backend design. 
+Notably planning, frontend design, backend design.
 
-Technology agnostic, but primarily using JavaScript/TypeScript and Python. 
+Technology agnostic, but primarily using TypeScript and Go.
 
-Postgres/SQLite for database - using Neon or Supabase as provider. 
+Postgres/SQLite for database - using Neon or Supabase as provider.
 
 Bun and Node.js runtimes.
 
-Clerk for identity management when needed. 
+Clerk for identity management when needed.
 
-Astro framework for content based websites.
+Astro with React or Next.js for frontend, shadcn/ui for components, Tailwind CSS for styling.
+
+Playwright for E2E testing — always ask what Playwright should test before writing tests.
 ```
 
 -----
@@ -44,7 +46,7 @@ claude-code-skills/
 │
 ├── Implementation Guides
 │   ├── frontend/
-│   │   ├── FRONTEND.md        # Astro, React/Preact, accessibility
+│   │   ├── FRONTEND.md        # Astro, React/Next.js, shadcn/ui, accessibility
 │   │   └── UI-STANDARDS.md    # UI design and technology standards
 │   ├── backend/
 │   │   └── BACKEND.md         # API design, services, background jobs
@@ -85,7 +87,7 @@ The repository must emphasize:
 **Primary Languages:**
 
 - TypeScript/JavaScript (with strict type checking)
-- Python (with type hints)
+- Go (with strong typing and error handling)
 
 **Runtimes:**
 
@@ -102,7 +104,8 @@ The repository must emphasize:
 **Frameworks:**
 
 - Astro (static-first content sites)
-- React/Preact (interactive components)
+- React / Next.js (interactive applications)
+- shadcn/ui (component library)
 
 **Authentication:**
 
@@ -114,11 +117,13 @@ The repository must emphasize:
 
 - Drizzle ORM (type-safe queries)
 - Zod (validation)
-- Bun Test (testing framework)
+- Bun Test (unit/integration testing)
+- Playwright (E2E testing)
 
-**UI Framework (New Projects):**
+**UI Stack:**
 
-- Bootstrap 5.3+ (CSS framework)
+- Tailwind CSS (utility-first styling)
+- shadcn/ui (accessible, composable components)
 - Alexandria font (fonts.bunny.net)
 - Monochrome design system (black/white/grey)
 - White background default
@@ -137,7 +142,7 @@ Each guide must include:
 
 ✅ **Production-Ready Examples**
 
-- Fully typed (TypeScript/Python)
+- Fully typed (TypeScript/Go)
 - Comprehensive error handling
 - Security considerations built-in
 - Test coverage provided
@@ -145,7 +150,7 @@ Each guide must include:
 
 ✅ **Real-World Patterns**
 
-- Background job processing (PG-TaskFlow style)
+- Background job processing (PostgreSQL-native)
 - Authentication flows
 - API versioning
 - Database migrations
@@ -190,8 +195,10 @@ Each guide must include:
 **FRONTEND.md** should cover:
 
 - Astro framework patterns
+- React / Next.js patterns
 - Progressive hydration
 - Type-safe components
+- shadcn/ui component usage and customization
 - Accessibility (WCAG 2.1 AA)
 - Performance optimization
 - Form handling with validation
@@ -200,13 +207,14 @@ Each guide must include:
 **UI-STANDARDS.md** should include:
 
 - UI design philosophy and technology choices
-- Bootstrap Minimal Stack for new projects
+- Tailwind CSS + shadcn/ui for all projects
 - Alexandria font from fonts.bunny.net
 - Monochrome color scheme (black/white/grey)
 - White background default
 - No custom animations policy
 - Existing project analysis and pattern matching
-- Complete component examples (navigation, forms, cards, tables)
+- Complete shadcn/ui component examples (navigation, forms, cards, tables)
+- Tailwind configuration and theming
 - Performance optimization guidelines
 - Decision tree for new vs existing projects
 
@@ -244,9 +252,10 @@ Each guide must include:
 **TESTING.md** should cover:
 
 - TDD workflow (red-green-refactor)
-- Unit testing patterns
+- Unit testing patterns (Bun Test / Go testing)
 - Integration testing
-- E2E testing
+- Playwright E2E testing — always ask what Playwright should test before writing tests
+- Automated test execution in CI/CD
 - Test coverage targets
 - Continuous integration
 - Performance testing
@@ -431,7 +440,7 @@ async function createUser(email, name, role) {
 
 ## Special Patterns to Include
 
-### PG-TaskFlow Pattern
+### PostgreSQL Background Job Pattern
 
 Background job processing using PostgreSQL as task queue:
 
@@ -439,22 +448,22 @@ Background job processing using PostgreSQL as task queue:
 // Atomic task creation with business operation
 async function createOrder(orderData: CreateOrderInput) {
   const client = await pool.connect();
-  
+
   try {
     await client.query('BEGIN');
-    
+
     // Create order
     const [order] = await client.query(
       'INSERT INTO orders (...) VALUES (...) RETURNING *',
       [...]
     );
-    
+
     // Queue confirmation email
     await client.query(
-      'SELECT pg_taskflow.enqueue($1, $2)',
+      'INSERT INTO job_queue (type, payload) VALUES ($1, $2)',
       ['SEND_EMAIL', JSON.stringify({ orderId: order.id })]
     );
-    
+
     await client.query('COMMIT');
     return order;
   } catch (error) {
@@ -497,94 +506,84 @@ if (!result.success) {
 }
 ```
 
-### Bootstrap Minimal UI Pattern (New Projects)
+### Tailwind + shadcn/ui Pattern (New Projects)
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project Name</title>
-  
-  <!-- Alexandria Font from Bunny Fonts -->
-  <link rel="preconnect" href="https://fonts.bunny.net">
-  <link href="https://fonts.bunny.net/css?family=alexandria:400,500,600,700" rel="stylesheet">
-  
-  <!-- Bootstrap 5.3+ -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  
-  <style>
-    :root {
-      --bs-body-font-family: 'Alexandria', system-ui, sans-serif;
-      --bs-body-bg: #ffffff;
-      --bs-body-color: #212529;
-      --bs-primary: #212529;
-    }
-    body { font-family: 'Alexandria', sans-serif; }
-  </style>
-</head>
-<body>
-  <!-- Clean monochrome navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
-    <div class="container">
-      <a class="navbar-brand fw-semibold" href="/">Brand</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="#features">Features</a>
-          </li>
-          <li class="nav-item">
-            <a class="btn btn-dark ms-2" href="#signup">Sign Up</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+```tsx
+// app/page.tsx — Next.js example with shadcn/ui
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+} from "@/components/ui/navigation-menu";
 
-  <!-- Hero Section -->
-  <section class="py-5 bg-white">
-    <div class="container py-5 text-center">
-      <h1 class="display-4 fw-semibold mb-3">Clean & Simple</h1>
-      <p class="lead text-secondary mb-4">Fast, minimal, production-ready.</p>
-      <a href="#start" class="btn btn-dark btn-lg">Get Started</a>
-    </div>
-  </section>
+export default function Home() {
+  return (
+    <div className="min-h-screen bg-white font-sans">
+      {/* Clean monochrome navbar */}
+      <nav className="border-b bg-white">
+        <div className="container mx-auto flex items-center justify-between px-4 py-3">
+          <a href="/" className="text-lg font-semibold">Brand</a>
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <NavigationMenuLink href="#features" className="text-muted-foreground hover:text-foreground">
+                  Features
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Button asChild>
+                  <a href="#signup">Sign Up</a>
+                </Button>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+        </div>
+      </nav>
 
-  <!-- Feature Cards -->
-  <section class="py-5 bg-light">
-    <div class="container">
-      <div class="row g-4">
-        <div class="col-md-4">
-          <div class="card h-100 border-0 shadow-sm">
-            <div class="card-body">
-              <h3 class="h5 fw-semibold mb-3">Fast Performance</h3>
-              <p class="text-secondary mb-0">Optimized for speed.</p>
-            </div>
+      {/* Hero Section */}
+      <section className="bg-white py-20">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-4xl font-semibold tracking-tight mb-3">Clean & Simple</h1>
+          <p className="text-lg text-muted-foreground mb-6">Fast, minimal, production-ready.</p>
+          <Button size="lg" asChild>
+            <a href="#start">Get Started</a>
+          </Button>
+        </div>
+      </section>
+
+      {/* Feature Cards */}
+      <section className="bg-muted/50 py-16">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Fast Performance</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">Optimized for speed.</p>
+              </CardContent>
+            </Card>
+            {/* More cards... */}
           </div>
         </div>
-        <!-- More cards... -->
-      </div>
+      </section>
     </div>
-  </section>
-
-  <!-- Bootstrap JS Bundle (no jQuery needed) -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+  );
+}
 ```
 
 **Key Principles:**
 
+- Tailwind CSS for all styling — no Bootstrap
+- shadcn/ui for accessible, composable components
 - Monochrome color palette (black/white/grey)
 - Alexandria font for clean typography
 - White background default
-- No custom animations - Bootstrap built-ins only
+- No custom animations
 - Minimal dependencies for maximum performance
-- Use vanilla JavaScript, not jQuery
 
 -----
 
@@ -653,14 +652,15 @@ Total documentation: **3,500+ lines** across all guides.
 
 ## UI Design Standards
 
-For new projects, the repository includes a **Bootstrap Minimal Stack** approach:
+For new projects, the repository uses **Tailwind CSS + shadcn/ui**:
 
 - Clean, monochrome design (black/white/grey)
 - Alexandria font from fonts.bunny.net
-- Bootstrap 5.3+ for all UI components
+- Tailwind CSS for all styling
+- shadcn/ui for accessible, composable components
 - White background by default
-- No custom animations - Bootstrap built-ins only
-- Minimal CSS/JS for maximum performance
+- No custom animations
+- Minimal dependencies for maximum performance
 
 For existing projects, the guide emphasizes:
 
@@ -669,7 +669,7 @@ For existing projects, the guide emphasizes:
 - Follow existing design system
 - Maintain consistency with current styling
 
-The UI Standards guide provides complete examples for navigation, forms, cards, tables, and more - all using pure Bootstrap classes with the monochrome aesthetic.
+The UI Standards guide provides complete examples for navigation, forms, cards, tables, and more — all using Tailwind CSS with shadcn/ui components.
 
 -----
 

@@ -276,7 +276,7 @@ Create `tech-spec.md` in the project root. This is the comprehensive technical d
 - Database schema design
 - API design and endpoints
 - Authentication and authorization
-- Background job processing (TaskFlow if applicable)
+- Background job processing (if applicable)
 - Error handling strategy
 - Monitoring and observability
 - Deployment architecture
@@ -321,11 +321,11 @@ Generates the `/docs/skills/` folder — a comprehensive development best practi
 | `QUICK-REFERENCE.md` | Cheat sheet for common patterns |
 | `planning/ARCHITECTURE.md` | System design, data modeling, API contracts, pre-dev checklists |
 | `frontend/FRONTEND.md` | Framework patterns, progressive hydration, accessibility, performance |
-| `frontend/UI-STANDARDS.md` | UI design philosophy, Bootstrap minimal stack, component examples |
+| `frontend/UI-STANDARDS.md` | UI design philosophy, Tailwind CSS + shadcn/ui, component examples |
 | `backend/BACKEND.md` | API standards, service/repository patterns, background jobs, webhooks |
 | `database/DATABASE.md` | Schema design, indexing, migrations, query optimization, ORM patterns |
 | `security/SECURITY.md` | Auth flows, input validation, secure coding, Clerk integration |
-| `testing/TESTING.md` | TDD workflow, critical tests first, unit/integration/E2E |
+| `testing/TESTING.md` | TDD workflow, automated tests, Playwright E2E, unit/integration |
 | `operations/DEPLOYMENT.md` | Production deployment, Docker, CI/CD, environment management |
 | `operations/DEBUGGING.md` | Debugging methodology, profiling, emergency procedures |
 
@@ -333,11 +333,12 @@ Generates the `/docs/skills/` folder — a comprehensive development best practi
 
 **Content requirements:**
 
-- Technology agnostic but primarily JavaScript/TypeScript and Python
+- Technology agnostic but primarily TypeScript and Go
 - PostgreSQL/SQLite via Neon or Supabase for database
 - Bun and Node.js runtimes
 - Clerk for identity management
-- Astro for content-based websites
+- Astro with React or Next.js for frontend, shadcn/ui for components
+- Tailwind CSS for styling (no Bootstrap)
 - All code examples: complete, working, production-ready (not pseudo-code)
 - Error handling, type annotations, and security in every example
 - Anti-patterns shown alongside correct patterns
@@ -409,12 +410,12 @@ Stack-agnostic scaffolding, optimized for this default stack. Adapt per project.
 
 | Category | Technology | Purpose |
 |----------|-----------|---------|
-| **Languages** | TypeScript, Python | Primary development |
+| **Languages** | TypeScript, Go | Primary development |
 | **Runtime** | Bun, Node.js | JavaScript execution |
 | **Database** | PostgreSQL (Neon/Supabase), SQLite | Data persistence |
 | **Auth** | Clerk | Identity management |
-| **Frontend** | Astro, React/Preact | UI framework |
-| **Event Bus** | TaskFlow | PostgreSQL-native background jobs |
+| **Frontend** | Astro, React/Next.js, shadcn/ui | UI framework |
+| **Background Jobs** | PostgreSQL-native | Background job processing |
 | **Observability** | PostHog | Analytics and monitoring |
 | **Deployment** | Vercel, Docker | Production hosting |
 | **Dev Environment** | VS Code, sprites.dev | Local and cloud IDE |
