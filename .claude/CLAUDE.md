@@ -33,7 +33,7 @@ Stack-agnostic scaffolding, optimized for this default stack. Adapt per project.
 | **Runtime** | Bun (preferred), Node.js | JavaScript execution |
 | **Database** | PostgreSQL (Neon/Supabase), SQLite | Data persistence |
 | **Auth** | Clerk | Identity management |
-| **Frontend** | Astro, React/Next.js, shadcn/ui, Tailwind CSS | UI framework |
+| **Frontend** | Astro + React **or** Next.js (ask first), shadcn/ui, Tailwind CSS | UI framework |
 | **Background Jobs** | PostgreSQL-native | Background job processing |
 | **Observability** | PostHog | Analytics and monitoring |
 | **Deployment** | Vercel, Docker | Production hosting |
@@ -78,7 +78,7 @@ The `.claude/agents/` folder contains specialized sub-agent definitions:
 | Agent | File | Purpose |
 |-------|------|---------|
 | **Scaffold** | `agents/scaffold.md` | Guides scaffolding process for new and existing projects |
-| **Frontend** | `agents/frontend.md` | Astro, React/Next.js, shadcn/ui, Tailwind CSS development |
+| **Frontend** | `agents/frontend.md` | Frontend development — asks user to choose Astro + React or Next.js |
 | **Backend** | `agents/backend.md` | TypeScript and Go API/service development |
 | **Testing** | `agents/testing.md` | TDD enforcement, automated tests, Playwright E2E |
 | **Database** | `agents/database.md` | Schema design, migrations, query optimization |
@@ -173,6 +173,7 @@ For existing projects, analyze and match established patterns.
 - **Apply gro\/\/ stack branding** to all generated documents
 - **Iterate** — documents are living artifacts, revise as understanding deepens
 - **Always ask what Playwright should test** — never auto-generate E2E tests
+- **Always ask which frontend framework** — Astro + React or Next.js — before writing frontend code
 
 -----
 
