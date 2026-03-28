@@ -241,7 +241,7 @@ The generator should adapt based on:
 
 2. **Technology Stack**
    - Frontend framework (Astro, Next.js, etc.)
-   - Backend runtime (Bun, Node.js, Python)
+   - Backend runtime (Bun, Node.js, Go)
    - Database (PostgreSQL, SQLite)
 
 3. **Deployment Target**
