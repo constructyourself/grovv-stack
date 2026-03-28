@@ -276,7 +276,7 @@ Create `tech-spec.md` in the project root. This is the comprehensive technical d
 - Database schema design
 - API design and endpoints
 - Authentication and authorization
-- Background job processing (TaskFlow if applicable)
+- Background job processing (if applicable)
 - Error handling strategy
 - Monitoring and observability
 - Deployment architecture
@@ -414,7 +414,7 @@ Stack-agnostic scaffolding, optimized for this default stack. Adapt per project.
 | **Database** | PostgreSQL (Neon/Supabase), SQLite | Data persistence |
 | **Auth** | Clerk | Identity management |
 | **Frontend** | Astro, React/Preact | UI framework |
-| **Event Bus** | TaskFlow | PostgreSQL-native background jobs |
+| **Background Jobs** | PostgreSQL-native | Background job processing |
 | **Observability** | PostHog | Analytics and monitoring |
 | **Deployment** | Vercel, Docker | Production hosting |
 | **Dev Environment** | VS Code, sprites.dev | Local and cloud IDE |

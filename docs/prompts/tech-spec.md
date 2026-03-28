@@ -128,7 +128,7 @@ Use the project name derived from these source documents as `[project-name]` in 
 | **Identity Management** | Clerk | Authentication with organization-restricted access |
 | **Observability** | PostHog | Analytics, feature flags, session replay |
 | **Documentation** | Docmost | Application documentation within codebase |
-| **Event Bus** | Task Flow (custom) | Kafkaesque event handling and durable workflows |
+| **Background Jobs** | PostgreSQL-native | Background job processing and durable workflows |
 
 ### Languages & Frameworks
 
@@ -164,7 +164,7 @@ Use the project name derived from these source documents as `[project-name]` in 
 4. Configure Clerk with organization-restricted access
 5. Set up Neon/Supabase database
 6. Integrate PostHog for observability
-7. Implement Task Flow event bus as needed
+7. Implement background job processing as needed
 8. Deploy to Vercel when ready for production
 ```
 
@@ -201,7 +201,7 @@ project-root/
 ├── src/
 │   ├── app/                         # Application code
 │   ├── lib/                         # Shared libraries
-│   └── events/                      # Task Flow event handlers
+│   └── events/                      # Background job and event handlers
 ├── tests/
 │   ├── critical/                    # Critical path tests (run first)
 │   └── integration/                 # Integration tests
@@ -263,9 +263,8 @@ KV_REST_API_URL="..."
 KV_REST_API_TOKEN="..."
 KV_REST_API_READ_ONLY_TOKEN="..."
 
-# Task Flow Event Bus
-TASKFLOW_API_KEY="..."
-TASKFLOW_ENDPOINT="..."
+# Background Jobs
+JOB_QUEUE_ENABLED="true"
 
 # AI Services (as needed)
 ANTHROPIC_API_KEY="sk-ant-..."
@@ -319,7 +318,7 @@ All generated specifications must include requirements for:
 | **Documentation** | Inline comments, Docmost documentation, architecture decision records |
 | **Testing** | TDD approach with critical tests first, integration coverage |
 | **Security** | Clerk authentication, organization restrictions, data protection |
-| **Events** | Task Flow integration for durable event handling where applicable |
+| **Events** | PostgreSQL-native background job processing where applicable |
 
 ### Testing Priority Order
 
@@ -349,13 +348,13 @@ export default clerkMiddleware((auth, req) => {
 });
 ```
 
-### Task Flow Event Bus Pattern
+### Background Job Processing Pattern
 
 ```typescript
 // events/handlers/example-event.ts
-import { TaskFlowHandler } from '@/lib/taskflow';
+import type { JobHandler } from '@/lib/jobs';
 
-export const exampleHandler: TaskFlowHandler = {
+export const exampleHandler: JobHandler = {
   event: 'domain.event',
   handler: async (payload, context) => {
     // Durable processing with automatic retries
@@ -392,7 +391,7 @@ Think through all available solutions and present a balanced analysis of:
 - Identify potential risks and dependencies early
 - Provide multiple solution options with trade-off analysis
 - Flag areas requiring stakeholder input or decision-making
-- Reference existing patterns from Task Flow, Clerk, PostHog integrations
+- Reference existing patterns from Clerk, PostHog integrations
 - Consider sprites.dev → Vercel deployment pipeline in architecture decisions
 
 ---
@@ -440,7 +439,7 @@ Use Beads and Beads Viewer plugin for Claude to:
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
 | 3.0.0 | 2025-02-22 | Dan | Reformatted to match tech-spec-template.md conventions; added explicit docs-reading and file-generation instructions |
-| 2.0.0 | 2025-01-24 | Dan | Complete rewrite for new stack (sprites.dev, Vercel, Neon/Supabase, Clerk, PostHog, Task Flow, AI workflow) |
+| 2.0.0 | 2025-01-24 | Dan | Complete rewrite for new stack (sprites.dev, Vercel, Neon/Supabase, Clerk, PostHog, AI workflow) |
 | 1.0.0 | — | — | Original template |
 
 ## Colophon

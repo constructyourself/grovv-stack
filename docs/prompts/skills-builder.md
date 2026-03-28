@@ -145,7 +145,7 @@ Each guide must include:
 
 ✅ **Real-World Patterns**
 
-- Background job processing (PG-TaskFlow style)
+- Background job processing (PostgreSQL-native)
 - Authentication flows
 - API versioning
 - Database migrations
@@ -431,7 +431,7 @@ async function createUser(email, name, role) {
 
 ## Special Patterns to Include
 
-### PG-TaskFlow Pattern
+### PostgreSQL Background Job Pattern
 
 Background job processing using PostgreSQL as task queue:
 
@@ -439,22 +439,22 @@ Background job processing using PostgreSQL as task queue:
 // Atomic task creation with business operation
 async function createOrder(orderData: CreateOrderInput) {
   const client = await pool.connect();
-  
+
   try {
     await client.query('BEGIN');
-    
+
     // Create order
     const [order] = await client.query(
       'INSERT INTO orders (...) VALUES (...) RETURNING *',
       [...]
     );
-    
+
     // Queue confirmation email
     await client.query(
-      'SELECT pg_taskflow.enqueue($1, $2)',
+      'INSERT INTO job_queue (type, payload) VALUES ($1, $2)',
       ['SEND_EMAIL', JSON.stringify({ orderId: order.id })]
     );
-    
+
     await client.query('COMMIT');
     return order;
   } catch (error) {

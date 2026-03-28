@@ -250,7 +250,6 @@ The generator should adapt based on:
    - Serverless functions
 
 4. **Special Features**
-   - TaskFlow integration
    - Real-time features
    - Background jobs
    - Webhooks
