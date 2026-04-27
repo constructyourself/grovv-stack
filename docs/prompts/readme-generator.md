@@ -163,7 +163,7 @@ project/
 │   └── api/            # API routes
 ├── docs/               # Documentation
 ├── tests/              # Test suites
-└── .skills/            # Claude Code skills
+└── .skills/            # AI coding agent skills
 \`\`\`
 ```
 

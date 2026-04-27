@@ -107,8 +107,8 @@ Use the project name derived from these source documents as `[project-name]` in 
 |-----------|-----------|---------|
 | **Cloud IDE** | sprites.dev | Remote development environment and deployment staging |
 | **Local IDE** | VS Code | Primary local development with AI extensions |
-| **AI CLI** | Claude Code CLI | Agentic coding and automation |
-| **Spec/Content** | Claude (claude.ai) | Technical specification and content development |
+| **AI CLI** | Codex CLI / Claude Code / Cline | Agentic coding and automation |
+| **Spec/Content** | Any capable LLM assistant | Technical specification and content development |
 | **Version Control** | Git | Source control with workspace files committed |
 
 ### Infrastructure & Hosting
@@ -142,14 +142,14 @@ Use the project name derived from these source documents as `[project-name]` in 
 
 | Tool | Purpose |
 |------|---------|
-| **Claude** | Primary AI assistant (specs, code, content) |
-| **OpenAI** | Alternative AI for specific use cases |
-| **Grok** | Alternative AI assistant |
+| **Primary Model** | Choose per task (GPT, Claude, Gemini, etc.) |
+| **OpenAI** | Optional AI provider |
+| **Anthropic / Claude** | Optional AI provider |
 | **Mistral / Devstral** | Code-focused AI assistance |
-| **Cline Extension** | VS Code AI coding extension (primary) |
-| **Gemini Extension** | VS Code AI extension |
-| **Claude Extension** | VS Code AI extension |
-| **Beads + Beads Viewer** | Claude plugin for context management |
+| **Cline Extension** | VS Code AI coding extension (optional) |
+| **Gemini Extension** | VS Code AI extension (optional) |
+| **Claude Extension** | VS Code AI extension (optional) |
+| **Context/MCP Tools** | Optional context management plugins and MCP servers |
 
 ---
 
@@ -223,7 +223,7 @@ project-root/
   ],
   "settings": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "cline.model": "claude-sonnet-4-20250514",
+    "cline.model": "gpt-5.3-codex",
     "files.associations": {
       "*.md": "markdown"
     }
@@ -231,6 +231,7 @@ project-root/
   "extensions": {
     "recommendations": [
       "saoudrizwan.claude-dev",
+      "openai.chatgpt",
       "continue.continue",
       "google.gemini"
     ]
@@ -414,7 +415,7 @@ Think through all available solutions and present a balanced analysis of:
 
 ### Beads Context Management
 
-Use Beads and Beads Viewer plugin for Claude to:
+Use your chosen context-management workflow (MCP, notes, memory plugins) to:
 
 - Maintain conversation context across sessions
 - Track document versions and changes
@@ -450,4 +451,4 @@ Use Beads and Beads Viewer plugin for Claude to:
 | **Last Updated** | 2025-02-22 |
 | **Document Status** | Draft |
 | **Author(s)** | Dan |
-| **Model** | Claude Sonnet 4.5 |
+| **Model** | Configurable (e.g., GPT-5.3-Codex / Claude / Gemini) |

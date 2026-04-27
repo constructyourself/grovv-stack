@@ -1,13 +1,13 @@
-# Prompt: Generate Claude Code Skills Repository
+# Prompt: Generate AI Coding Skills Repository
 
-Use this prompt to create a comprehensive development best practices repository for Claude.
+Use this prompt to create a comprehensive development best practices repository for any AI coding agent (Codex, Claude Code, Cline, etc.).
 
 -----
 
 ## Initial Prompt
 
 ```
-Create a repository of Claude code skills including a Claude.md that focuses on development best practices, security, and test driven development.
+Create a repository of AI coding skills including an AGENT.md that focuses on development best practices, security, and test driven development.
 
 Notably planning, frontend design, backend design.
 
@@ -28,12 +28,12 @@ Playwright for E2E testing — always ask what Playwright should test before wri
 
 ## Expected Repository Structure
 
-Claude will create a comprehensive repository with the following structure:
+The agent will create a comprehensive repository with the following structure:
 
 ```
-claude-code-skills/
+ai-code-skills/
 ├── Core Documentation (5 files)
-│   ├── Claude.md              # Core philosophy and development principles
+│   ├── AGENT.md               # Core philosophy and development principles
 │   ├── README.md              # Repository overview and quick start
 │   ├── INDEX.md               # Complete navigation index
 │   ├── QUICK-REFERENCE.md     # Cheat sheet for common patterns
@@ -171,7 +171,7 @@ Each guide must include:
 
 ### Specific Guide Requirements
 
-**Claude.md** should cover:
+**AGENT.md** should cover:
 
 - Core development workflow
 - Technology stack guidance
@@ -302,7 +302,7 @@ Each guide must include:
 
 Additionally create:
 
-**CLAUDE-CODE-SKILLS-COMPLETE.md**
+**AI-CODE-SKILLS-COMPLETE.md**
 
 - Single comprehensive markdown file
 - All essential content consolidated
@@ -605,10 +605,10 @@ The repository is complete when:
 
 ## Usage Instructions
 
-1. Provide this prompt to Claude
-1. Claude will create the complete repository structure
-1. All files will be in `/mnt/user-data/outputs/claude-code-skills/`
-1. Mobile-friendly version: `CLAUDE-CODE-SKILLS-COMPLETE.md`
+1. Provide this prompt to your chosen AI assistant
+1. The agent will create the complete repository structure
+1. All files will be in `/mnt/user-data/outputs/ai-code-skills/`
+1. Mobile-friendly version: `AI-CODE-SKILLS-COMPLETE.md`
 1. Navigate using `INDEX.md` for desktop use
 
 -----
@@ -620,7 +620,7 @@ The repository is complete when:
 - Create single comprehensive markdown artifact
 - Include complete table of contents
 - All essential patterns in one file
-- Viewable directly in Claude interface
+- Viewable directly in your AI interface
 
 **For Desktop Users:**
 
@@ -673,4 +673,4 @@ The UI Standards guide provides complete examples for navigation, forms, cards, 
 
 -----
 
-*This prompt generates a production-tested, comprehensive development reference covering all aspects of modern software development with Claude.*
+*This prompt generates a production-tested, comprehensive development reference covering all aspects of modern software development for AI-assisted engineering workflows.*

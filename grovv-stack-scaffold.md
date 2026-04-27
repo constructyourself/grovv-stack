@@ -87,7 +87,7 @@ project-folder/
 │   │   ├── tech-spec.md
 │   │   └── readme-generator.md
 │   └── skills/                # Development best practices and guides
-│       ├── Claude.md
+│       ├── AGENT.md
 │       ├── README.md
 │       ├── INDEX.md
 │       ├── QUICK-REFERENCE.md
@@ -111,6 +111,8 @@ project-folder/
 ├── development-plan.md        # Engineering plan based on product-spec
 ├── tech-spec.md               # Complete technical specification
 ├── settings.json              # Claude Code agent configuration
+├── .codex/
+│   └── config.toml            # Codex CLI feature configuration
 └── README.md                  # Project README (generated last)
 ```
 
@@ -128,7 +130,8 @@ project-folder/
 | `product-spec.md` | Product-level definition: what, who, why |
 | `development-plan.md` | Engineering development plan derived from product-spec |
 | `tech-spec.md` | Complete technical specification built from product-spec + development-plan |
-| `settings.json` | Claude Code configuration |
+| `settings.json` | Claude Code configuration (incl. agent teams flag) |
+| `.codex/config.toml` | Codex CLI configuration (incl. multi-agent toggle) |
 | `README.md` | Project README, generated or updated as the final step |
 
 -----
@@ -181,6 +184,15 @@ For existing projects, only create directories that don't already exist. If the 
 ```
 
 For existing projects that already have a `settings.json`, merge the `env` block into the existing file.
+
+**If using Codex CLI, also create `.codex/config.toml`**:
+
+```toml
+[features]
+multi_agent = true
+```
+
+This enables Codex's multi-agent collaboration tools (`spawn_agent`, `send_input`, `resume_agent`, `wait_agent`, `close_agent`) when running Codex CLI in environments that support them.
 
 ### Step 2: Product Spec
 
@@ -315,7 +327,7 @@ Generates the `/docs/skills/` folder — a comprehensive development best practi
 
 | File | Content |
 |------|---------|
-| `Claude.md` | Core philosophy, workflow standards, code quality expectations |
+| `AGENT.md` | Core philosophy, workflow standards, code quality expectations |
 | `README.md` | Skills overview and navigation |
 | `INDEX.md` | Complete navigation index |
 | `QUICK-REFERENCE.md` | Cheat sheet for common patterns |
