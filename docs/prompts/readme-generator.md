@@ -89,7 +89,7 @@ Quick description paragraph highlighting the core value proposition.
 
 ### Prerequisites
 
-- Node.js 18+ / Bun 1.0+
+- Node.js 20+ (LTS)
 - PostgreSQL 14+
 - [Other requirements]
 
@@ -101,16 +101,16 @@ git clone https://github.com/org/project.git
 cd project
 
 # Install dependencies
-bun install
+npm install
 
 # Set up environment
 cp .env.example .env
 
 # Run database migrations
-bun db:migrate
+npm run db:migrate
 
 # Start development server
-bun dev
+npm run dev
 \`\`\`
 ```
 
@@ -121,7 +121,7 @@ bun dev
 
 | Category | Technology | Purpose |
 |----------|------------|---------|
-| **Runtime** | Bun | JavaScript execution |
+| **Runtime** | Node.js (LTS) | JavaScript execution |
 | **Database** | PostgreSQL (Neon) | Data persistence |
 | **Auth** | Clerk | Identity management |
 | **Frontend** | Astro + React | UI framework |
@@ -146,6 +146,19 @@ CLERK_SECRET_KEY="sk_..."
 
 # Observability
 NEXT_PUBLIC_POSTHOG_KEY="phc_..."
+
+# Email (Resend preferred; Plunk alternative; SES only if required)
+RESEND_API_KEY="re_..."
+EMAIL_FROM="no-reply@example.com"
+
+# Payments (Stripe)
+STRIPE_SECRET_KEY="sk_..."
+STRIPE_WEBHOOK_SECRET="whsec_..."
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_..."
+
+# Usage tracking (Lago)
+LAGO_API_KEY="..."
+LAGO_API_URL="https://api.getlago.com"
 \`\`\`
 ```
 
@@ -176,23 +189,23 @@ project/
 
 \`\`\`bash
 # Run all tests
-bun test
+npm test
 
 # Run with coverage
-bun test --coverage
+npm test -- --coverage
 
 # Run specific test
-bun test path/to/test.ts
+npm test -- path/to/test.ts
 \`\`\`
 
 ### Building for Production
 
 \`\`\`bash
 # Build
-bun run build
+npm run build
 
 # Preview production build
-bun preview
+npm run preview
 \`\`\`
 ```
 
@@ -241,7 +254,7 @@ The generator should adapt based on:
 
 2. **Technology Stack**
    - Frontend framework (Astro, Next.js, etc.)
-   - Backend runtime (Bun, Node.js, Go)
+   - Backend runtime (Node.js, Go)
    - Database (PostgreSQL, SQLite)
 
 3. **Deployment Target**

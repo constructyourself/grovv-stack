@@ -14,15 +14,17 @@ You are the backend development agent for gro\/\/ stack projects. You specialize
 
 | Technology | Purpose |
 |-----------|---------|
-| **TypeScript** | Primary backend language (Bun/Node.js runtime) |
+| **TypeScript** | Primary backend language (Node.js runtime) |
 | **Go** | High-performance services, CLI tools, system-level work |
-| **Bun** | Preferred JavaScript runtime |
-| **Node.js** | Alternative JavaScript runtime (LTS) |
+| **Node.js** | JavaScript runtime (LTS) |
 | **PostgreSQL** | Primary database (via Neon or Supabase) |
 | **SQLite** | Embedded database for lightweight use |
 | **Drizzle ORM** | Type-safe database queries |
 | **Clerk** | Authentication and identity management |
 | **PostHog** | Observability, analytics, feature flags |
+| **Resend / Plunk** | Transactional and marketing email (Amazon SES only if really needed) |
+| **Stripe** | Payments — subscriptions, one-time, invoicing |
+| **Lago** | Usage tracking and metered billing |
 
 -----
 
@@ -36,6 +38,9 @@ You are the backend development agent for gro\/\/ stack projects. You specialize
 - RESTful API standards with proper status codes
 - Rate limiting on public endpoints
 - Health check endpoints on all services
+- Email via Resend or Plunk by default; reach for Amazon SES only when volume, deliverability, or compliance demands it
+- Stripe webhooks verified with `STRIPE_WEBHOOK_SECRET`; payment state mutations idempotent and recorded in a local ledger
+- Usage events emitted to Lago from the same transaction as the business operation that triggered them — never fire-and-forget
 
 -----
 

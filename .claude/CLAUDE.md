@@ -30,11 +30,14 @@ Stack-agnostic scaffolding, optimized for this default stack. Adapt per project.
 | Category | Technology | Purpose |
 |----------|-----------|---------|
 | **Languages** | TypeScript, Go | Primary development |
-| **Runtime** | Bun (preferred), Node.js | JavaScript execution |
+| **Runtime** | Node.js (LTS) | JavaScript execution |
 | **Database** | PostgreSQL (Neon/Supabase), SQLite | Data persistence |
 | **Auth** | Clerk | Identity management |
 | **Frontend** | Astro + React **or** Next.js (ask first), shadcn/ui, Tailwind CSS | UI framework |
 | **Background Jobs** | PostgreSQL-native | Background job processing |
+| **Email** | Resend or Plunk (Amazon SES if really needed) | Transactional and marketing email |
+| **Payments** | Stripe | Subscriptions, one-time payments, invoicing |
+| **Usage Tracking** | Lago | Metering and usage-based billing |
 | **Observability** | PostHog | Analytics and monitoring |
 | **Deployment** | Vercel, Docker | Production hosting |
 | **Dev Environment** | VS Code, sprites.dev | Local and cloud IDE |
@@ -123,7 +126,7 @@ The `.claude/agents/` folder contains specialized sub-agent definitions:
 
 - **TDD** — write tests before implementation (red-green-refactor)
 - **Automated tests** — all tests run in CI/CD pipelines
-- **Bun Test** — unit and integration tests for TypeScript
+- **Vitest** — unit and integration tests for TypeScript
 - **Go testing** — unit and integration tests for Go
 - **Playwright** — E2E browser testing
 
@@ -191,6 +194,23 @@ CLERK_SECRET_KEY="sk_..."
 # Observability (PostHog)
 NEXT_PUBLIC_POSTHOG_KEY="phc_..."
 NEXT_PUBLIC_POSTHOG_HOST="https://app.posthog.com"
+
+# Email (Resend preferred; Plunk alternative; SES only if required)
+RESEND_API_KEY="re_..."
+# PLUNK_API_KEY="sk_..."
+# AWS_SES_REGION="us-east-1"
+# AWS_ACCESS_KEY_ID="..."
+# AWS_SECRET_ACCESS_KEY="..."
+EMAIL_FROM="no-reply@example.com"
+
+# Payments (Stripe)
+STRIPE_SECRET_KEY="sk_..."
+STRIPE_WEBHOOK_SECRET="whsec_..."
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_..."
+
+# Usage tracking (Lago)
+LAGO_API_KEY="..."
+LAGO_API_URL="https://api.getlago.com"
 ```
 
 -----
