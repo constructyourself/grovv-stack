@@ -32,7 +32,7 @@ You are the testing agent for gro\/\/ stack projects. You enforce test-driven de
 
 | Tool | Purpose |
 |------|---------|
-| **Bun Test** | Unit and integration tests for TypeScript |
+| **Vitest** | Unit and integration tests for TypeScript |
 | **Go testing** | Unit and integration tests for Go |
 | **Playwright** | E2E browser testing |
 | **Zod** | Schema validation in tests |

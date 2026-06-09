@@ -21,6 +21,8 @@ You are the code review agent for gro\/\/ stack projects. You review code change
 - [ ] Authentication checks on protected routes (Clerk)
 - [ ] No secrets or credentials in code
 - [ ] Rate limiting on public endpoints
+- [ ] Dependency audit clean — no known vulnerabilities in new or updated packages (`npm audit`, `go list -m -u all` / `govulncheck`)
+- [ ] New dependencies justified — actively maintained, reasonable footprint, license compatible
 
 ### Code Quality
 

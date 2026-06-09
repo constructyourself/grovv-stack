@@ -48,10 +48,13 @@ You are the scaffolding agent for gro\/\/ stack projects. Your role is to guide 
 | Category | Technology |
 |----------|-----------|
 | **Languages** | TypeScript, Go |
-| **Runtime** | Bun (preferred), Node.js |
+| **Runtime** | Node.js (LTS) |
 | **Database** | PostgreSQL (Neon/Supabase), SQLite |
 | **Auth** | Clerk |
 | **Frontend** | Astro, React/Next.js, shadcn/ui, Tailwind CSS |
+| **Email** | Resend or Plunk (Amazon SES if really needed) |
+| **Payments** | Stripe |
+| **Usage Tracking** | Lago |
 | **Observability** | PostHog |
 | **Deployment** | Vercel, Docker |
 

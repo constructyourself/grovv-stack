@@ -335,10 +335,13 @@ Generates the `/docs/skills/` folder — a comprehensive development best practi
 
 - Technology agnostic but primarily TypeScript and Go
 - PostgreSQL/SQLite via Neon or Supabase for database
-- Bun and Node.js runtimes
+- Node.js runtime (LTS)
 - Clerk for identity management
 - Astro with React or Next.js for frontend, shadcn/ui for components
 - Tailwind CSS for styling (no Bootstrap)
+- Email: Resend or Plunk (Amazon SES only if regulatory/volume requires it)
+- Payments: Stripe (subscriptions, one-time, invoicing)
+- Usage tracking: Lago for metered/usage-based billing
 - All code examples: complete, working, production-ready (not pseudo-code)
 - Error handling, type annotations, and security in every example
 - Anti-patterns shown alongside correct patterns
@@ -411,11 +414,14 @@ Stack-agnostic scaffolding, optimized for this default stack. Adapt per project.
 | Category | Technology | Purpose |
 |----------|-----------|---------|
 | **Languages** | TypeScript, Go | Primary development |
-| **Runtime** | Bun, Node.js | JavaScript execution |
+| **Runtime** | Node.js (LTS) | JavaScript execution |
 | **Database** | PostgreSQL (Neon/Supabase), SQLite | Data persistence |
 | **Auth** | Clerk | Identity management |
 | **Frontend** | Astro, React/Next.js, shadcn/ui | UI framework |
 | **Background Jobs** | PostgreSQL-native | Background job processing |
+| **Email** | Resend or Plunk (Amazon SES if really needed) | Transactional and marketing email |
+| **Payments** | Stripe | Subscriptions, one-time payments, invoicing |
+| **Usage Tracking** | Lago | Metering and usage-based billing |
 | **Observability** | PostHog | Analytics and monitoring |
 | **Deployment** | Vercel, Docker | Production hosting |
 | **Dev Environment** | VS Code, sprites.dev | Local and cloud IDE |

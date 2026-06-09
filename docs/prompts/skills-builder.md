@@ -15,7 +15,7 @@ Technology agnostic, but primarily using TypeScript and Go.
 
 Postgres/SQLite for database - using Neon or Supabase as provider.
 
-Bun and Node.js runtimes.
+Node.js (LTS) runtime.
 
 Clerk for identity management when needed.
 
@@ -89,9 +89,8 @@ The repository must emphasize:
 - TypeScript/JavaScript (with strict type checking)
 - Go (with strong typing and error handling)
 
-**Runtimes:**
+**Runtime:**
 
-- Bun (preferred for new projects)
 - Node.js (LTS versions)
 
 **Databases:**
@@ -113,11 +112,17 @@ The repository must emphasize:
 - Session handling
 - Authorization patterns
 
+**Third-Party Services:**
+
+- Email — Resend or Plunk (Amazon SES only if really needed)
+- Payments — Stripe (subscriptions, one-time, invoicing, webhooks)
+- Usage tracking — Lago (metered billing, usage events)
+
 **Additional Tools:**
 
 - Drizzle ORM (type-safe queries)
 - Zod (validation)
-- Bun Test (unit/integration testing)
+- Vitest (unit/integration testing)
 - Playwright (E2E testing)
 
 **UI Stack:**
@@ -227,6 +232,9 @@ Each guide must include:
 - Error handling strategies
 - Rate limiting
 - Webhook patterns
+- Email sending — Resend (default) and Plunk integration patterns, templating, idempotency keys, bounce/complaint handling; Amazon SES only when explicitly required
+- Stripe integration — Checkout vs. Elements, subscription lifecycle, webhook verification with `STRIPE_WEBHOOK_SECRET`, idempotent handlers, local ledger pattern for payment state
+- Lago usage tracking — emitting usage events transactionally alongside the business operation, mapping plans/subscriptions to Lago, reconciling with Stripe for invoicing
 
 **DATABASE.md** should cover:
 
@@ -248,11 +256,12 @@ Each guide must include:
 - Rate limiting strategies
 - File upload security
 - Security event logging
+- Dependency security — `npm audit` / `npm audit fix`, `govulncheck`, Dependabot or Renovate configuration, lockfile review, criteria for accepting new dependencies (maintenance, footprint, license), and a documented response process for newly disclosed CVEs
 
 **TESTING.md** should cover:
 
 - TDD workflow (red-green-refactor)
-- Unit testing patterns (Bun Test / Go testing)
+- Unit testing patterns (Vitest / Go testing)
 - Integration testing
 - Playwright E2E testing — always ask what Playwright should test before writing tests
 - Automated test execution in CI/CD

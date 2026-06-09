@@ -127,6 +127,9 @@ Use the project name derived from these source documents as `[project-name]` in 
 |-----------|-----------|---------|
 | **Identity Management** | Clerk | Authentication with organization-restricted access |
 | **Observability** | PostHog | Analytics, feature flags, session replay |
+| **Email** | Resend or Plunk (Amazon SES if really needed) | Transactional and marketing email |
+| **Payments** | Stripe | Subscriptions, one-time payments, invoicing, webhooks |
+| **Usage Tracking** | Lago | Metering and usage-based billing |
 | **Documentation** | Docmost | Application documentation within codebase |
 | **Background Jobs** | PostgreSQL-native | Background job processing and durable workflows |
 
@@ -265,6 +268,23 @@ KV_REST_API_READ_ONLY_TOKEN="..."
 
 # Background Jobs
 JOB_QUEUE_ENABLED="true"
+
+# Email (Resend preferred; Plunk alternative; SES only if required)
+RESEND_API_KEY="re_..."
+# PLUNK_API_KEY="sk_..."
+# AWS_SES_REGION="us-east-1"
+# AWS_ACCESS_KEY_ID="..."
+# AWS_SECRET_ACCESS_KEY="..."
+EMAIL_FROM="no-reply@example.com"
+
+# Payments (Stripe)
+STRIPE_SECRET_KEY="sk_..."
+STRIPE_WEBHOOK_SECRET="whsec_..."
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_..."
+
+# Usage tracking (Lago)
+LAGO_API_KEY="..."
+LAGO_API_URL="https://api.getlago.com"
 
 # AI Services (as needed)
 ANTHROPIC_API_KEY="sk-ant-..."
