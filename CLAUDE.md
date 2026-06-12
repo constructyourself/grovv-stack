@@ -13,7 +13,7 @@ This repo is conversation-driven. When invoked against a target project:
 1. **Read** `grovv-stack-scaffold.md` — the master directive that defines the full workflow.
 2. **Ask** before generating. Understand product, users, constraints, and stack first.
 3. **Assess** for existing projects (Step 0 of the scaffold) — never overwrite working code without an approved adoption plan.
-4. **Execute** Steps 1–7 sequentially, pausing for confirmation at each major artifact.
+4. **Execute** Steps 1–8 sequentially, pausing for confirmation at each major artifact. Step 7 designs the project-specific agent team (harness) after the skills repository exists.
 5. **Mark** unknowns with `@TODO`; revisit as the conversation progresses.
 
 If the user asks "build out this project," start by reading `grovv-stack-scaffold.md` end-to-end before any tool call that writes a file.
@@ -26,10 +26,12 @@ If the user asks "build out this project," start by reading `grovv-stack-scaffol
 |------|------|
 | `grovv-stack-scaffold.md` | Master scaffolding directive — read this first |
 | `docs/prompts/skills-builder.md` | Generates the target project's `docs/skills/` (15+ best-practice guides) |
+| `docs/prompts/team-design.md` | Designs the target project's agent team + skills (harness step, runs after skills-builder) |
 | `docs/prompts/tech-spec.md` | Generates the target project's technical specification |
 | `docs/prompts/tech-spec-template.md` | Section structure used by `tech-spec.md` |
 | `docs/prompts/readme-generator.md` | Generates the target project's README |
 | `.claude/agents/` | Sub-agent definitions (scaffold, frontend, backend, database, testing, code-review) |
+| `.claude/skills/harness/` | Vendored harness meta-skill (Apache-2.0) — powers the team-design step; see its `ATTRIBUTION.md` |
 | `.claude/CLAUDE.md` | Extended project context (stack details, conventions, env vars) |
 | `settings.json` | Claude Code agent-team configuration |
 
