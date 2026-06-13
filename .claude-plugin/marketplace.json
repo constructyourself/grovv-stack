@@ -4,6 +4,9 @@
     "name": "grovv",
     "url": "https://github.com/constructyourself/grovv-stack"
   },
+  "metadata": {
+    "description": "The grovv stack marketplace — production-first project scaffolding for Claude Code. Install the grovv-stack plugin to scaffold a new or existing project end to end: product/development/technical specs, a development best-practices skills repository, a project-specific agent team (harness), Linear project tracking, and the README."
+  },
   "plugins": [
     {
       "name": "grovv-stack",
