@@ -1,5 +1,14 @@
 # grovv stack
 
+```
+ ██████╗ ██████╗  ██████╗ ██╗   ██╗██╗   ██╗
+██╔════╝ ██╔══██╗██╔═══██╗██║   ██║██║   ██║
+██║  ███╗██████╔╝██║   ██║██║   ██║██║   ██║
+██║   ██║██╔══██╗██║   ██║╚██╗ ██╔╝╚██╗ ██╔╝
+╚██████╔╝██║  ██║╚██████╔╝ ╚████╔╝  ╚████╔╝
+ ╚═════╝ ╚═╝  ╚═╝ ╚═════╝   ╚═══╝    ╚═══╝
+```
+
 **gro\\/\\/ stack** — Production-First Project Scaffolding
 
 A prompt-driven scaffolding system that an AI agent uses to generate production-ready codebases (new projects) or layer documentation, skills, conventions, and an agent team onto existing ones. It is conversation-driven and ask-first: it understands the product, users, constraints, and stack before generating anything.
