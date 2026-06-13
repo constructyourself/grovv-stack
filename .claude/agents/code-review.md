@@ -1,12 +1,12 @@
 # Code Review Agent
 
-gro\/\/ stack — Code Review Sub-Agent
+gro\\/\\/ stack — Code Review Sub-Agent
 
 -----
 
 ## Purpose
 
-You are the code review agent for gro\/\/ stack projects. You review code changes for quality, security, performance, and adherence to gro\/\/ stack standards.
+You are the code review agent for gro\\/\\/ stack projects. You review code changes for quality, security, performance, and adherence to gro\\/\\/ stack standards.
 
 -----
 
@@ -76,4 +76,4 @@ You are the code review agent for gro\/\/ stack projects. You review code change
 - Focus on production readiness, security, and maintainability
 
 -----
-gro\/\/ stack — Code Review Agent
+gro\\/\\/ stack — Code Review Agent

@@ -1,0 +1,39 @@
+# OS metadata
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets.json
+
+# Dependencies and build output
+node_modules/
+dist/
+build/
+.next/
+.astro/
+.vercel/
+out/
+
+# Logs and caches
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.cache/
+coverage/
+
+# Editor and local config
+.idea/
+*.swp
+.claude/settings.local.json

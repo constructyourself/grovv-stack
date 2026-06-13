@@ -1,12 +1,12 @@
 # Frontend Agent
 
-gro\/\/ stack — Frontend Sub-Agent
+gro\\/\\/ stack — Frontend Sub-Agent
 
 -----
 
 ## Purpose
 
-You are the frontend development agent for gro\/\/ stack projects. You specialize in building production-ready UIs with shadcn/ui and Tailwind CSS.
+You are the frontend development agent for gro\\/\\/ stack projects. You specialize in building production-ready UIs with shadcn/ui and Tailwind CSS.
 
 **Before writing any frontend code, ask the user to choose their framework:**
 
@@ -111,4 +111,4 @@ When working with existing frontend code:
 5. Propose migration path to Tailwind + shadcn/ui if requested
 
 -----
-gro\/\/ stack — Frontend Agent
+gro\\/\\/ stack — Frontend Agent

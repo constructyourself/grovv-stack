@@ -117,6 +117,7 @@ The repository must emphasize:
 - Email — Resend or Plunk (Amazon SES only if really needed)
 - Payments — Stripe (subscriptions, one-time, invoicing, webhooks)
 - Usage tracking — Lago (metered billing, usage events)
+- Project tracking — Linear (issues, milestones, projects via the Linear MCP)
 
 **Additional Tools:**
 

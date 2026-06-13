@@ -1,12 +1,24 @@
 # grovv-stack
 
-**gro\/\/ stack** — Production-First Project Scaffolding
+**gro\\/\\/ stack** — Production-First Project Scaffolding
 
 -----
 
 ## What This Is
 
 grovv-stack is a prompt-driven project scaffolding system that generates production-ready codebases with built-in best practices, security, and test-driven development patterns. It works for both new and existing projects through a conversational process.
+
+It ships as a Claude Code plugin. Install it once, then kick it off in any repo:
+
+```
+/plugin marketplace add constructyourself/grovv-stack
+/plugin install grovv-stack@grovv
+```
+
+- `/grovv` — explicit kickoff (`commands/grovv.md`); optional `new` or `adopt` argument, otherwise auto-detects.
+- Natural language — the `grovv-scaffold` skill triggers on intent ("build out this project", "adopt grovv stack here").
+
+Both read `grovv-stack-scaffold.md` and run the same Steps 0–9 workflow.
 
 -----
 
@@ -39,6 +51,7 @@ Stack-agnostic scaffolding, optimized for this default stack. Adapt per project.
 | **Payments** | Stripe | Subscriptions, one-time payments, invoicing |
 | **Usage Tracking** | Lago | Metering and usage-based billing |
 | **Observability** | PostHog | Analytics and monitoring |
+| **Project Tracking** | Linear | Issue and project tracking (via Linear MCP) |
 | **Deployment** | Vercel, Docker | Production hosting |
 | **Dev Environment** | VS Code, sprites.dev | Local and cloud IDE |
 | **AI CLI** | Claude Code | Agentic coding and automation |
@@ -49,19 +62,29 @@ Stack-agnostic scaffolding, optimized for this default stack. Adapt per project.
 
 ```
 grovv-stack/
+├── .claude-plugin/             # Plugin packaging (makes this repo installable)
+│   ├── plugin.json             # Plugin manifest — name, version, component paths
+│   └── marketplace.json        # Marketplace catalog for /plugin marketplace add
+├── commands/                   # Plugin commands
+│   └── grovv.md                # /grovv — kickoff front door (new vs existing)
 ├── .claude/                    # Claude Code configuration
 │   ├── CLAUDE.md               # This file — project context for Claude
 │   ├── settings.json           # Claude Code settings
-│   └── agents/                 # Sub-agent definitions
-│       ├── scaffold.md         # Scaffolding agent
-│       ├── frontend.md         # Frontend development agent
-│       ├── backend.md          # Backend development agent
-│       ├── testing.md          # Testing and TDD agent
-│       ├── database.md         # Database design agent
-│       └── code-review.md      # Code review agent
+│   ├── agents/                 # Sub-agent definitions (shipped via plugin.json)
+│   │   ├── scaffold.md         # Scaffolding agent
+│   │   ├── frontend.md         # Frontend development agent
+│   │   ├── backend.md          # Backend development agent
+│   │   ├── testing.md          # Testing and TDD agent
+│   │   ├── database.md         # Database design agent
+│   │   └── code-review.md      # Code review agent
+│   └── skills/                 # Skills the scaffolder uses (shipped via plugin.json)
+│       ├── grovv-scaffold/     # Natural-language kickoff skill
+│       └── harness/            # harness meta-skill (Apache-2.0) — team-design step
 ├── docs/
 │   ├── prompts/                # Executable prompts for scaffolding
 │   │   ├── skills-builder.md
+│   │   ├── team-design.md
+│   │   ├── linear-tracking.md
 │   │   ├── tech-spec.md
 │   │   ├── tech-spec-template.md
 │   │   └── readme-generator.md
@@ -87,6 +110,8 @@ The `.claude/agents/` folder contains specialized sub-agent definitions:
 | **Database** | `agents/database.md` | Schema design, migrations, query optimization |
 | **Code Review** | `agents/code-review.md` | Security, quality, and standards review |
 
+These six are the **baseline team**. During the team-design step (prompt: `docs/prompts/team-design.md`), the scaffolder uses the vendored **harness** meta-skill (`.claude/skills/harness/`) to design *additional*, project-specific agents and the skills they use, plus an orchestrator — written into the **target project's** `.claude/`. The step is additive: the six defaults stay intact, and only the specialists a given domain needs are added. harness is vendored verbatim under Apache-2.0; see `.claude/skills/harness/ATTRIBUTION.md` for provenance. The grovv-facing interface is the team-design prompt, not the vendored files.
+
 -----
 
 ## How the Scaffolding Works
@@ -94,8 +119,10 @@ The `.claude/agents/` folder contains specialized sub-agent definitions:
 ### Prompt Execution Order
 
 1. **skills-builder** → Generates `/docs/skills/` with development best practices
-2. **tech-spec** → Creates technical specification document
-3. **readme-generator** → Generates project README
+2. **team-design** → Designs the project-specific agent team + skills (harness); additive to grovv defaults
+3. **linear-tracking** → Creates/reuses a Linear project and seeds issues from the development plan (via Linear MCP)
+4. **tech-spec** → Creates technical specification document
+5. **readme-generator** → Generates project README
 
 ### For New Projects
 
@@ -163,7 +190,7 @@ For existing projects, analyze and match established patterns.
 - Tables for structured reference data
 - `@TODO` markers for incomplete sections
 - Colophon with version, status, author, model metadata
-- Footer: `gro\/\/ stack — [Purpose or Project Name]`
+- Footer (in prose): `gro\\/\\/ stack — [Purpose or Project Name]` — doubled backslashes so it renders as the gro\\/\\/ wordmark, not gro//. Inside code blocks, use single backslashes (`gro\/\/`).
 - No excessive bold or emoji in headings
 
 -----
@@ -173,7 +200,7 @@ For existing projects, analyze and match established patterns.
 - **Ask before generating** — understand the product, users, constraints, and stack first
 - **Never overwrite working code** in existing projects without approval
 - **Mark unknowns with `@TODO`** and revisit as conversation progresses
-- **Apply gro\/\/ stack branding** to all generated documents
+- **Apply gro\\/\\/ stack branding** to all generated documents
 - **Iterate** — documents are living artifacts, revise as understanding deepens
 - **Always ask what Playwright should test** — never auto-generate E2E tests
 - **Always ask which frontend framework** — Astro + React or Next.js — before writing frontend code
@@ -211,7 +238,11 @@ NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_..."
 # Usage tracking (Lago)
 LAGO_API_KEY="..."
 LAGO_API_URL="https://api.getlago.com"
+
+# Project tracking (Linear) — primarily via the Linear MCP server;
+# API key only needed for non-MCP/CI automation
+LINEAR_API_KEY="lin_api_..."
 ```
 
 -----
-gro\/\/ stack
+gro\\/\\/ stack
