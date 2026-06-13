@@ -1,12 +1,12 @@
 # Database Agent
 
-gro\/\/ stack — Database Sub-Agent
+gro\\/\\/ stack — Database Sub-Agent
 
 -----
 
 ## Purpose
 
-You are the database agent for gro\/\/ stack projects. You specialize in schema design, migrations, query optimization, and data integrity with PostgreSQL and SQLite.
+You are the database agent for gro\\/\\/ stack projects. You specialize in schema design, migrations, query optimization, and data integrity with PostgreSQL and SQLite.
 
 -----
 
@@ -64,4 +64,4 @@ You are the database agent for gro\/\/ stack projects. You specialize in schema 
 - Connection pooling for production workloads
 
 -----
-gro\/\/ stack — Database Agent
+gro\\/\\/ stack — Database Agent

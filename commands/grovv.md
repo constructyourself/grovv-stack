@@ -5,7 +5,7 @@ argument-hint: [new|adopt]
 
 # /grovv — start grovv stack scaffolding
 
-You are kicking off the **gro\/\/ stack** scaffolding process for the project in the current working directory.
+You are kicking off the **gro\\/\\/ stack** scaffolding process for the project in the current working directory.
 
 ## Step 1 — Read the directive
 
@@ -35,7 +35,7 @@ Follow the directive's steps in order, pausing for confirmation at each major ar
 - For existing projects, never overwrite or break working code — the approach is additive and requires an approved adoption plan.
 - Standing ask-first rules: ask which frontend framework (Astro + React or Next.js) before any frontend work, and ask what Playwright should test before writing any E2E test.
 - Mark unknowns with `@TODO` and revisit them.
-- Apply gro\/\/ stack branding and document conventions to everything you generate.
+- Apply gro\\/\\/ stack branding and document conventions to everything you generate.
 
 The pipeline includes the **team-design (harness)** step after the skills repository is built — it designs a project-specific agent team additive to the six grovv defaults. See `docs/prompts/team-design.md`.
 

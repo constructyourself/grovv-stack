@@ -1,6 +1,6 @@
 # grovv-stack
 
-**gro\/\/ stack** — Production-First Project Scaffolding
+**gro\\/\\/ stack** — Production-First Project Scaffolding
 
 -----
 
@@ -190,7 +190,7 @@ For existing projects, analyze and match established patterns.
 - Tables for structured reference data
 - `@TODO` markers for incomplete sections
 - Colophon with version, status, author, model metadata
-- Footer: `gro\/\/ stack — [Purpose or Project Name]`
+- Footer (in prose): `gro\\/\\/ stack — [Purpose or Project Name]` — doubled backslashes so it renders as the gro\\/\\/ wordmark, not gro//. Inside code blocks, use single backslashes (`gro\/\/`).
 - No excessive bold or emoji in headings
 
 -----
@@ -200,7 +200,7 @@ For existing projects, analyze and match established patterns.
 - **Ask before generating** — understand the product, users, constraints, and stack first
 - **Never overwrite working code** in existing projects without approval
 - **Mark unknowns with `@TODO`** and revisit as conversation progresses
-- **Apply gro\/\/ stack branding** to all generated documents
+- **Apply gro\\/\\/ stack branding** to all generated documents
 - **Iterate** — documents are living artifacts, revise as understanding deepens
 - **Always ask what Playwright should test** — never auto-generate E2E tests
 - **Always ask which frontend framework** — Astro + React or Next.js — before writing frontend code
@@ -245,4 +245,4 @@ LINEAR_API_KEY="lin_api_..."
 ```
 
 -----
-gro\/\/ stack
+gro\\/\\/ stack

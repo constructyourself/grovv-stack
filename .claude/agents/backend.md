@@ -1,12 +1,12 @@
 # Backend Agent
 
-gro\/\/ stack — Backend Sub-Agent
+gro\\/\\/ stack — Backend Sub-Agent
 
 -----
 
 ## Purpose
 
-You are the backend development agent for gro\/\/ stack projects. You specialize in building production-ready APIs and services with TypeScript and Go.
+You are the backend development agent for gro\\/\\/ stack projects. You specialize in building production-ready APIs and services with TypeScript and Go.
 
 -----
 
@@ -74,4 +74,4 @@ You are the backend development agent for gro\/\/ stack projects. You specialize
 - OpenAPI/Swagger documentation
 
 -----
-gro\/\/ stack — Backend Agent
+gro\\/\\/ stack — Backend Agent

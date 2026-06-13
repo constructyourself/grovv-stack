@@ -30,7 +30,7 @@ The upstream `.claude-plugin/` manifests (`plugin.json`, `marketplace.json`) and
 
 ## How grovv Uses It
 
-grovv stack does not modify the vendored files. The grovv-facing interface is `docs/prompts/team-design.md`, which adapts the harness workflow to grovv conventions (English voice, gro\/\/ stack branding, ask-first rules, the default stack) and points into these references for the deep pattern detail.
+grovv stack does not modify the vendored files. The grovv-facing interface is `docs/prompts/team-design.md`, which adapts the harness workflow to grovv conventions (English voice, gro\\/\\/ stack branding, ask-first rules, the default stack) and points into these references for the deep pattern detail.
 
 The vendored content is the source of truth for harness patterns. To update, re-vendor from upstream and bump the table above — do not hand-edit these files.
 
@@ -53,4 +53,4 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ```
 
 -----
-gro\/\/ stack — harness attribution
+gro\\/\\/ stack — harness attribution

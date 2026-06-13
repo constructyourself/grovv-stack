@@ -2,7 +2,7 @@
 
 Use this prompt to stand up **Linear** project tracking for the scaffolded project. It runs as a step in the grovv stack pipeline, **after the agent team is designed and before the README** — once the development plan, technical spec, and agent team exist, the work is seeded into Linear so the build phase has a live backlog.
 
-Linear is the gro\/\/ stack default for project and issue tracking. This step uses the **Linear MCP server** to create (or reuse) a project and seed issues from `development-plan.md` and `tech-spec.md`.
+Linear is the gro\\/\\/ stack default for project and issue tracking. This step uses the **Linear MCP server** to create (or reuse) a project and seed issues from `development-plan.md` and `tech-spec.md`.
 
 -----
 
@@ -67,7 +67,7 @@ Derive issues from `development-plan.md` (features, priorities) and `tech-spec.m
 - **Estimate** only when the plan gives a clear sizing; otherwise leave unset.
 - Link the GitHub repository (and PR, if one exists) on the relevant issues.
 
-Respect the standing gro\/\/ stack ask-first rules — do not create issues that pre-decide the frontend framework or Playwright E2E scope; those remain conversations to have when the work is picked up.
+Respect the standing gro\\/\\/ stack ask-first rules — do not create issues that pre-decide the frontend framework or Playwright E2E scope; those remain conversations to have when the work is picked up.
 
 ### 5. Link back
 
@@ -112,4 +112,4 @@ This step is re-runnable. On a later run:
 Continue the pipeline: proceed to `readme-generator.md`. The README can include a link to the Linear project so contributors find the backlog.
 
 -----
-gro\/\/ stack — Project Tracking (Linear)
+gro\\/\\/ stack — Project Tracking (Linear)

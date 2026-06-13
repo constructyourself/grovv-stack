@@ -512,6 +512,8 @@ gro\/\/ stack — Product Specification
 gro\/\/ stack — my-saas-app
 ```
 
+**Escaping the wordmark.** The footer normally sits in Markdown prose, not a code block. In prose, double the backslashes — `gro\\/\\/ stack — …` — so it renders as the gro\\/\\/ wordmark rather than gro//. The fenced examples above use the single-backslash `gro\/\/` form because backslashes are already literal inside code blocks.
+
 ### Document Conventions
 
 - `-----` (five dashes) for horizontal rules

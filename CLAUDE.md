@@ -1,6 +1,6 @@
 # grovv-stack
 
-**gro\/\/ stack** — Production-First Project Scaffolding
+**gro\\/\\/ stack** — Production-First Project Scaffolding
 
 This repository is **not an application**. It is a prompt-driven scaffolding system that an AI agent uses to generate production-ready codebases (new projects) or layer documentation, skills, and conventions onto existing ones. The output of this repo is documents and configuration files in another project — never code in this repo.
 
@@ -80,7 +80,7 @@ Adapt per project; never assume.
 - **Security by default** — input validation, auth, dependency audits in every layer. Never deferred.
 - **Zero data loss** — transactions for all multi-step data operations.
 - **Never overwrite working code** in existing projects without an approved adoption plan.
-- **Apply gro\/\/ stack branding** to every generated document (footer, conventions below).
+- **Apply gro\\/\\/ stack branding** to every generated document (footer, conventions below).
 
 -----
 
@@ -93,7 +93,7 @@ Apply to every file this repo generates:
 - Tables for structured reference data.
 - `@TODO` markers for incomplete sections.
 - Colophon (version, status, author, model) on specs.
-- Footer: `gro\/\/ stack — [Purpose or Project Name]`.
+- Footer (in prose): `gro\\/\\/ stack — [Purpose or Project Name]` — doubled backslashes so it renders as the gro\\/\\/ wordmark, not gro//. Inside code blocks, use single backslashes (`gro\/\/`).
 - No emoji in headings; minimal bold.
 - Project folder names: lowercase with dashes.
 
@@ -121,4 +121,4 @@ These files are the source of truth that downstream projects depend on. Treat ch
 Then run `/grovv` in any project, or just say "build out this project with grovv stack". Working from a clone of this repo (without installing) also works — the `.claude/` agents and skills load as project-scope components and the `grovv-scaffold` skill triggers on intent.
 
 -----
-gro\/\/ stack — Repository Guide
+gro\\/\\/ stack — Repository Guide

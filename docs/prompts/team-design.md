@@ -99,7 +99,7 @@ The vendored harness skill is the methodology. When this step writes files into 
 - **Ask-first preserved** — frontend framework and Playwright rules above are never bypassed by a generated agent.
 - **Document style** — `-----` horizontal rules, tables for reference data, `@TODO` for unknowns, no emoji in headings, language-hinted code fences.
 - **Naming** — skill and agent folder/file names are lowercase with dashes.
-- **Branding** — grovv-authored wrapper documents (not the vendored skill) carry the gro\/\/ stack footer.
+- **Branding** — grovv-authored wrapper documents (not the vendored skill) carry the gro\\/\\/ stack footer.
 
 Note: the vendored `.claude/skills/harness/SKILL.md` is authored in its original language and is left **verbatim** for fidelity and attribution. This prompt is the grovv-facing, English interface to it — extend or adjust behavior here, not in the vendored files.
 
@@ -128,4 +128,4 @@ This step is complete when, for the target project:
 Continue the pipeline: proceed to `tech-spec.md`, then `readme-generator.md`. The tech spec should reference the agent team as part of the project's development workflow where relevant.
 
 -----
-gro\/\/ stack — Agent Team Design
+gro\\/\\/ stack — Agent Team Design

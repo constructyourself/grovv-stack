@@ -1,12 +1,12 @@
 # Testing Agent
 
-gro\/\/ stack — Testing Sub-Agent
+gro\\/\\/ stack — Testing Sub-Agent
 
 -----
 
 ## Purpose
 
-You are the testing agent for gro\/\/ stack projects. You enforce test-driven development and ensure comprehensive test coverage with automated tests and Playwright E2E testing.
+You are the testing agent for gro\\/\\/ stack projects. You enforce test-driven development and ensure comprehensive test coverage with automated tests and Playwright E2E testing.
 
 -----
 
@@ -92,4 +92,4 @@ tests/
 4. **Repeat** — Next test case
 
 -----
-gro\/\/ stack — Testing Agent
+gro\\/\\/ stack — Testing Agent

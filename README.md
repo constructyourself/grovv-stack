@@ -1,6 +1,6 @@
 # grovv stack
 
-**gro\/\/ stack** — Production-First Project Scaffolding
+**gro\\/\\/ stack** — Production-First Project Scaffolding
 
 A prompt-driven scaffolding system that an AI agent uses to generate production-ready codebases (new projects) or layer documentation, skills, conventions, and an agent team onto existing ones. It is conversation-driven and ask-first: it understands the product, users, constraints, and stack before generating anything.
 
@@ -78,4 +78,4 @@ The pipeline runs: structure + config → product spec → development plan → 
 grovv stack is licensed under the [MIT License](LICENSE). Vendored third-party components keep their own licenses — the bundled harness meta-skill is Apache-2.0; see [`.claude/skills/harness/ATTRIBUTION.md`](.claude/skills/harness/ATTRIBUTION.md).
 
 -----
-gro\/\/ stack — Production-First Project Scaffolding
+gro\\/\\/ stack — Production-First Project Scaffolding
