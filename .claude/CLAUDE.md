@@ -8,6 +8,18 @@
 
 grovv-stack is a prompt-driven project scaffolding system that generates production-ready codebases with built-in best practices, security, and test-driven development patterns. It works for both new and existing projects through a conversational process.
 
+It ships as a Claude Code plugin. Install it once, then kick it off in any repo:
+
+```
+/plugin marketplace add constructyourself/grovv-stack
+/plugin install grovv-stack@grovv
+```
+
+- `/grovv` — explicit kickoff (`commands/grovv.md`); optional `new` or `adopt` argument, otherwise auto-detects.
+- Natural language — the `grovv-scaffold` skill triggers on intent ("build out this project", "adopt grovv stack here").
+
+Both read `grovv-stack-scaffold.md` and run the same Steps 0–8 workflow.
+
 -----
 
 ## Core Principles
@@ -49,17 +61,23 @@ Stack-agnostic scaffolding, optimized for this default stack. Adapt per project.
 
 ```
 grovv-stack/
+├── .claude-plugin/             # Plugin packaging (makes this repo installable)
+│   ├── plugin.json             # Plugin manifest — name, version, component paths
+│   └── marketplace.json        # Marketplace catalog for /plugin marketplace add
+├── commands/                   # Plugin commands
+│   └── grovv.md                # /grovv — kickoff front door (new vs existing)
 ├── .claude/                    # Claude Code configuration
 │   ├── CLAUDE.md               # This file — project context for Claude
 │   ├── settings.json           # Claude Code settings
-│   ├── agents/                 # Sub-agent definitions
+│   ├── agents/                 # Sub-agent definitions (shipped via plugin.json)
 │   │   ├── scaffold.md         # Scaffolding agent
 │   │   ├── frontend.md         # Frontend development agent
 │   │   ├── backend.md          # Backend development agent
 │   │   ├── testing.md          # Testing and TDD agent
 │   │   ├── database.md         # Database design agent
 │   │   └── code-review.md      # Code review agent
-│   └── skills/                 # Vendored skills the scaffolder uses
+│   └── skills/                 # Skills the scaffolder uses (shipped via plugin.json)
+│       ├── grovv-scaffold/     # Natural-language kickoff skill
 │       └── harness/            # harness meta-skill (Apache-2.0) — team-design step
 ├── docs/
 │   ├── prompts/                # Executable prompts for scaffolding

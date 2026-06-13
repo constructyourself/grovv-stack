@@ -15,11 +15,23 @@
 
 ## What is This?
 
-This is the starting document for any project — new or existing. Drop this file into a project folder, open a conversation with an AI agent, and say:
+This is the starting document for any project — new or existing. It defines the full scaffolding workflow that the agent follows.
+
+The easiest way to kick it off is the **gro\\/\\/ stack plugin**. Install once, then run `/grovv` in any repo (or just say "build out this project with grovv stack"):
+
+```
+/plugin marketplace add constructyourself/grovv-stack
+/plugin install grovv-stack@grovv
+```
+
+- `/grovv` — explicit kickoff. Optional argument `new` or `adopt` forces the mode; otherwise it auto-detects new vs existing.
+- Natural language — the `grovv-scaffold` skill triggers on intent and runs this same workflow.
+
+Without the plugin, you can still drop this file into a project folder, open a conversation with an AI agent, and say:
 
 > *"Read grovv-stack-scaffold.md and help me build out this project."*
 
-The agent will ask questions to fully understand your product, your goals, your constraints, and your technical preferences — then systematically build out the documentation foundation that drives development.
+Either way, the agent will ask questions to fully understand your product, your goals, your constraints, and your technical preferences — then systematically build out the documentation foundation that drives development.
 
 This is not a boilerplate generator. It is a **conversational scaffolding process** — the agent works with you to understand the project deeply before generating anything.
 

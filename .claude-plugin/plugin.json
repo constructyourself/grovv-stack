@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "grovv-stack",
+  "displayName": "grovv stack",
+  "version": "0.1.0",
+  "description": "Production-first project scaffolding. Drop into any repo — new or existing — and run /grovv to generate the product spec, development plan, technical spec, a development best-practices skills repository, a project-specific agent team (via the bundled harness meta-skill), and the README. Conversation-driven and ask-first: understands the product, users, constraints, and stack before generating.",
+  "author": {
+    "name": "grovv",
+    "url": "https://github.com/constructyourself/grovv-stack"
+  },
+  "homepage": "https://github.com/constructyourself/grovv-stack",
+  "repository": "https://github.com/constructyourself/grovv-stack",
+  "keywords": [
+    "grovv",
+    "grovv-stack",
+    "scaffolding",
+    "project-scaffolding",
+    "production-first",
+    "claude-code",
+    "claude-code-plugin",
+    "agent-team",
+    "harness",
+    "skills",
+    "tech-spec",
+    "typescript",
+    "go"
+  ],
+  "skills": "./.claude/skills/",
+  "agents": [
+    "./.claude/agents/scaffold.md",
+    "./.claude/agents/frontend.md",
+    "./.claude/agents/backend.md",
+    "./.claude/agents/testing.md",
+    "./.claude/agents/database.md",
+    "./.claude/agents/code-review.md"
+  ]
+}

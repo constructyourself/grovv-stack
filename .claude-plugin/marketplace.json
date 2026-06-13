@@ -1,0 +1,14 @@
+{
+  "name": "grovv",
+  "owner": {
+    "name": "grovv",
+    "url": "https://github.com/constructyourself/grovv-stack"
+  },
+  "plugins": [
+    {
+      "name": "grovv-stack",
+      "source": "./",
+      "description": "Production-first project scaffolding — run /grovv in any repo to scaffold specs, a skills repository, a project-specific agent team (harness), and the README."
+    }
+  ]
+}
