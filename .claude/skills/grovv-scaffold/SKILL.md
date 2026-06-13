@@ -15,7 +15,7 @@ Before writing any file, read the master directive bundled with this plugin:
 ${CLAUDE_PLUGIN_ROOT}/grovv-stack-scaffold.md
 ```
 
-When running from a clone of the grovv-stack repo rather than an installed plugin, read `grovv-stack-scaffold.md` at the repo root. It defines the full workflow (Steps 0–8) and is authoritative. Also follow the conventions in `CLAUDE.md` and `.claude/CLAUDE.md`.
+When running from a clone of the grovv-stack repo rather than an installed plugin, read `grovv-stack-scaffold.md` at the repo root. It defines the full workflow (Steps 0–9) and is authoritative. Also follow the conventions in `CLAUDE.md` and `.claude/CLAUDE.md`.
 
 ## Detect new vs existing
 
@@ -37,6 +37,6 @@ Follow the directive's steps in order, pausing for confirmation at each major ar
 
 ## Pipeline
 
-The directive runs: structure + config → product spec → development plan → tech spec → prompt docs → **skills-builder** → **team-design (harness)** → readme-generator. The team-design step (`docs/prompts/team-design.md`) designs a project-specific agent team additive to the six grovv default agents, using the bundled harness meta-skill.
+The directive runs: structure + config → product spec → development plan → tech spec → prompt docs → **skills-builder** → **team-design (harness)** → **linear-tracking** → readme-generator. The team-design step (`docs/prompts/team-design.md`) designs a project-specific agent team additive to the six grovv default agents, using the bundled harness meta-skill. The linear-tracking step (`docs/prompts/linear-tracking.md`) seeds a Linear project and issues from the development plan via the Linear MCP.
 
 Begin by reading the directive, then engage the user.

@@ -18,7 +18,7 @@ It ships as a Claude Code plugin. Install it once, then kick it off in any repo:
 - `/grovv` — explicit kickoff (`commands/grovv.md`); optional `new` or `adopt` argument, otherwise auto-detects.
 - Natural language — the `grovv-scaffold` skill triggers on intent ("build out this project", "adopt grovv stack here").
 
-Both read `grovv-stack-scaffold.md` and run the same Steps 0–8 workflow.
+Both read `grovv-stack-scaffold.md` and run the same Steps 0–9 workflow.
 
 -----
 
@@ -51,6 +51,7 @@ Stack-agnostic scaffolding, optimized for this default stack. Adapt per project.
 | **Payments** | Stripe | Subscriptions, one-time payments, invoicing |
 | **Usage Tracking** | Lago | Metering and usage-based billing |
 | **Observability** | PostHog | Analytics and monitoring |
+| **Project Tracking** | Linear | Issue and project tracking (via Linear MCP) |
 | **Deployment** | Vercel, Docker | Production hosting |
 | **Dev Environment** | VS Code, sprites.dev | Local and cloud IDE |
 | **AI CLI** | Claude Code | Agentic coding and automation |
@@ -83,6 +84,7 @@ grovv-stack/
 │   ├── prompts/                # Executable prompts for scaffolding
 │   │   ├── skills-builder.md
 │   │   ├── team-design.md
+│   │   ├── linear-tracking.md
 │   │   ├── tech-spec.md
 │   │   ├── tech-spec-template.md
 │   │   └── readme-generator.md
@@ -118,8 +120,9 @@ These six are the **baseline team**. During the team-design step (prompt: `docs/
 
 1. **skills-builder** → Generates `/docs/skills/` with development best practices
 2. **team-design** → Designs the project-specific agent team + skills (harness); additive to grovv defaults
-3. **tech-spec** → Creates technical specification document
-4. **readme-generator** → Generates project README
+3. **linear-tracking** → Creates/reuses a Linear project and seeds issues from the development plan (via Linear MCP)
+4. **tech-spec** → Creates technical specification document
+5. **readme-generator** → Generates project README
 
 ### For New Projects
 
@@ -235,6 +238,10 @@ NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_..."
 # Usage tracking (Lago)
 LAGO_API_KEY="..."
 LAGO_API_URL="https://api.getlago.com"
+
+# Project tracking (Linear) — primarily via the Linear MCP server;
+# API key only needed for non-MCP/CI automation
+LINEAR_API_KEY="lin_api_..."
 ```
 
 -----

@@ -15,7 +15,7 @@ Read the master directive bundled with this plugin before writing any file:
 ${CLAUDE_PLUGIN_ROOT}/grovv-stack-scaffold.md
 ```
 
-It defines the full workflow (Steps 0–8). It is authoritative — follow it end to end. Also honor the conventions in this plugin's `CLAUDE.md` and `.claude/CLAUDE.md`.
+It defines the full workflow (Steps 0–9). It is authoritative — follow it end to end. Also honor the conventions in this plugin's `CLAUDE.md` and `.claude/CLAUDE.md`.
 
 ## Step 2 — Determine the mode
 

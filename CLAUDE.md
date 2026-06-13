@@ -18,7 +18,7 @@ Both entry points read `grovv-stack-scaffold.md` and run the same workflow. This
 1. **Read** `grovv-stack-scaffold.md` — the master directive that defines the full workflow.
 2. **Ask** before generating. Understand product, users, constraints, and stack first.
 3. **Assess** for existing projects (Step 0 of the scaffold) — never overwrite working code without an approved adoption plan.
-4. **Execute** Steps 1–8 sequentially, pausing for confirmation at each major artifact. Step 7 designs the project-specific agent team (harness) after the skills repository exists.
+4. **Execute** Steps 1–9 sequentially, pausing for confirmation at each major artifact. Step 7 designs the project-specific agent team (harness) after the skills repository exists; Step 8 sets up Linear project tracking from the development plan.
 5. **Mark** unknowns with `@TODO`; revisit as the conversation progresses.
 
 If the user asks "build out this project," start by reading `grovv-stack-scaffold.md` end-to-end before any tool call that writes a file.
@@ -36,6 +36,7 @@ If the user asks "build out this project," start by reading `grovv-stack-scaffol
 | `.claude/skills/grovv-scaffold/` | Natural-language skill that triggers the same scaffolding flow without the explicit command |
 | `docs/prompts/skills-builder.md` | Generates the target project's `docs/skills/` (15+ best-practice guides) |
 | `docs/prompts/team-design.md` | Designs the target project's agent team + skills (harness step, runs after skills-builder) |
+| `docs/prompts/linear-tracking.md` | Sets up Linear project tracking — seeds a project + issues from the development plan (via Linear MCP) |
 | `docs/prompts/tech-spec.md` | Generates the target project's technical specification |
 | `docs/prompts/tech-spec-template.md` | Section structure used by `tech-spec.md` |
 | `docs/prompts/readme-generator.md` | Generates the target project's README |
@@ -66,6 +67,7 @@ Adapt per project; never assume.
 | Payments | Stripe |
 | Usage Tracking | Lago |
 | Observability | PostHog |
+| Project Tracking | Linear (via Linear MCP) |
 | Deployment | Vercel, Docker |
 
 -----
