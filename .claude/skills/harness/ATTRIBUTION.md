@@ -20,7 +20,7 @@ This skill is vendored, mostly verbatim, from a third-party open-source project.
 
 ## What Was Vendored
 
-- `SKILL.md` — the harness meta-skill (verbatim)
+- `SKILL.md` — the harness meta-skill. The workflow body and the full methodology are verbatim; only the YAML frontmatter `description` and a short top-of-body note were localized to English (see "grovv Modifications" below).
 - `references/` — agent design patterns, orchestrator template, QA agent guide, skill writing/testing guides, team examples (verbatim)
 - `LICENSE` — Apache-2.0 license text (verbatim)
 
@@ -30,9 +30,22 @@ The upstream `.claude-plugin/` manifests (`plugin.json`, `marketplace.json`) and
 
 ## How grovv Uses It
 
-grovv stack does not modify the vendored files. The grovv-facing interface is `docs/prompts/team-design.md`, which adapts the harness workflow to grovv conventions (English voice, gro\\/\\/ stack branding, ask-first rules, the default stack) and points into these references for the deep pattern detail.
+grovv stack does not modify the vendored **methodology**. The grovv-facing interface is `docs/prompts/team-design.md`, which adapts the harness workflow to grovv conventions (English voice, gro\\/\\/ stack branding, ask-first rules, the default stack) and points into these references for the deep pattern detail.
 
-The vendored content is the source of truth for harness patterns. To update, re-vendor from upstream and bump the table above — do not hand-edit these files.
+The vendored content is the source of truth for harness patterns. To update, re-vendor from upstream and bump the table above — do not hand-edit the workflow body or the `references/` files.
+
+-----
+
+## grovv Modifications
+
+The vendored files are kept verbatim with one deliberate, documented exception in `SKILL.md`:
+
+| Element | Change | Why |
+|---------|--------|-----|
+| Frontmatter `description` | Korean → English | The description is the skill's trigger text and is shown in the Claude Code skill picker; the original Korean rendered as opaque text for English users. The English version preserves the trigger intent and adds this attribution. |
+| Top-of-body note | Added a short English note under the title | Surfaces the attribution and points to the English `team-design.md` interface, while leaving the workflow body untouched. |
+
+The workflow body, the methodology, and every file under `references/` remain verbatim. When re-vendoring from upstream, re-apply these two localizations.
 
 -----
 

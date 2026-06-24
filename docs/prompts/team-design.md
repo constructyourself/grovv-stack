@@ -62,7 +62,7 @@ Follow the phased workflow defined in the vendored skill `.claude/skills/harness
 | Phase | Purpose |
 |-------|---------|
 | 0 — Audit | Read the target's existing `.claude/agents/`, `.claude/skills/`, and `CLAUDE.md`. Decide: new build, extension, or maintenance. Detect drift. Report before acting. |
-| 1 — Domain analysis | Identify the domain, dominant task types, and the project stack from `tech-spec.md` / codebase. |
+| 1 — Domain analysis | Identify the domain, dominant task types, and the project stack from `docs/tech-spec.md` / codebase. |
 | 2 — Team architecture | Choose execution mode (agent team is the default) and one of the six patterns. |
 | 3 — Agent definitions | Write each agent to `.claude/agents/{name}.md` (duplicate review first; reuse defaults where possible). |
 | 4 — Skill generation | Write the skills each agent uses to `.claude/skills/{name}/SKILL.md` with progressive disclosure. |

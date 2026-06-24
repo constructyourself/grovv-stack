@@ -174,9 +174,9 @@ project/
 │   ├── pages/          # Astro pages
 │   ├── lib/            # Utility functions
 │   └── api/            # API routes
-├── docs/               # Documentation
+├── docs/               # Documentation (specs, prompts, architecture)
 ├── tests/              # Test suites
-└── .skills/            # Claude Code skills
+└── .claude/skills/     # Invocable Claude Code skills
 \`\`\`
 ```
 

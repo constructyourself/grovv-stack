@@ -8,17 +8,17 @@ This repository is **not an application**. It is a prompt-driven scaffolding sys
 
 ## Operating Mode
 
-grovv stack is installable as a Claude Code plugin. Once installed (`/plugin marketplace add constructyourself/grovv-stack` then `/plugin install grovv-stack@grovv`), it is kicked off two ways:
+grovv stack is installable as a Claude Code plugin. Once installed (`/plugin marketplace add constructyourself/grovv-stack` then `/plugin install grovv-stack@grovv`), it is kicked off through a single entry point — the `grovv` skill:
 
-- `/grovv` — the explicit command front door (`commands/grovv.md`). Optional argument `new` or `adopt` forces the mode; otherwise it auto-detects.
-- Natural language — the `grovv-scaffold` skill triggers on intent like "build out this project" or "adopt grovv stack in this repo".
+- `/grovv` — invoke the skill explicitly. Optional argument `new` or `adopt` forces the mode; otherwise it auto-detects.
+- Natural language — the same `grovv` skill triggers on intent like "build out this project" or "adopt grovv stack in this repo".
 
-Both entry points read `grovv-stack-scaffold.md` and run the same workflow. This repo is conversation-driven. When invoked against a target project:
+Both routes are the one `grovv` skill — there is no separate command. Both read `grovv-stack-scaffold.md` and run the same workflow. This repo is conversation-driven. When invoked against a target project:
 
 1. **Read** `grovv-stack-scaffold.md` — the master directive that defines the full workflow.
 2. **Ask** before generating. Understand product, users, constraints, and stack first.
 3. **Assess** for existing projects (Step 0 of the scaffold) — never overwrite working code without an approved adoption plan.
-4. **Execute** Steps 1–9 sequentially, pausing for confirmation at each major artifact. Step 7 designs the project-specific agent team (harness) after the skills repository exists; Step 8 sets up Linear project tracking from the development plan.
+4. **Execute** Steps 1–9 sequentially, pausing for confirmation at each major artifact. Step 6 generates the project's invocable skills under `.claude/skills/`; Step 7 designs the project-specific agent team (harness) on top of them; Step 8 sets up Linear project tracking from the development plan.
 5. **Mark** unknowns with `@TODO`; revisit as the conversation progresses.
 
 If the user asks "build out this project," start by reading `grovv-stack-scaffold.md` end-to-end before any tool call that writes a file.
@@ -32,9 +32,8 @@ If the user asks "build out this project," start by reading `grovv-stack-scaffol
 | `grovv-stack-scaffold.md` | Master scaffolding directive — read this first |
 | `.claude-plugin/plugin.json` | Plugin manifest — makes this repo installable as a Claude Code plugin (`grovv-stack`) |
 | `.claude-plugin/marketplace.json` | Marketplace catalog for `/plugin marketplace add` |
-| `commands/grovv.md` | The `/grovv` slash command — the kickoff front door (auto-detects new vs existing) |
-| `.claude/skills/grovv-scaffold/` | Natural-language skill that triggers the same scaffolding flow without the explicit command |
-| `docs/prompts/skills-builder.md` | Generates the target project's `docs/skills/` (15+ best-practice guides) |
+| `.claude/skills/grovv/` | The `grovv` skill — the single kickoff entry point (invocable as `/grovv`, also triggers on natural language; auto-detects new vs existing) |
+| `docs/prompts/skills-builder.md` | Generates the target project's invocable skills under `.claude/skills/` (the baseline best-practice set) |
 | `docs/prompts/team-design.md` | Designs the target project's agent team + skills (harness step, runs after skills-builder) |
 | `docs/prompts/linear-tracking.md` | Sets up Linear project tracking — seeds a project + issues from the development plan (via Linear MCP) |
 | `docs/prompts/tech-spec.md` | Generates the target project's technical specification |
@@ -105,7 +104,7 @@ These files are the source of truth that downstream projects depend on. Treat ch
 
 - Stack changes (e.g., adding a runtime, swapping a default) must propagate to **every** doc that references the stack: `grovv-stack-scaffold.md`, `.claude/CLAUDE.md`, `.claude/agents/*.md`, and every prompt under `docs/prompts/`. Grep before committing.
 - The sub-agent definitions in `.claude/agents/` and the prompts in `docs/prompts/` are read by future agent runs. A small wording change here changes behavior at scale — review with care.
-- Don't introduce dependencies or build steps in this repo. It still produces documents, not compiled artifacts. The plugin manifests (`.claude-plugin/*.json`), the `/grovv` command, and the skills are configuration, not a build pipeline — keep it that way.
+- Don't introduce dependencies or build steps in this repo. It still produces documents, not compiled artifacts. The plugin manifests (`.claude-plugin/*.json`) and the skills (including the `grovv` kickoff skill) are configuration, not a build pipeline — keep it that way.
 - This repo is also an **installable plugin**. The single source of truth for agents and skills stays under `.claude/`; `plugin.json` points `skills` at `.claude/skills/` and lists the six agents from `.claude/agents/` — do not duplicate those files into root-level `agents/` or `skills/`, or they will drift. When you add or rename an agent, update the `agents` array in `.claude-plugin/plugin.json` too.
 - Bump `version` in `.claude-plugin/plugin.json` when you change behavior that installed users should receive.
 
@@ -118,7 +117,7 @@ These files are the source of truth that downstream projects depend on. Treat ch
 /plugin install grovv-stack@grovv
 ```
 
-Then run `/grovv` in any project, or just say "build out this project with grovv stack". Working from a clone of this repo (without installing) also works — the `.claude/` agents and skills load as project-scope components and the `grovv-scaffold` skill triggers on intent.
+Then run `/grovv` in any project, or just say "build out this project with grovv stack". Working from a clone of this repo (without installing) also works — the `.claude/` agents and skills load as project-scope components and the `grovv` skill triggers on intent.
 
 -----
 gro\\/\\/ stack — Repository Guide

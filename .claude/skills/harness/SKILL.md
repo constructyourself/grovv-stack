@@ -1,9 +1,11 @@
 ---
 name: harness
-description: "하네스를 구성합니다. 전문 에이전트를 정의하며, 해당 에이전트가 사용할 스킬을 생성하는 메타 스킬. (1) '하네스 구성해줘', '하네스 구축해줘' 요청 시, (2) '하네스 설계', '하네스 엔지니어링' 요청 시, (3) 새로운 도메인/프로젝트에 대한 하네스 기반 자동화 체계를 구축할 때, (4) 하네스 구성을 재구성하거나 확장할 때, (5) '하네스 점검', '하네스 감사', '하네스 현황', '에이전트/스킬 동기화' 등 기존 하네스 운영/유지보수 요청 시 사용."
+description: "Bundled harness meta-skill — the team-architecture factory the grovv stack team-design step uses to build a project-specific agent team and the skills those agents use. Included in this repo for enhanced project build-out and attributed: vendored from the open-source harness project by revfactory under Apache-2.0 (see ATTRIBUTION.md). Use when designing, building, extending, auditing, or maintaining a Claude Code agent team / harness for a domain or project — defining specialist agents and generating the skills they use. The workflow body below is the vendored original (Korean)."
 ---
 
 # Harness — Agent Team & Skill Architect
+
+> **Note (gro\\/\\/ stack).** harness is bundled in this repo for enhanced project build-out — it powers the team-design step that generates a project-specific agent team and the skills those agents use. It is vendored, mostly verbatim, from the open-source [harness project by revfactory](https://github.com/revfactory/harness) under Apache-2.0; see [`ATTRIBUTION.md`](ATTRIBUTION.md). The grovv-facing, English interface is `docs/prompts/team-design.md`. The workflow body below is the vendored original and is in Korean — it is left intact for fidelity to the source.
 
 도메인/프로젝트에 맞는 하네스를 구성하고, 각 에이전트의 역할을 정의하며, 에이전트가 사용할 스킬을 생성하는 메타 스킬.
 
