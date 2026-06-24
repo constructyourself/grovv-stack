@@ -115,10 +115,10 @@ These six are the **baseline team**. During the team-design step (prompt: `docs/
 
 ### Prompt Execution Order
 
-1. **skills-builder** → Generates the project's invocable skills under `.claude/skills/` (the baseline best-practice set)
-2. **team-design** → Designs the project-specific agent team + skills (harness); additive to grovv defaults
-3. **linear-tracking** → Creates/reuses a Linear project and seeds issues from the development plan (via Linear MCP)
-4. **tech-spec** → Creates technical specification document
+1. **tech-spec** → Creates the technical specification (`docs/tech-spec.md`)
+2. **skills-builder** → Generates the project's invocable skills under `.claude/skills/` (the baseline best-practice set)
+3. **team-design** → Designs the project-specific agent team + skills (harness); additive to grovv defaults
+4. **linear-tracking** → Creates/reuses a Linear project and seeds issues from the development plan (via Linear MCP)
 5. **readme-generator** → Generates project README
 
 ### For New Projects
