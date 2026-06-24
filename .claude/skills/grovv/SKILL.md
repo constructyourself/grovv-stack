@@ -1,11 +1,13 @@
 ---
-name: grovv-scaffold
-description: "Scaffolds a project with the grovv stack production-first process — generates the product spec, development plan, technical spec, a development best-practices skills repository, a project-specific agent team (harness), and the README. Use whenever the user wants to: 'build out this project', 'scaffold with grovv', 'set up grovv stack', 'grovv stack this repo', 'adopt grovv stack' in an existing codebase, or start a new production-ready project from scratch. Also triggers on requests to lay down docs/specs/skills foundations or an agent team for a new or existing project. Prefer the /grovv command when the user wants an explicit kickoff; this skill catches the same intent expressed in natural language."
+name: grovv
+description: "Scaffolds a project with the grovv stack production-first process — generates the product spec, development plan, technical spec, an invocable set of best-practice skills, a project-specific agent team (harness), Linear tracking, and the README. This is the single entry point for grovv stack: invoke it explicitly as /grovv (optionally /grovv new or /grovv adopt to force the mode), or let it trigger on intent. Use whenever the user wants to: 'build out this project', 'scaffold with grovv', 'set up grovv stack', 'grovv stack this repo', 'adopt grovv stack' in an existing codebase, or start a new production-ready project from scratch. Also triggers on requests to lay down docs/specs/skills foundations or an agent team for a new or existing project."
 ---
 
-# grovv-scaffold — start the gro\\/\\/ stack process
+# grovv — start the gro\\/\\/ stack process
 
 Runs the gro\\/\\/ stack production-first scaffolding process against the project in the current working directory. The output is documents, configuration, and an agent team in the target project — never code in the grovv-stack repo itself.
+
+This skill is the single entry point for grovv stack. It is invocable explicitly as `/grovv` and also triggers on natural-language intent ("build out this project", "adopt grovv stack here") — there is no separate command.
 
 ## Read the directive first
 
@@ -19,7 +21,13 @@ When running from a clone of the grovv-stack repo rather than an installed plugi
 
 ## Detect new vs existing
 
-Inspect the working directory:
+An optional argument forces the mode:
+
+- `new` — treat this as a brand-new project; start at Step 1.
+- `adopt` — treat this as an existing project; start at Step 0.
+- no argument — **auto-detect** from the working directory.
+
+When auto-detecting:
 
 - **Existing project** — source code, configs (`package.json`, `go.mod`, `tsconfig.json`, etc.), or a populated `docs/` are present. Start at Step 0: assess the codebase, then propose an adoption plan and wait for approval before changing anything. Never overwrite or break working code.
 - **New project** — the directory is essentially empty. Start at Step 1.

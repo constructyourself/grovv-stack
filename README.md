@@ -32,10 +32,10 @@ In any repository — new or existing:
 
 | Entry point | How |
 |-------------|-----|
-| Command | `/grovv` — auto-detects new vs existing. Force the mode with `/grovv new` or `/grovv adopt`. |
-| Natural language | "build out this project with grovv stack", "adopt grovv stack in this repo" — triggers the `grovv-scaffold` skill. |
+| `/grovv` | Invoke the `grovv` skill explicitly — auto-detects new vs existing. Force the mode with `/grovv new` or `/grovv adopt`. |
+| Natural language | "build out this project with grovv stack", "adopt grovv stack in this repo" — the same `grovv` skill triggers on intent. |
 
-Both run the same workflow defined in `grovv-stack-scaffold.md`. For an existing project, the agent assesses the codebase and proposes an adoption plan before changing anything — it never overwrites working code without approval.
+Both routes are the one `grovv` skill (there is no separate command) and run the same workflow defined in `grovv-stack-scaffold.md`. For an existing project, the agent assesses the codebase and proposes an adoption plan before changing anything — it never overwrites working code without approval.
 
 Working from a clone of this repo (without installing) also works: the agents and skills under `.claude/` load as project-scope components.
 
@@ -46,14 +46,13 @@ Working from a clone of this repo (without installing) also works: the agents an
 Into the target project:
 
 ```
-product-spec.md            # What, who, why
-development-plan.md         # Engineering plan
-tech-spec.md               # Complete technical specification
-docs/skills/               # 12-15 development best-practice guides
-docs/prompts/              # Prompt specs (skills-builder, team-design, tech-spec, readme)
+docs/product-spec.md       # What, who, why
+docs/development-plan.md    # Engineering plan
+docs/tech-spec.md          # Complete technical specification
+docs/prompts/              # Prompt specs (skills-builder, team-design, linear-tracking, tech-spec, readme)
 docs/architecture/         # Architecture decision records
 .claude/agents/            # Project-specific agent team (additive to the six defaults)
-.claude/skills/            # Skills the agents use + an orchestrator
+.claude/skills/            # Invocable skills — best-practice set + the agents' skills + an orchestrator
 README.md                  # Project README
 ```
 
@@ -65,8 +64,7 @@ The pipeline runs: structure + config → product spec → development plan → 
 
 | Component | Path |
 |-----------|------|
-| Command | `commands/grovv.md` |
-| Kickoff skill | `.claude/skills/grovv-scaffold/` |
+| Kickoff skill — `/grovv`, also triggers on intent | `.claude/skills/grovv/` |
 | harness meta-skill (Apache-2.0, vendored) | `.claude/skills/harness/` |
 | Default agents | `.claude/agents/` (scaffold, frontend, backend, testing, database, code-review) |
 | Master directive | `grovv-stack-scaffold.md` |

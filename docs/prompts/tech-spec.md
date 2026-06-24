@@ -3,7 +3,7 @@
 ## Prompt Purpose
 
 **Prompt Title:** Technical Specification Document Generator  
-**SubTitle:** From Docs → `docs/tech-spec-[project-name].md`  
+**SubTitle:** From Docs → `docs/tech-spec.md`  
 **Description:** 💡 Read all available documentation in the `docs/` folder and generate a fully-populated technical specification document using `tech-spec-template.md` as the formatting standard.
 
 | Role | Name |
@@ -14,7 +14,7 @@
 | Informed | [Stakeholders who need to be kept informed of progress] |
 
 **Template Reference:** `docs/prompts/tech-spec-template.md`  
-**Output File:** `docs/tech-spec-[project-name].md`
+**Output File:** `docs/tech-spec.md`
 
 ---
 
@@ -50,17 +50,17 @@ This prompt is used in conjunction with `docs/prompts/tech-spec-template.md`. To
 
 1. This prompt defines the persona, tech stack context, and process instructions
 2. The template (`tech-spec-template.md`) defines the exact section structure and formatting
-3. The output is a new file: `docs/tech-spec-[project-name].md`
+3. The output is a new file: `docs/tech-spec.md`
 
 **Source Documents to Read (in `docs/` folder):**
 
 When executing this prompt, read all available documentation in the `docs/` folder, prioritizing:
 
-- `docs/product-plan*.md` — product vision, goals, user stories, business context
+- `docs/product-spec*.md` — product vision, goals, user stories, business context
 - `docs/development-plan*.md` — implementation phases, sprint structure, technical approach
 - Any other `.md` files present in `docs/` and subdirectories for additional context
 
-Use the project name derived from these source documents as `[project-name]` in the output filename.
+Use the project name derived from these source documents in the spec's title and colophon.
 
 ---
 
@@ -69,25 +69,25 @@ Use the project name derived from these source documents as `[project-name]` in 
 ### Step-by-Step Instructions
 
 1. **Read source docs** — Scan all files in `docs/` (including subdirectories). Identify the project name, goals, technical requirements, and implementation plan.
-2. **Identify project name** — Extract from `product-plan` or `development-plan` filename or content.
+2. **Identify project name** — Extract from `product-spec` or `development-plan` filename or content.
 3. **Populate every template section** — Use `tech-spec-template.md` as the exact structural and formatting reference. Do not omit sections; mark unavailable information as `@TODO`.
 4. **Apply stack context** — Reference the tech stack tables defined in this prompt when filling in architecture, environment, and deployment sections.
-5. **Write output file** — Save completed document to `docs/tech-spec-[project-name].md`.
+5. **Write output file** — Save completed document to `docs/tech-spec.md`.
 
 ### Section Mapping: Source Docs → Template Sections
 
 | Template Section | Primary Source |
 |-----------------|----------------|
-| 🔑 Purpose / Summary | product-plan goals, project overview |
-| 📰 Background | product-plan problem statement, business context |
-| 📑 Scope | product-plan features, development-plan phases |
+| 🔑 Purpose / Summary | product-spec goals, project overview |
+| 📰 Background | product-spec problem statement, business context |
+| 📑 Scope | product-spec features, development-plan phases |
 | 🖌️ Design | development-plan architecture, schema, API design |
-| 👥 User Flow + Business Processes | product-plan user stories, workflows |
+| 👥 User Flow + Business Processes | product-spec user stories, workflows |
 | 🎢 Risk Assessment | development-plan risks, technical constraints |
 | 🧪 Testing and QA | development-plan test strategy |
 | ➡️ Rollout / Deployment Plan | development-plan deployment, migration |
-| 🏆 Measuring Success | product-plan success metrics |
-| 🎧 Detailed Requirements | product-plan + development-plan requirements |
+| 🏆 Measuring Success | product-spec success metrics |
+| 🎧 Detailed Requirements | product-spec + development-plan requirements |
 | 🧑‍💻 Development Resources | stack context in this prompt |
 | Sprint Planning | development-plan sprint backlog |
 
@@ -193,8 +193,8 @@ cp .env.example .env.local
 ```
 project-root/
 ├── docs/
-│   ├── tech-spec-[project-name].md  # Generated technical specification
-│   ├── product-plan.md              # Product plan (source doc)
+│   ├── tech-spec.md  # Generated technical specification
+│   ├── product-spec.md              # Product spec (source doc)
 │   ├── development-plan.md          # Development plan (source doc)
 │   ├── prompts/                     # AI prompts and skills
 │   │   ├── tech-spec.md             # This prompt

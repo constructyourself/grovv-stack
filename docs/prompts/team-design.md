@@ -1,6 +1,6 @@
 # Prompt: Design the Agent Team (Harness)
 
-Use this prompt to generate a project-specific **agent team and the skills they use** for the target project. It runs as a step in the grovv stack scaffolding pipeline, **after `skills-builder.md` and before `tech-spec.md`** — once the development best practices exist, the team is designed to execute against them.
+Use this prompt to generate a project-specific **agent team and the skills they use** for the target project. It is **Step 7** of the grovv stack scaffolding pipeline — it runs **after `skills-builder.md` (Step 6) and before `linear-tracking.md` (Step 8)**. The specs (`docs/product-spec.md`, `docs/development-plan.md`, `docs/tech-spec.md`) already exist by now, and once the baseline best-practice skills exist, the team is designed to execute against them.
 
 This step adapts the vendored **harness** meta-skill (`.claude/skills/harness/`) to grovv stack conventions. harness is the team-architecture factory: it turns a domain description into coordinated agents plus the skills those agents use, using six proven orchestration patterns. See `.claude/skills/harness/ATTRIBUTION.md` for provenance and license.
 
@@ -62,7 +62,7 @@ Follow the phased workflow defined in the vendored skill `.claude/skills/harness
 | Phase | Purpose |
 |-------|---------|
 | 0 — Audit | Read the target's existing `.claude/agents/`, `.claude/skills/`, and `CLAUDE.md`. Decide: new build, extension, or maintenance. Detect drift. Report before acting. |
-| 1 — Domain analysis | Identify the domain, dominant task types, and the project stack from `tech-spec.md` / codebase. |
+| 1 — Domain analysis | Identify the domain, dominant task types, and the project stack from `docs/tech-spec.md` / codebase. |
 | 2 — Team architecture | Choose execution mode (agent team is the default) and one of the six patterns. |
 | 3 — Agent definitions | Write each agent to `.claude/agents/{name}.md` (duplicate review first; reuse defaults where possible). |
 | 4 — Skill generation | Write the skills each agent uses to `.claude/skills/{name}/SKILL.md` with progressive disclosure. |
@@ -125,7 +125,7 @@ This step is complete when, for the target project:
 
 ## After This Step
 
-Continue the pipeline: proceed to `tech-spec.md`, then `readme-generator.md`. The tech spec should reference the agent team as part of the project's development workflow where relevant.
+Continue the pipeline: proceed to `linear-tracking.md` (Step 8), then `readme-generator.md` (Step 9). Surface the agent team where relevant — in the Linear backlog and the README — and revisit `docs/tech-spec.md` if it should document the team as part of the project's development workflow.
 
 -----
 gro\\/\\/ stack — Agent Team Design

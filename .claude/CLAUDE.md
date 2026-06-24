@@ -15,10 +15,10 @@ It ships as a Claude Code plugin. Install it once, then kick it off in any repo:
 /plugin install grovv-stack@grovv
 ```
 
-- `/grovv` — explicit kickoff (`commands/grovv.md`); optional `new` or `adopt` argument, otherwise auto-detects.
-- Natural language — the `grovv-scaffold` skill triggers on intent ("build out this project", "adopt grovv stack here").
+- `/grovv` — explicit kickoff: invokes the `grovv` skill; optional `new` or `adopt` argument, otherwise auto-detects.
+- Natural language — the same `grovv` skill triggers on intent ("build out this project", "adopt grovv stack here").
 
-Both read `grovv-stack-scaffold.md` and run the same Steps 0–9 workflow.
+Both routes are the one `grovv` skill (no separate command); both read `grovv-stack-scaffold.md` and run the same Steps 0–9 workflow.
 
 -----
 
@@ -65,8 +65,6 @@ grovv-stack/
 ├── .claude-plugin/             # Plugin packaging (makes this repo installable)
 │   ├── plugin.json             # Plugin manifest — name, version, component paths
 │   └── marketplace.json        # Marketplace catalog for /plugin marketplace add
-├── commands/                   # Plugin commands
-│   └── grovv.md                # /grovv — kickoff front door (new vs existing)
 ├── .claude/                    # Claude Code configuration
 │   ├── CLAUDE.md               # This file — project context for Claude
 │   ├── settings.json           # Claude Code settings
@@ -77,8 +75,8 @@ grovv-stack/
 │   │   ├── testing.md          # Testing and TDD agent
 │   │   ├── database.md         # Database design agent
 │   │   └── code-review.md      # Code review agent
-│   └── skills/                 # Skills the scaffolder uses (shipped via plugin.json)
-│       ├── grovv-scaffold/     # Natural-language kickoff skill
+│   └── skills/                 # Skills shipped via plugin.json
+│       ├── grovv/              # Kickoff skill — /grovv, also triggers on intent (single entry point)
 │       └── harness/            # harness meta-skill (Apache-2.0) — team-design step
 ├── docs/
 │   ├── prompts/                # Executable prompts for scaffolding
@@ -88,7 +86,6 @@ grovv-stack/
 │   │   ├── tech-spec.md
 │   │   ├── tech-spec-template.md
 │   │   └── readme-generator.md
-│   ├── skills/                 # Generated development best practices
 │   └── architecture/           # Architecture decision records
 ├── grovv-stack-scaffold.md     # Main scaffolding directive
 ├── settings.json               # Claude Code agent team config
@@ -118,10 +115,10 @@ These six are the **baseline team**. During the team-design step (prompt: `docs/
 
 ### Prompt Execution Order
 
-1. **skills-builder** → Generates `/docs/skills/` with development best practices
-2. **team-design** → Designs the project-specific agent team + skills (harness); additive to grovv defaults
-3. **linear-tracking** → Creates/reuses a Linear project and seeds issues from the development plan (via Linear MCP)
-4. **tech-spec** → Creates technical specification document
+1. **tech-spec** → Creates the technical specification (`docs/tech-spec.md`)
+2. **skills-builder** → Generates the project's invocable skills under `.claude/skills/` (the baseline best-practice set)
+3. **team-design** → Designs the project-specific agent team + skills (harness); additive to grovv defaults
+4. **linear-tracking** → Creates/reuses a Linear project and seeds issues from the development plan (via Linear MCP)
 5. **readme-generator** → Generates project README
 
 ### For New Projects
