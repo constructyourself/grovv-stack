@@ -53,10 +53,11 @@ docs/prompts/              # Prompt specs (skills-builder, team-design, linear-t
 docs/architecture/         # Architecture decision records
 .claude/agents/            # Project-specific agent team (additive to the six defaults)
 .claude/skills/            # Invocable skills — best-practice set + the agents' skills + an orchestrator
+MEMORY.md                  # Cross-session memory, coordinated with the Linear project
 README.md                  # Project README
 ```
 
-The pipeline runs: structure + config → product spec → development plan → tech spec → prompt docs → skills-builder → **team-design (harness)** → **linear-tracking** → readme. The team-design step uses the bundled [harness](.claude/skills/harness/ATTRIBUTION.md) meta-skill to design a project-specific agent team, additive to the six grovv defaults. The linear-tracking step uses the Linear MCP to create a project and seed issues from the development plan.
+The pipeline runs: structure + config → product spec → development plan → tech spec → prompt docs → skills-builder → **team-design (harness)** → **linear-tracking** → readme. The team-design step uses the bundled [harness](.claude/skills/harness/ATTRIBUTION.md) meta-skill to design a project-specific agent team, additive to the six grovv defaults. The linear-tracking step uses the Linear MCP to create a project and seed issues from the development plan, and creates `MEMORY.md` — durable cross-session memory that coordinates with the Linear backlog (Linear owns the tasks; MEMORY.md owns decisions, gotchas, and in-flight context), kept alive by CLAUDE.md rules and a SessionStart hook.
 
 -----
 

@@ -18,7 +18,7 @@ Both routes are the one `grovv` skill — there is no separate command. Both rea
 1. **Read** `grovv-stack-scaffold.md` — the master directive that defines the full workflow.
 2. **Ask** before generating. Understand product, users, constraints, and stack first.
 3. **Assess** for existing projects (Step 0 of the scaffold) — never overwrite working code without an approved adoption plan.
-4. **Execute** Steps 1–9 sequentially, pausing for confirmation at each major artifact. Step 6 generates the project's invocable skills under `.claude/skills/`; Step 7 designs the project-specific agent team (harness) on top of them; Step 8 sets up Linear project tracking from the development plan.
+4. **Execute** Steps 1–9 sequentially, pausing for confirmation at each major artifact. Step 6 generates the project's invocable skills under `.claude/skills/`; Step 7 designs the project-specific agent team (harness) on top of them; Step 8 sets up Linear project tracking from the development plan plus the cross-session `MEMORY.md` that coordinates with it.
 5. **Mark** unknowns with `@TODO`; revisit as the conversation progresses.
 
 If the user asks "build out this project," start by reading `grovv-stack-scaffold.md` end-to-end before any tool call that writes a file.
@@ -30,12 +30,13 @@ If the user asks "build out this project," start by reading `grovv-stack-scaffol
 | Path | Role |
 |------|------|
 | `grovv-stack-scaffold.md` | Master scaffolding directive — read this first |
+| `MEMORY.md` | Cross-session memory for this repo's own development — read at session start, update before ending (see Cross-Session Memory below) |
 | `.claude-plugin/plugin.json` | Plugin manifest — makes this repo installable as a Claude Code plugin (`grovv-stack`) |
 | `.claude-plugin/marketplace.json` | Marketplace catalog for `/plugin marketplace add` |
 | `.claude/skills/grovv/` | The `grovv` skill — the single kickoff entry point (invocable as `/grovv`, also triggers on natural language; auto-detects new vs existing) |
 | `docs/prompts/skills-builder.md` | Generates the target project's invocable skills under `.claude/skills/` (the baseline best-practice set) |
 | `docs/prompts/team-design.md` | Designs the target project's agent team + skills (harness step, runs after skills-builder) |
-| `docs/prompts/linear-tracking.md` | Sets up Linear project tracking — seeds a project + issues from the development plan (via Linear MCP) |
+| `docs/prompts/linear-tracking.md` | Sets up Linear project tracking (seeds a project + issues from the development plan, via Linear MCP) and the target project's `MEMORY.md` |
 | `docs/prompts/tech-spec.md` | Generates the target project's technical specification |
 | `docs/prompts/tech-spec-template.md` | Section structure used by `tech-spec.md` |
 | `docs/prompts/readme-generator.md` | Generates the target project's README |
@@ -45,6 +46,19 @@ If the user asks "build out this project," start by reading `grovv-stack-scaffol
 | `settings.json` | Claude Code agent-team configuration |
 
 When in doubt about a convention, the master directive (`grovv-stack-scaffold.md`) is authoritative.
+
+-----
+
+## Cross-Session Memory
+
+This repo keeps its own cross-session memory in `MEMORY.md` (root), coordinated with the grovv-stack Linear project. The rules:
+
+- **Read `MEMORY.md` at the start of every session.** A `SessionStart` hook in `.claude/settings.json` surfaces it automatically; read it manually if hooks didn't fire.
+- **Update it before ending any session that changed something meaningful:** refresh Current State, append a dated Decision Log entry, update Next Steps, prune anything stale.
+- **Linear owns the backlog; `MEMORY.md` owns context.** Never mirror issue lists into the file — reference Linear issues by identifier. Completed or re-scoped work gets synced to Linear in the same session (or marked `@TODO` in `MEMORY.md` if Linear is unreachable).
+- **Keep it under ~120 lines.** It is loaded every session; history lives in git, the backlog lives in Linear.
+
+Target projects get the same convention: the linear-tracking step (Step 8) generates their `MEMORY.md`, `CLAUDE.md` rules, and `SessionStart` hook.
 
 -----
 

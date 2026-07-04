@@ -88,6 +88,7 @@ grovv-stack/
 │   │   └── readme-generator.md
 │   └── architecture/           # Architecture decision records
 ├── grovv-stack-scaffold.md     # Main scaffolding directive
+├── MEMORY.md                   # Cross-session memory for this repo (coordinates with Linear)
 ├── settings.json               # Claude Code agent team config
 └── README.md                   # Project readme
 ```
@@ -118,7 +119,7 @@ These six are the **baseline team**. During the team-design step (prompt: `docs/
 1. **tech-spec** → Creates the technical specification (`docs/tech-spec.md`)
 2. **skills-builder** → Generates the project's invocable skills under `.claude/skills/` (the baseline best-practice set)
 3. **team-design** → Designs the project-specific agent team + skills (harness); additive to grovv defaults
-4. **linear-tracking** → Creates/reuses a Linear project and seeds issues from the development plan (via Linear MCP)
+4. **linear-tracking** → Creates/reuses a Linear project and seeds issues from the development plan (via Linear MCP); also creates the target project's `MEMORY.md`, its `CLAUDE.md` memory rules, and a `SessionStart` hook
 5. **readme-generator** → Generates project README
 
 ### For New Projects
@@ -192,6 +193,18 @@ For existing projects, analyze and match established patterns.
 
 -----
 
+## Cross-Session Memory
+
+`MEMORY.md` at the repo root is this repo's durable memory across agent sessions, coordinated with the grovv-stack Linear project:
+
+- **Read it at session start** — a `SessionStart` hook in `.claude/settings.json` surfaces it automatically; read it manually if hooks didn't fire.
+- **Update it before ending** any session that changed something meaningful: Current State, a dated Decision Log entry, Next Steps; prune stale content.
+- **Linear owns the backlog; `MEMORY.md` owns context** — reference Linear issues by identifier, never mirror issue lists into the file. Keep it under ~120 lines.
+
+Target projects get the same convention from the linear-tracking step (see `docs/prompts/linear-tracking.md` for the template and hook).
+
+-----
+
 ## Key Directives
 
 - **Ask before generating** — understand the product, users, constraints, and stack first
@@ -199,6 +212,7 @@ For existing projects, analyze and match established patterns.
 - **Mark unknowns with `@TODO`** and revisit as conversation progresses
 - **Apply gro\\/\\/ stack branding** to all generated documents
 - **Iterate** — documents are living artifacts, revise as understanding deepens
+- **Maintain memory** — read `MEMORY.md` at session start, update it before ending meaningful work, sync with Linear
 - **Always ask what Playwright should test** — never auto-generate E2E tests
 - **Always ask which frontend framework** — Astro + React or Next.js — before writing frontend code
 
