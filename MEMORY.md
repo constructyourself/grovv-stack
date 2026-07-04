@@ -18,9 +18,9 @@ Cross-session memory for grovv-stack development. An agent starting a session in
 
 | Field | Value |
 |-------|-------|
-| Project | @TODO — Linear project URL (fill in once confirmed via Linear MCP) |
-| Team | @TODO |
-| Issue prefix | @TODO |
+| Project | https://linear.app/grovv/project/grovv-stack-838efdf244c3 |
+| Team | Grovv |
+| Issue prefix | GRO |
 
 Sync rules:
 
@@ -44,7 +44,7 @@ Sync rules:
 
 Append-only, newest first, dated. One line of decision, one line of why. Prune entries older than a few months if no longer load-bearing.
 
-- **2026-07-04** — Adopted the MEMORY.md convention, both for this repo and as scaffold output. Maintained via CLAUDE.md rules plus a `SessionStart` hook in `.claude/settings.json`; generated in target projects by the linear-tracking step (Step 8), since the two artifacts coordinate: Linear = backlog, MEMORY.md = session context.
+- **2026-07-04** — Adopted the MEMORY.md convention, both for this repo and as scaffold output (GRO-196, PR #9; promoted from GRO-169). Maintained via CLAUDE.md rules plus a `SessionStart` hook in `.claude/settings.json`; generated in target projects by the linear-tracking step (Step 8), since the two artifacts coordinate: Linear = backlog, MEMORY.md = session context.
 - **2026-07-04** — Division of responsibility fixed: never mirror Linear issue lists into memory files; reference identifiers only.
 
 -----
@@ -61,8 +61,9 @@ Append-only, newest first, dated. One line of decision, one line of why. Prune e
 
 ## Next Steps
 
-- @TODO — Fill in the Linear Coordination table once the Linear project is confirmed via the Linear MCP.
-- @TODO — Reconcile the existing grovv-stack Linear project issues with the MEMORY.md work (add issues for the convention rollout; update any issue that references the old Step 8 scope).
+- Merge PR #9, then move GRO-196 to Done.
+- Run the GRO-197 smoke test (SessionStart hook fires; Step 8 generates memory in a real target project).
+- @TODO — GRO-169's description still lists "memory system" as open; editing it was approval-gated from the agent session (a comment noting the promotion was added instead). Strike it through manually or from an approved session.
 
 -----
 gro\\/\\/ stack — Cross-Session Memory
