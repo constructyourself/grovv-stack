@@ -45,6 +45,6 @@ Follow the directive's steps in order, pausing for confirmation at each major ar
 
 ## Pipeline
 
-The directive runs: structure + config → product spec → development plan → tech spec → prompt docs → **skills-builder** → **team-design (harness)** → **linear-tracking** → readme-generator. The team-design step (`docs/prompts/team-design.md`) designs a project-specific agent team additive to the six grovv default agents, using the bundled harness meta-skill. The linear-tracking step (`docs/prompts/linear-tracking.md`) seeds a Linear project and issues from the development plan via the Linear MCP.
+The directive runs: structure + config → product spec → development plan → tech spec → prompt docs → **skills-builder** → **team-design (harness)** → **linear-tracking** → readme-generator. The team-design step (`docs/prompts/team-design.md`) designs a project-specific agent team additive to the six grovv default agents, using the bundled harness meta-skill. The linear-tracking step (`docs/prompts/linear-tracking.md`) seeds a Linear project and issues from the development plan via the Linear MCP, and creates the project's root `MEMORY.md` — cross-session memory coordinated with the Linear project (Linear owns the backlog; MEMORY.md owns session context) — plus its `CLAUDE.md` maintenance rules and `SessionStart` hook.
 
 Begin by reading the directive, then engage the user.
