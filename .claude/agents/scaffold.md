@@ -30,8 +30,8 @@ Follow Steps 0–9 of `grovv-stack-scaffold.md`:
 3. Development plan (`docs/development-plan.md`)
 4. Technical specification (`docs/tech-spec.md`)
 5. Prompt documents (`docs/prompts/`)
-6. Execute skills builder → populate `.claude/skills/` with invocable skills
-7. Design the agent team (harness) → `.claude/agents/` + `.claude/skills/`
+6. Execute skills builder → populate the chosen tool directories' `skills/` with invocable skills
+7. Design the agent team (harness) → the chosen tool directories' `agents/` + `skills/`
 8. Set up project tracking (GitHub Issues or Linear — ask)
 9. Generate README
 

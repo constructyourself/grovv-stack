@@ -126,7 +126,7 @@ project-folder/
 │       ├── tracker-setup.md
 │       ├── tech-spec.md
 │       └── readme-generator.md
-├── .claude/
+├── .claude/                   # One directory per tool the team chose in Step 1 (.claude/, .vibe/, .codex/)
 │   ├── agents/                # Project-specific agent team (from team-design step)
 │   └── skills/                # Invocable skills — best-practice set + agent skills + orchestrator
 │       ├── dev-standards/         # Core philosophy + workflow (from skills-builder)
@@ -140,6 +140,7 @@ project-folder/
 │       ├── deployment-ops/
 │       ├── debugging/
 │       └── {orchestrator}/        # + agent skills (from team-design step)
+├── .grovv/                    # Canonical definitions — only when more than one tool was chosen
 ├── .gitignore                 # Ignore rules — includes the gitignored prototypes/ the throwaway tier requires
 ├── MEMORY.md                  # Cross-session memory, coordinated with the tracker (from tracker-setup step)
 ├── settings.json              # Claude Code agent configuration
@@ -196,6 +197,25 @@ The adoption plan should clearly state:
 
 Create directories, the `settings.json` configuration file, and the project's `.gitignore` entries.
 
+**Which tool directories to create is a question, not an assumption.** The scaffolder runs from one CLI, but the project outlives the session that created it, and a teammate may open it from a different one. Generating only the running CLI's directory is how a project ends up usable from exactly one tool by accident rather than by choice. Ask before creating any of them; never infer the answer from which CLI happens to be running.
+
+Ask exactly this:
+
+> Which AI coding assistants will be used in this project? Pick every one your team works in — I will generate configuration for those and no others.
+>
+> 1. **Claude Code** — `.claude/`
+> 2. **Vibe** — `.vibe/`
+> 3. **Codex** — `.codex/`
+>
+> I am running from one of these already, so that one is a safe answer on its own. Adding another costs one directory and means a teammate on that tool can pick this project up with no migration. Leaving it out keeps the project smaller. Adding one later is possible but more work than adding it now, while the skills and agents are being generated.
+
+- Wait for an explicit answer. If the user says "whatever you think", name the CLI this session is running from, say that it is the only one you can confirm they have, and ask them to confirm — a stated default is still an answer they gave.
+- **One tool chosen** — create only that tool's directory. Do **not** create `.grovv/`. A single-tool project should not carry a canonical tree nobody will open.
+- **More than one chosen** — create `.grovv/` as the canonical definitions plus each chosen tool's directory derived from it, identical apart from the tool path prefix. State in the project's context file that `.grovv/` is the source of truth and the tool directories are derived from it, so a future editor changes the canonical copy rather than one derived copy.
+- Record the answer in the project's `MEMORY.md` so Steps 6 and 7 write into the chosen directories and a later session does not re-ask.
+
+Derived copies drift silently — this repository keeps four in sync only because a CI check compares them. A target project that chose more than one tool has the same exposure and may want the same check. Do not generate one here; that is the verify-loop decision, and it belongs to the user.
+
 **Directories to create:**
 
 ```
@@ -204,7 +224,7 @@ docs/architecture/
 docs/prompts/
 ```
 
-The `.claude/skills/` directory is created later by the skills-builder step (Step 6) and the team-design step (Step 7). For existing projects, only create directories that don't already exist. If the project has an existing `docs/` folder, integrate into it rather than replacing it.
+The `skills/` directory inside each chosen tool directory is created later by the skills-builder step (Step 6) and the team-design step (Step 7). For existing projects, only create directories that don't already exist. If the project has an existing `docs/` folder, integrate into it rather than replacing it.
 
 **Create `settings.json`** in the project root:
 
