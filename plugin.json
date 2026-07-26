@@ -1,0 +1,79 @@
+{
+  "name": "grovv-stack",
+  "displayName": "grovv stack",
+  "version": "0.4.0",
+  "description": "Production-first project scaffolding for AI coding assistants. Drop into any repo — new or existing — and run /grovv to generate the product spec, development plan, technical spec (under docs/), an invocable set of best-practice skills, a project-specific agent team (harness), and the README. Conversation-driven and ask-first: understands the product, users, constraints, and stack before generating.",
+  "author": {
+    "name": "grovv",
+    "url": "https://github.com/constructyourself/grovv-stack"
+  },
+  "homepage": "https://github.com/constructyourself/grovv-stack",
+  "repository": "https://github.com/constructyourself/grovv-stack",
+  "keywords": [
+    "grovv",
+    "grovv-stack",
+    "scaffolding",
+    "project-scaffolding",
+    "production-first",
+    "ai-coding-assistant",
+    "agent-team",
+    "harness",
+    "skills",
+    "tech-spec",
+    "typescript",
+    "go",
+    "claude-code",
+    "vibe",
+    "codex"
+  ],
+  "tools": ["claude", "vibe", "codex"],
+  "directories": {
+    "claude": ".claude/",
+    "vibe": ".vibe/",
+    "codex": ".codex/",
+    "shared": ".grovv/"
+  },
+  "skills": {
+    "claude": ".claude/skills/",
+    "vibe": ".vibe/skills/",
+    "codex": ".codex/skills/"
+  },
+  "agents": {
+    "claude": [
+      ".claude/agents/scaffold.md",
+      ".claude/agents/frontend.md",
+      ".claude/agents/backend.md",
+      ".claude/agents/testing.md",
+      ".claude/agents/database.md",
+      ".claude/agents/code-review.md"
+    ],
+    "vibe": [
+      ".vibe/agents/scaffold.md",
+      ".vibe/agents/frontend.md",
+      ".vibe/agents/backend.md",
+      ".vibe/agents/testing.md",
+      ".vibe/agents/database.md",
+      ".vibe/agents/code-review.md"
+    ],
+    "codex": [
+      ".codex/agents/scaffold.md",
+      ".codex/agents/frontend.md",
+      ".codex/agents/backend.md",
+      ".codex/agents/testing.md",
+      ".codex/agents/database.md",
+      ".codex/agents/code-review.md"
+    ]
+  },
+  "entryPoint": {
+    "skill": "grovv",
+    "command": "/grovv",
+    "triggers": [
+      "build out this project",
+      "scaffold with grovv",
+      "set up grovv stack",
+      "grovv stack this repo",
+      "adopt grovv stack",
+      "build out this project with grovv stack"
+    ]
+  }
+}

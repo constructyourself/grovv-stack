@@ -37,3 +37,5 @@ coverage/
 .idea/
 *.swp
 .claude/settings.local.json
+.vibe/settings.local.json
+.codex/settings.local.json
