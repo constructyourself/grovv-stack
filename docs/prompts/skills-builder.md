@@ -111,7 +111,7 @@ description: "..."
 
 Across the skill set:
 
-- **Stack** — technology-agnostic but primarily TypeScript and Go; PostgreSQL/SQLite via Neon or Supabase; Node.js (LTS); Clerk for identity; Astro + React or Next.js with shadcn/ui and Tailwind; Resend or Plunk for email (Amazon SES only if regulatory/volume requires it); Stripe for payments; Lago for usage metering; PostHog for observability.
+- **Stack** — technology-agnostic, defaulting to the Core Technology Stack Reference in `grovv-stack-scaffold.md`. Read the defaults there; do not restate them here, so the stack has one copy to keep current.
 - **Production-first** — every example is complete, typed, and error-handled, with security considerations built in. That is the bar for everything that ships; exploratory artifacts are exempt (see below).
 - **Anti-patterns** — show what not to do and why, next to the correct alternative.
 - **Traceability** — skills reference the project's `docs/tech-spec.md` for project-specific customization.

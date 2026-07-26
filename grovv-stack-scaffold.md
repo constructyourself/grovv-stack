@@ -378,7 +378,7 @@ Generates the target project's **invocable skills** — a set of development bes
 **Content requirements:**
 
 - Each skill is invocable: valid frontmatter (`name` matching the folder, a pushy trigger-rich `description`), a body under 500 lines, with depth pushed to `references/`
-- Technology agnostic but primarily TypeScript and Go; PostgreSQL/SQLite via Neon or Supabase; Node.js (LTS); Clerk for identity; Astro + React or Next.js with shadcn/ui and Tailwind; Resend or Plunk for email (Amazon SES only if regulatory/volume requires it); Stripe for payments; Lago for usage metering; PostHog for observability
+- Technology agnostic, defaulting to the Core Technology Stack Reference below — read it there rather than restating it here, so there is one copy to keep current
 - All code examples complete, typed, and production-ready (not pseudo-code), with error handling and security built in; anti-patterns shown alongside correct patterns. This governs generated code and documentation; exploratory artifacts in the throwaway tier are exempt by definition
 - The throwaway tier is stated wherever a generated skill would otherwise imply that everything built must clear the production bar — in `dev-standards` above all, and in `ui-standards`, `frontend-development`, `architecture-planning`, and `testing-tdd` where they touch exploration. Keep the wording consistent with the tier as stated above rather than inventing a second rule set
 - The frontend-framework ask-first rule lives in `frontend-development` / `ui-standards`; the Playwright ask-first rule lives in `testing-tdd`
