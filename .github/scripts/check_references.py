@@ -8,7 +8,7 @@ The hard part is knowing which paths this repo is answerable for: these
 documents also name files the scaffolder CREATES IN A TARGET PROJECT, which
 must NOT exist here. That output mirrors this repo's shape, so nothing
 structural separates the two and no inference should try - OWNED_TREES and
-OWNED_DIRS name what is ours, literally. The rest goes unjudged, and every
+OWNED_DIRS name what is ours, literally, and the rest goes unjudged. Every
 message says how much that was.
 
 Standard library only. Runs from anywhere:
@@ -53,6 +53,7 @@ OWNED_TREES = (
 # docs/prompts/tech-spec.md:431 tells a TARGET to keep prompts in
 # docs/prompts/skills/, and the agents/ and skills/ subtrees under the tool
 # roots are the shape team-design and skills-builder write into a target.
+# check_tool_sync.py already holds those subtrees to presence in all four trees.
 OWNED_DIRS = ("docs/prompts", ".claude", ".vibe", ".codex")
 
 # Regions discussing the file set at another point in time, where a name
@@ -76,6 +77,7 @@ def is_vendored_harness(parts: tuple[str, ...]) -> bool:
     """True for anything under a skills/harness/ tree (Apache-2.0, verbatim)."""
     return any(parts[i : i + 2] == ("skills", "harness") for i in range(len(parts)))
 
+
 def markdown_files(root: Path):
     for path in sorted(root.rglob("*.md")):
         rel = path.relative_to(root)
@@ -84,14 +86,15 @@ def markdown_files(root: Path):
         if not rel.as_posix().startswith(NARRATIVE_DIRS):
             yield path
 
+
 def is_ours(bare: str) -> bool:
     """True when a reference names a file this repo is answerable for.
 
-    Literal text, never inferred from disk: a rule like "judge it if that
-    directory exists and holds files like it" is switched OFF by the very change
-    it should catch, and one stray file in docs/ would arm it over dozens of
-    correct target-project references."""
+    Literal text, never inferred from disk: "judge it if that directory exists
+    and holds files like it" is switched OFF by the very change it should catch,
+    and one stray file in docs/ would arm it over dozens of correct targets."""
     return bare.startswith(OWNED_TREES) or bare.rpartition("/")[0] in OWNED_DIRS
+
 
 def candidates(raw: str):
     for token in INLINE_CODE.findall(raw) + LINK_TARGET.findall(raw):
@@ -100,6 +103,7 @@ def candidates(raw: str):
         shaped = PATH_SHAPE.fullmatch(bare) and EXTENSION.search(bare)
         if shaped and ".." not in bare.split("/"):  # Never leave the repo.
             yield written, bare
+
 
 def where(target: Path) -> str:
     """What is at the reference's parent, so the fix needs no digging."""
