@@ -6,10 +6,14 @@ r"""Check that the repo's two ask-first rules survive every edit.
     playwright  ask what Playwright should test before writing any E2E test
 
 Part one is presence: every file in RULES must still state its rule, in its own
-words - a line counts when it carries an ASK signal, the rule's SUBJECT and a
-PRECEDENCE word putting the ask ahead of the work, all on one line (this repo
-writes a paragraph per line). Matching one exact string would instead fire on
-any legitimate rewording.
+words - one SENTENCE carrying an ASK signal, the rule's SUBJECT and a PRECEDENCE
+word putting the ask ahead of the work, and not revoking it in the same breath.
+Sentence scope rather than line scope because this repo writes a paragraph per
+line, and across a paragraph those signals co-occur as readily in prose that
+cancels the rule as in prose that states it. What passes is a normative
+sentence, not a verified meaning - no regex reads - but the realistic failure is
+an edit dropping the rule from a document that governs it, and that it catches.
+Matching one exact string instead would fire on every legitimate rewording.
 
 Part two is erosion: the throwaway tier sanctions prototypes, so prose could
 come to treat "I built four mockups in React" as the framework question having
@@ -28,19 +32,39 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SKIP_DIR, TREES = ".git", (".grovv", ".claude", ".vibe", ".codex")
 
+# A sentence boundary: terminator then whitespace. "Next.js" survives intact
+# because no space follows its dot - splitting there would cut the canonical
+# statement ("...or Next.js - before writing frontend code") in half and report
+# the repo's own wording as missing.
+SENTENCE = re.compile(r"(?<=[.;])\s+")
 # "discuss" counts because the code-review checklists word the rule as "discussed
-# with user"; the user-decides clause counts because a file may state the rule as
-# whose choice it is rather than as an instruction to ask. Neither says "ask".
+# with user"; "agree" because agreeing a scope with the user is the same act; the
+# user-decides clause counts because a file may state the rule as whose choice it
+# is rather than as an instruction to ask. None of them says "ask".
 ASK = re.compile(
     r"\bask(?:s|ed|ing)?\b|\bdiscuss(?:es|ed|ion)?\b|\bconfirm(?:s|ed)?\b"
-    r"|\buser\b[^.;]{0,60}\b(?:choos|chose|decid|pick|select)"
+    r"|\bagree(?:s|d)?\b|\buser\b[^.;]{0,60}\b(?:choos|chose|decid|pick|select)"
     r"|\b(?:choos|chose|decid|pick|select)\w*[^.;]{0,60}\buser\b", re.I)
-# Bare "first" is deliberately absent: the stack tables carry a bare "(ask
-# first)" cell, and letting that satisfy the check would mean the rule could be
-# deleted from the directives while a table cell kept CI green.
+# The rule's own name, removed before the precedence test but never before the
+# ask test: a rule must not satisfy a check by naming itself. Otherwise the bare
+# "(ask-first)" cell in a capability table reads as an ordering, and every
+# directive could lose the rule while that cell kept CI green.
+SELF_LABEL = re.compile(r"\bask[- ]first\b", re.I)
+# "without" is deliberately absent: alone it states no order ("generate the flows
+# without asking"), and where this repo uses it the order comes from the
+# prohibition governing it ("never auto-generate ... without asking first").
+# "first" must be unhyphenated, which excludes "production-first".
 PRECEDENCE = re.compile(
-    r"\bbefore\b|\bnever\b|\bnot\b|\buntil\b|\bwithout\b|\bask-first\b"
-    r"|\bpre-(?:empt|decid)\w*", re.I)
+    r"\bbefore\b|\bnever\b|\bnot\b|\buntil\b|(?<![-\w])first\b|\bup[- ]front\b"
+    r"|\bin advance\b|\bahead of\b|\bpre-(?:empt|decid)\w*", re.I)
+# Phrases that cancel the rule instead of stating it, so a sentence carrying one
+# is not evidence of the rule. Only the unambiguous ones: "unless" and
+# "otherwise" are NOT here because the repo uses them in correct rule prose
+# (skills-builder states the rule "...before writing frontend code, unless the
+# project has already committed to one").
+REVOKED = re.compile(
+    r"\bno longer\b|\b(?:do|does|did)\s+not\s+ask\b|\bdon'?t\s+ask\b"
+    r"|\bno need to ask\b|\bnever\s+ask\b|\bskip\s+(?:the\s+)?ask", re.I)
 FRONTEND = re.compile(r"\bframeworks?\b|\bastro\b|\bnext\.js\b", re.I)
 PLAYWRIGHT = re.compile(r"\bplaywright\b|\be2e\b|\bend-to-end\b", re.I)
 
@@ -60,14 +84,13 @@ def per_tree(rel: str) -> tuple[str, ...]:
 
 # The governed files, derived by grepping every non-harness Markdown file for a
 # statement of each rule and keeping those carrying one today: context files, the
-# master directive, the agent definitions owning each subject across all four tool
+# master directive, the agent definitions owning each subject in all four tool
 # trees, the kickoff skill in all four, and the prompts generating frontend or
-# testing guidance. To extend: when a file starts governing a rule add it here;
-# when one stops, drop it here in the commit that removes the prose. Two
-# deliberate omissions - MEMORY.md states both rules today, but its own convention
-# is to prune aggressively and stay under ~120 lines, so a permanent requirement
-# there would fight that rule; docs/architecture/*.md record engineering already
-# done, so they are history, not governing documents.
+# testing guidance. To extend: add a file when it starts governing a rule; drop
+# it in the commit that removes the prose. Two deliberate omissions - MEMORY.md
+# states both rules, but its own convention is to prune to ~120 lines, so a
+# permanent requirement here would fight that; docs/architecture/*.md record
+# engineering already done, so they are history, not governing documents.
 CONTEXT = ("CLAUDE.md", ".claude/CLAUDE.md", ".grovv/CLAUDE.md", "VIBE.md",
            "CODEX.md", "README.md", "grovv-stack-scaffold.md")
 PROMPTS = ("docs/prompts/skills-builder.md", "docs/prompts/team-design.md",
@@ -98,8 +121,14 @@ def markdown_files(root: Path):
         if SKIP_DIR not in parts and not is_vendored_harness(parts):
             yield path
 
+def states_line(raw: str, subject: re.Pattern[str]) -> bool:
+    """True when one sentence of this line states the rule for `subject`."""
+    return any(ASK.search(part) and subject.search(part) and not REVOKED.search(part)
+               and PRECEDENCE.search(SELF_LABEL.sub(" ", part))
+               for part in SENTENCE.split(raw))
+
 def states_rule(path: Path, subject: re.Pattern[str]) -> bool:
-    return any(ASK.search(raw) and subject.search(raw) and PRECEDENCE.search(raw)
+    return any(states_line(raw, subject)
                for raw in path.read_text(encoding="utf-8").splitlines())
 
 
@@ -113,10 +142,9 @@ def check_presence(problems: list[str]) -> None:
                                 f"{name} ask-first rule")
             elif not states_rule(path, subject):
                 problems.append(
-                    f"{target}:1: no statement of the {name} ask-first rule - one "
-                    "line must carry an ask signal (ask/discuss/confirm, or the "
-                    f"user choosing), the subject ({words}), and a precedence word "
-                    f'(before/never/not/until/without)\n    e.g. "{example}"')
+                    f"{target}:1: no sentence states the {name} ask-first rule - "
+                    "nothing here carries an ask signal, the subject "
+                    f'({words}) and a precedence word together\n    e.g. "{example}"')
 
 
 def check_erosion(warnings: list[str]) -> int:
@@ -150,15 +178,18 @@ def main() -> int:
     if problems:
         print(f"Ask-first check FAILED - {len(problems)} missing statement(s):\n")
         print("\n".join(problems))
-        print("\nFix: restore the rule in the named file, in that file's own idiom. "
-              "Both are non-negotiable - ask which frontend framework (Astro + React "
-              "or Next.js) before any frontend code, and ask what Playwright should "
-              "test before any E2E test.")
+        print("\nFix: restore the rule in the named file, in that file's own idiom, "
+              "as ONE sentence carrying an ask signal (ask/discuss/confirm/agree, or "
+              "the user choosing), the subject, and a word putting the ask ahead of "
+              "the work (before/never/not/until/first/up front/in advance). Calling "
+              'the rule "ask-first" does not state it. Both rules are '
+              "non-negotiable.")
         return 1
 
-    print(f"Ask-first check passed - {STATEMENTS} rule statement(s) present across "
-          f"{len(GOVERNED)} governed file(s); {len(warnings)} erosion warning(s) from "
-          f"{scanned} Markdown file(s).")
+    print(f"Ask-first check passed - {STATEMENTS} file/rule pair(s) across "
+          f"{len(GOVERNED)} governed file(s) still carry a normative ask-first "
+          f"sentence; {len(warnings)} erosion warning(s) from {scanned} Markdown "
+          "file(s).")
     return 0
 
 

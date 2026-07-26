@@ -69,7 +69,7 @@ SCOPE = (
     "Judged: inline code spans and link targets, outside fenced code, under "
     + ", ".join(OWNED_TREES + tuple(d + "/" for d in OWNED_DIRS))
     + " (that second group at its own level only). Not judged: everything else, "
-    "including docs/architecture/ and Decision Log sections."
+    "including docs/architecture/, Decision Log sections, vendored harness trees."
 )
 
 
