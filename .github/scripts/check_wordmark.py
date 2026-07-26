@@ -28,6 +28,16 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 
 # "gro", a run of backslashes, a slash, another run of backslashes, a slash.
 WORDMARK = re.compile(r"gro(\\+)/(\\+)/")
+# Any "gro" followed by an escaped slash, whether or not a second one follows.
+# Used to catch shapes the wordmark never takes, in prose, spans and fences
+# alike - see MALFORMED_WHY. Both statements of the convention in this repo
+# were once wrong in exactly this way, and inline spans exempted them.
+ANY_ESCAPED = re.compile(r"gro(\\+)/(?:(\\+)/)?")
+
+MALFORMED_WHY = (
+    "the wordmark always has two escaped slashes with matching backslash runs "
+    r"- gro\/\/ in fenced code, gro\\/\\/ in prose"
+)
 # A fence opener/closer: three or more backticks or tildes.
 FENCE = re.compile(r"^\s*(`{3,}|~{3,})")
 # Inline code spans. Not judged in either direction - see module docstring.
@@ -85,6 +95,19 @@ def scan(path: Path, rel: str) -> list[str]:
             if bad_run in runs:
                 problems.append(
                     f"{rel}:{lineno}: {message}\n"
+                    f"    {raw.strip()[:160]}"
+                )
+
+        # Shapes the wordmark never takes, judged on the whole raw line so
+        # that inline code spans are covered too. A span is exempt from the
+        # prose/fence rule because it may legitimately quote either form -
+        # but neither form is truncated, and neither has mismatched runs.
+        for match in ANY_ESCAPED.finditer(raw):
+            first, second = match.group(1), match.group(2)
+            if second is None or len(first) != len(second) or len(first) > 2:
+                problems.append(
+                    f"{rel}:{lineno}: {MALFORMED_WHY}, found "
+                    f"{match.group(0)!r}\n"
                     f"    {raw.strip()[:160]}"
                 )
 
