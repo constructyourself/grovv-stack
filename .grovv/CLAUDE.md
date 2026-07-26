@@ -19,12 +19,23 @@ For tool-specific information, see:
 
 | Principle | Description |
 |-----------|-------------|
-| **Production-First** | Every implementation is production-ready from start |
+| **Production-First** | Everything that ships is production-ready from the start. Exploratory artifacts are exempt, and never ship |
 | **Zero Data Loss** | Transactional integrity is non-negotiable |
 | **Security by Default** | Security considerations never deferred |
 | **Test-Driven** | Tests define contracts and prevent regressions |
 | **Documentation as Code** | Docs maintained alongside code |
 | **Conversation-Driven** | Ask questions, understand deeply, then build |
+
+-----
+
+## The Throwaway Tier
+
+Production-first governs what ships, not what you build to find out what should ship. An exploratory artifact — prototype, mockup, brainstorm, or spike — is exempt from the production bar and is never merged.
+
+- Multi-file exploration goes on an unmerged `proto/*` or `spike/*` branch; a single-file mockup goes in the gitignored `prototypes/` directory. Delete it once the decision it informed is recorded.
+- An exploratory artifact never satisfies an ask-first rule. Four mockups built in React is not a decision to use Next.js — that question is still asked, and still answered by the user.
+
+Full rules: the Throwaway Tier section in `grovv-stack-scaffold.md`.
 
 -----
 
@@ -121,7 +132,7 @@ These six are the **baseline team**. During the team-design step, the scaffolder
 - All code must be production-ready, fully typed, with comprehensive error handling
 - Security considerations in every layer (input validation, auth, XSS/CSRF/SQLi prevention)
 - Test-driven development — critical tests first, then integration, then E2E
-- Complete code examples only — no pseudo-code
+- Complete code examples only — no pseudo-code. This governs generated code and documentation; exploratory artifacts in the throwaway tier are exempt by definition.
 - Anti-patterns documented alongside correct patterns
 
 -----

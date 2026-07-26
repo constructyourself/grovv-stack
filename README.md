@@ -32,8 +32,9 @@ This repository is **not an application**. Its output is documents, configuratio
 | Feature | Description |
 |---------|-------------|
 | **Multi-Tool Support** | Works with Claude Code, Vibe, and Codex |
-| **Production-First** | Generates production-ready code with built-in best practices |
+| **Production-First** | Everything that ships is production-ready from the start. Exploratory artifacts are exempt, and never ship |
 | **Conversation-Driven** | Asks questions to understand your project before generating |
+| **Throwaway Tier** | Prototypes, mockups, brainstorms and spikes on unmerged `proto/*` branches — exempt from the production bar, deleted once they have informed a decision |
 | **Agent Team** | Creates a team of specialized agents for your project |
 | **Invocable Skills** | Generates best-practice skills for common tasks |
 | **Linear Integration** | Seeds Linear project and issues from development plan |
@@ -153,7 +154,7 @@ grovv-stack/
 
 ## Non-negotiables
 
-- Ask which frontend framework (Astro + React or Next.js) before any frontend code.
+- Ask which frontend framework (Astro + React or Next.js) before any frontend code — a prototype built in one of them is not the answer.
 - Ask what Playwright should test before writing any E2E test.
 - Production-first, security by default, zero data loss (transactions for multi-step data ops).
 - Never overwrite working code in existing projects without an approved adoption plan.

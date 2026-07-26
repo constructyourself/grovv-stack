@@ -19,6 +19,14 @@ You are the testing agent for gro\\/\\/ stack projects. You enforce test-driven 
 
 -----
 
+## Exploratory Artifacts Are Not Tested
+
+Tests define contracts. An artifact built to be deleted has no contract, so a prototype, mockup, brainstorm, or spike gets no tests — writing them is wasted work, and it makes the artifact harder to throw away.
+
+When the idea a prototype proved graduates to production, the tests are written then, against the real implementation, never ported from the prototype. Test-driven development applies in full from that point: the first production commit starts with a failing test.
+
+-----
+
 ## Testing Priority Order
 
 1. **Critical Path Tests** — Core business logic and happy paths

@@ -64,7 +64,7 @@ Generate these skills by default. Drop one only if it is clearly irrelevant to t
 | `dev-standards` | Any feature or code work; "what are our standards / how should I build this" | Core philosophy, the production-first bar, the dev workflow (red-green-refactor), definition of done, when to reach for the other skills |
 | `architecture-planning` | Designing a system or feature, data modeling, API contracts, pre-build planning | System design, ER modeling, API contract design, background-job patterns, the pre-development checklist, ADRs |
 | `frontend-development` | Building UI, pages, components, forms, client logic | Framework patterns (Astro + React or Next.js), progressive hydration, type-safe components, forms with validation, accessibility (WCAG 2.1 AA) |
-| `ui-standards` | Styling, theming, component look-and-feel | Tailwind CSS + shadcn/ui, Alexandria font, monochrome palette, white background, no animations, component examples, existing-project pattern matching |
+| `ui-standards` | Styling, theming, component look-and-feel | Tailwind CSS + shadcn/ui, Alexandria font, monochrome palette, white background, no animations, component examples, existing-project pattern matching; plus the practice of offering three or four disposable directions to react to before a visual question is settled — the standards above are the shipping target the chosen direction is then brought to |
 | `backend-development` | APIs, services, background jobs, third-party integrations | REST standards, service and repository patterns, PostgreSQL-native background jobs, webhooks, email (Resend/Plunk), Stripe, Lago usage events |
 | `database-design` | Schema, migrations, queries, data access | Schema design, indexing, migrations, query optimization, transactions, Drizzle ORM patterns |
 | `security-practices` | Auth, input handling, secrets, anything user-facing | Zod validation, authN/authZ (Clerk), SQLi/XSS/CSRF prevention, secrets management, rate limiting, file-upload safety, dependency audits |
@@ -96,7 +96,7 @@ description: "..."
 
 - Lead with the principles and the decision rules, then the highest-value patterns inline. Explain the **why**, not just "ALWAYS/NEVER" — Claude generalizes correctly from reasons.
 - Write in the imperative ("validate input at the boundary", "wrap multi-step writes in a transaction").
-- Keep complete, working, typed examples — never pseudo-code. Show the anti-pattern beside the correct pattern where it teaches something.
+- Keep complete, working, typed examples — never pseudo-code. The rule governs the skill's own examples and the shipping code they teach; exploratory artifacts in the throwaway tier are exempt by definition. Show the anti-pattern beside the correct pattern where it teaches something.
 - When the body approaches 500 lines, move depth into `references/` and leave a one-line pointer ("for the full Stripe webhook flow, read `references/stripe.md`").
 
 ### references/ (as needed)
@@ -112,9 +112,20 @@ description: "..."
 Across the skill set:
 
 - **Stack** — technology-agnostic but primarily TypeScript and Go; PostgreSQL/SQLite via Neon or Supabase; Node.js (LTS); Clerk for identity; Astro + React or Next.js with shadcn/ui and Tailwind; Resend or Plunk for email (Amazon SES only if regulatory/volume requires it); Stripe for payments; Lago for usage metering; PostHog for observability.
-- **Production-first** — every example is complete, typed, and error-handled, with security considerations built in.
+- **Production-first** — every example is complete, typed, and error-handled, with security considerations built in. That is the bar for everything that ships; exploratory artifacts are exempt (see below).
 - **Anti-patterns** — show what not to do and why, next to the correct alternative.
 - **Traceability** — skills reference the project's `docs/tech-spec.md` for project-specific customization.
+
+### The Throwaway Tier (state it wherever a skill implies otherwise)
+
+Production-first governs what ships. It does not govern what is built to find out what should ship. Any generated skill that would otherwise imply everything built must clear the production bar has to say so and carry the tier — `dev-standards` above all, and `ui-standards`, `frontend-development`, `architecture-planning`, and `testing-tdd` where they touch exploration:
+
+- An **exploratory artifact** — prototype, mockup, brainstorm, or spike — exists to be reacted to and then deleted. It may be untyped, unwired, hard-coded, hand-styled, and built from fake data. What it may never be is merged.
+- It lives on a `proto/*` or `spike/*` branch, or in a gitignored `prototypes/` directory, and is deleted once the decision it informed is written down. The decision survives, not the artifact.
+- It never satisfies an ask-first rule. Four mockups built in React is not a decision to use Next.js — that question is still asked, and still answered by the user.
+- Code review applies three checks to it, not the production checklist: unmerged, contained, decision recorded.
+
+The full statement of the tier is in `grovv-stack-scaffold.md`. Keep the generated wording consistent with it rather than inventing a second rule set.
 
 ### Ask-First Rules (embed these in the skills)
 
@@ -194,6 +205,7 @@ This step is complete when, for the target project:
 - [ ] Examples are complete, typed, and production-ready, with anti-patterns shown where useful
 - [ ] Skills reflect the project's actual stack (existing projects) and reference `docs/tech-spec.md`
 - [ ] The frontend-framework ask-first rule lives in `frontend-development` / `ui-standards`; the Playwright ask-first rule lives in `testing-tdd`
+- [ ] The throwaway tier is stated in `dev-standards` and in every other skill that would otherwise imply everything built must clear the production bar
 - [ ] Nothing was written to `docs/skills/` or `.claude/commands/`
 - [ ] Baseline skill names are stable so the team-design audit can dedupe against them
 

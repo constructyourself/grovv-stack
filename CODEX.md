@@ -133,11 +133,23 @@ Adapt per project; never assume.
 
 - **Ask which frontend framework** (Astro + React or Next.js) before writing any frontend code.
 - **Ask what Playwright should test** before writing any E2E test. Never auto-generate Playwright flows.
-- **Production-first** — every example must be complete, typed, with error handling. No pseudo-code.
+- **Production-first** — production readiness is the default for everything that ships, not aspirational. Exploratory artifacts (prototypes, mockups, spikes) are explicitly exempt and are never merged. See the Throwaway Tier.
+- **Complete code examples only** — typed, with error handling, no pseudo-code. This governs generated code and documentation; exploratory artifacts in the throwaway tier are exempt by definition.
 - **Security by default** — input validation, auth, dependency audits in every layer. Never deferred.
 - **Zero data loss** — transactions for all multi-step data operations.
 - **Never overwrite working code** in existing projects without an approved adoption plan.
 - **Apply gro\\/\\/ stack branding** to every generated document (footer, conventions below).
+
+-----
+
+## The Throwaway Tier
+
+Production-first governs what ships, not what you build to find out what should ship. An exploratory artifact — prototype, mockup, brainstorm, or spike — is exempt from the production bar and is never merged.
+
+- Multi-file exploration goes on an unmerged `proto/*` or `spike/*` branch; a single-file mockup goes in the gitignored `prototypes/` directory. Delete it once the decision it informed is recorded.
+- It never satisfies an ask-first rule above. Four mockups built in React is not a decision to use Next.js — Codex still asks, and the user still answers.
+
+Full rules: the Throwaway Tier section in `grovv-stack-scaffold.md`.
 
 -----
 

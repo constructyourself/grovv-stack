@@ -2,7 +2,9 @@
 
 Use this prompt to stand up the scaffolded project's **issue tracker** and its **`MEMORY.md`** cross-session memory file. This is the **tracker-setup step (Step 8)** of the gro\\/\\/ stack pipeline: it runs **after `team-design.md` (Step 7) and before `readme-generator.md` (Step 9)**. By this point the product spec, development plan, technical spec, and agent team all exist, so the work can be seeded into a live backlog.
 
-Two trackers are supported — **GitHub Issues** and **Linear**. The step **always asks the user which one** before doing anything else (see Step 0). Either way the same two artifacts result, and they coordinate: **the project's tracker owns the backlog** (tasks, priorities, status); **`MEMORY.md` owns session context** (decisions, rationale, gotchas, in-flight state). Together they let any future agent session pick up exactly where the last one left off without re-deriving the project's state.
+This is a **generic tracker step**. Two trackers are implemented today — **GitHub Issues** and **Linear** — and the step is structured so a third can be added without rewriting it (see "Adding Another Tracker"). Everything that is not tracker-specific lives in "The Common Path"; each tracker supplies four things and nothing more.
+
+The step **always asks the user which tracker to use** before doing anything else (see Step 0). Whichever is chosen, the same two artifacts result, and they coordinate: **the project's tracker owns the backlog** (tasks, priorities, status); **`MEMORY.md` owns session context** (decisions, rationale, gotchas, in-flight state). Together they let any future agent session pick up exactly where the last one left off without re-deriving the project's state.
 
 -----
 
@@ -27,20 +29,59 @@ In the target project's root:
 
 **This runs before anything else, and it is always a question.** The agent must not choose silently, must not infer the tracker from the presence of a `.git` remote or a Linear MCP connection, and must not start creating labels, milestones, or issues until the user has answered.
 
+Both implemented trackers are fully supported. GitHub Issues is the gro\\/\\/ stack recommendation, and a recommendation is a starting position with reasons attached — not a conclusion the question is a formality around. Give the user what they need to disagree with it: both options, the reasoning behind each, and the condition that flips the answer.
+
 Ask exactly this:
 
-> Which issue tracker should this project use?
+> Which issue tracker should this project use? Both are fully supported — pick the one that matches how this project will actually be run.
 >
-> 1. **GitHub Issues (recommended)** — it is the gro\\/\\/ stack recommended default for project tracking, and it lives in the same repo as the code, so issues, branches, and PRs cross-link with no extra service.
-> 2. **Linear** — worth choosing when the project needs heavy cross-referencing: multiple repos, initiatives spanning teams, or a backlog shared with people who do not live in GitHub.
+> 1. **GitHub Issues** — the gro\\/\\/ stack recommendation. It lives in the same repo as the code, so issues, branches, and PRs cross-link with no extra service to run and no second account for a contributor to hold.
+> 2. **Linear** — the better choice when the project needs heavy cross-referencing: multiple repos, initiatives spanning teams, cycles and estimates, or a backlog shared with people who do not live in GitHub.
+>
+> If the second description fits this project better than the first, choose Linear. The recommendation assumes one repo and a small team — worth checking against this project rather than inheriting.
 
-- Wait for an explicit answer. If the user says "whatever you think", state the recommendation (GitHub Issues) and ask them to confirm it — a stated default is still an answer they gave.
+- Wait for an explicit answer. A recommendation is not an answer. If the user says "whatever you think", say why GitHub Issues is the recommendation **for this project**, name the condition that would flip it to Linear, and ask them to confirm — a stated default is still an answer they gave.
+- If the user names a tracker neither path covers (Jira, Shortcut, a plain `docs/backlog.md`), do not quietly substitute one of these two. See "Adding Another Tracker".
 - Record the choice in `MEMORY.md` (Tracker Coordination table) so later sessions do not re-ask.
 - Follow **Path A** for GitHub Issues, **Path B** for Linear. Do not run both.
 
 -----
 
+## The Common Path
+
+Every stage below is tracker-independent: it holds whichever path runs, and it is what a third tracker would have to honour unchanged. The tracker-specific mechanics live in Path A and Path B — nothing in this section belongs to either.
+
+| Stage | What happens, on every tracker |
+|-------|--------------------------------|
+| 1. Preflight | Confirm the tracker is reachable and writable **before** creating anything |
+| 2. Reuse or create | Find the existing backlog for this codebase and reuse it; create one only when none exists. Never replace an existing setup |
+| 3. Milestones | One milestone per phase in `docs/development-plan.md`, carrying over names and any dated targets |
+| 4. Confirm the plan | Present the proposed milestones and every issue title, with labels/priority and milestone, and get approval before the first create command runs |
+| 5. Never duplicate | Search existing issues by title first — on the first run and on every re-run. A match is updated, never duplicated |
+| 6. Seed from the plan | Every issue traces to a `docs/development-plan.md` feature or a `docs/tech-spec.md` component, and its body opens with a `Source:` line naming that document and section |
+| 7. Record the reference format | Write the tracker, the backlog location, the reference format, and the status source into the `MEMORY.md` Tracker Coordination table, and link the backlog from `docs/development-plan.md` |
+| 8. Ask-first rules survive | No issue and no memory entry pre-decides the frontend framework or the Playwright E2E scope |
+
+**Skip gracefully.** If the preflight fails and the path has no fallback mechanism left, stop that path cleanly: write an `@TODO` into `MEMORY.md` (Tracker Coordination table + Next Steps) and `docs/development-plan.md` recording that tracker setup is pending and exactly what unblocks it, then continue the pipeline. Still create `MEMORY.md` — it does not depend on the tracker existing. Never leave a half-created taxonomy or a partial backlog behind.
+
+-----
+
+## What a Tracker Supplies
+
+A tracker plugs into the common path by supplying exactly four things. Path A and Path B are these four filled in:
+
+| Contract | GitHub Issues (Path A) | Linear (Path B) |
+|----------|------------------------|-----------------|
+| **Reference format** | `org/repo#NN`; branches `<NN>-<short-slug>` | `ABC-123`; branches from Linear's `gitBranchName` |
+| **Status model** | Open + exactly one `status:*` label; closed state carries the outcome | Native Linear issue states |
+| **Creation mechanism** | `gh` CLI, falling back to the GitHub MCP server | Linear MCP server |
+| **Availability preflight** | `gh --version`, `gh auth status`, push permission on the repo | Linear MCP server reachable, target team identified |
+
+-----
+
 ## Path A: GitHub Issues
+
+The common path implemented with `gh`. A0 is the preflight (stage 1), A1–A2 the taxonomy and milestones (stages 2–3), A3 the confirm-dedupe-seed sequence (stages 4–6, 8), A4 the reference format recorded in memory (stage 7).
 
 ### A0. Preflight
 
@@ -63,7 +104,7 @@ Then, in order:
 |-----------|--------|
 | `gh` present, authenticated, `push` is `true` | Proceed with the `gh` commands below. |
 | `gh` missing, unauthenticated, lacking `repo` scope, or `.permissions.push` is `false` | Fall back to the **GitHub MCP server** — same workflow, MCP tools instead of `gh` (`search_issues` / `list_issues` to check for duplicates, `issue_write` to create, `get_label` to verify the taxonomy). The MCP server has no milestone-creation tool: create the issues, then write an `@TODO` in `docs/development-plan.md` asking the repo owner to add the milestones and back-fill them. |
-| Neither `gh` nor the GitHub MCP server is available | **Skip and stop.** Write an `@TODO` into the target project's `MEMORY.md` (Tracker Coordination table + Next Steps) recording that tracker setup is pending and what unblocks it (`gh auth login --scopes repo`, or connecting the GitHub MCP server), then continue the pipeline. Do **not** half-create the taxonomy or a partial issue list. |
+| Neither `gh` nor the GitHub MCP server is available | **Skip gracefully** (common path): `@TODO` recording that tracker setup is pending and what unblocks it — `gh auth login --scopes repo`, or connecting the GitHub MCP server — then continue the pipeline. Do **not** half-create the taxonomy or a partial issue list. |
 
 ### A1. Label taxonomy
 
@@ -161,7 +202,9 @@ In `MEMORY.md`, commit messages, PR bodies, and every downstream document, refer
 
 ## Path B: Linear
 
-Linear is set up through the **Linear MCP server**. If it is unavailable, skip this path, note it with `@TODO` in `docs/development-plan.md`, tell the user how to connect Linear, and **still create `MEMORY.md`** with the Tracker Coordination table marked `@TODO`.
+The same common path implemented through the **Linear MCP server**. B0 is the preflight and reuse check (stages 1–2), B1 the confirmation (stage 4), B2 the project and milestones (stages 2–3), B3 the seeding (stages 5–6, 8), B4 the reference format recorded in memory (stage 7).
+
+If the Linear MCP server is unavailable, skip gracefully: note it with `@TODO` in `docs/development-plan.md`, tell the user how to connect Linear, and **still create `MEMORY.md`** with the Tracker Coordination table marked `@TODO`.
 
 ### B0. Discover
 
@@ -200,9 +243,35 @@ Reference issues by the team's issue prefix and number — for example, `GRO-123
 
 -----
 
+## Adding Another Tracker
+
+Two paths exist because two trackers are implemented, not because two is the limit. Jira, Shortcut, a plain `docs/backlog.md` — any of them is a legitimate future Path C. Adding one touches exactly four places:
+
+| Edit site | What changes |
+|-----------|--------------|
+| Step 0's ask block | One more numbered option, with the condition that makes it the right choice |
+| "What a Tracker Supplies" | One more column, filling in the four contract items |
+| A new path section | The mechanics — preflight, taxonomy, milestones, seeding, reference format |
+| Deliverable Checklist | The path's own preflight and taxonomy items, alongside the existing `(GitHub)` and `(Linear)` ones |
+
+Nothing else moves. The common path, the `MEMORY.md` template (its Tracker Coordination placeholders name no tracker), the `SessionStart` hook, and the guardrails all hold unchanged.
+
+A tracker is ready to add when it can supply all four contract items:
+
+| Requirement | What it must state |
+|-------------|--------------------|
+| **Reference format** | The unambiguous way an issue is written in `MEMORY.md`, commit messages, and PR bodies, plus the branch-naming convention that follows from it |
+| **Status model** | How Backlog, Todo, In Progress, Done, and Canceled are each represented, so `MEMORY.md` can name one status source |
+| **Creation mechanism** | The concrete tool that creates milestones and issues — a CLI, an MCP server, an API — and the fallback when the first choice is unavailable |
+| **Availability preflight** | The checks that prove the tracker is reachable and writable before anything is created, and what a failure means: fall back, or skip with an `@TODO` |
+
+Until a tracker supplies all four, do not offer it in Step 0. If a user asks for one that is not implemented, say so plainly, offer the paths that are, and record the request as an `@TODO` — never improvise a half-path.
+
+-----
+
 ## Cross-Session Memory
 
-This section applies to **both paths**, with only the Tracker Coordination table differing. Create `MEMORY.md` in the target project's root — the durable memory that coordinates with the tracker across agent sessions. For existing projects that already have a memory file, extend it rather than replacing it.
+This section applies to **both paths** — the template is identical on either, and only the values filled into the Tracker Coordination table differ. Create `MEMORY.md` in the target project's root — the durable memory that coordinates with the tracker across agent sessions. For existing projects that already have a memory file, extend it rather than replacing it.
 
 Division of responsibility (state it in the file itself):
 
@@ -234,10 +303,10 @@ owns the backlog; this file owns the context.
 
 | Field | Value |
 |-------|-------|
-| Tracker | [GitHub Issues or Linear] |
-| Project / Repo | [org/repo, or the Linear project URL] |
-| Reference format | [org/repo#NN, or ABC-123] |
-| Status source | [open + status:* labels / closed state, or Linear issue state] |
+| Tracker | [the chosen tracker] |
+| Project / Repo | [the backlog's location — repo or project URL] |
+| Reference format | [the tracker's reference format] |
+| Status source | [the tracker's status source] |
 
 - Completed an issue? Note the reference in the Decision Log and close it in
   the tracker (or mark @TODO here if the tracker is unreachable).
@@ -307,25 +376,20 @@ The `$CLAUDE_PROJECT_DIR` prefix is required — a bare `cat MEMORY.md` resolves
 
 ## Guardrails
 
-These apply to **both paths**:
+The common path states **what** every tracker does. These are the standing rules about **how**, and they hold on every path, implemented or future, and on every re-run:
 
-- **Ask first.** The tracker choice (Step 0) is always a question. So is the target team on the Linear path, and the target repo on the GitHub path when more than one remote exists.
-- **Confirm the plan before bulk-creating.** Present the milestones and the full issue list, with labels and priorities, and get approval before the first create command runs.
-- **Never duplicate.** Search existing issues and milestones by title first; update the match rather than creating a second one. This holds on every re-run.
-- **Skip gracefully.** If the required tooling is unavailable, write an `@TODO` recording what is pending and what unblocks it, then stop that path cleanly — never leave a half-created taxonomy or a partial backlog.
+- **Ask first.** The tracker choice (Step 0) is always a question, and the recommendation never answers it. So is every ambiguous case inside a path — the target team on the Linear path, the target repo on the GitHub path when more than one remote exists.
 - **Never overwrite an existing tracker setup.** An existing Linear project, an existing label taxonomy, or an existing milestone set is reused and synced, not replaced. Surface conflicts to the user instead of resolving them silently.
-- **Traceability.** Every issue maps to a `docs/development-plan.md` feature or a `docs/tech-spec.md` component.
-- **Ask-first rules survive.** No issue and no memory entry may pre-empt the frontend-framework choice or the Playwright E2E scope.
-- **Document style** for any grovv-authored notes about tracking: `-----` rules, `@TODO` for unknowns, tables for reference data, no emoji in headings. Project names lowercase with dashes.
 - **Link back.** Write the tracker location (repo URL or Linear project URL) into a "Tracking" section of `docs/development-plan.md` and into the `MEMORY.md` Tracker Coordination table, so the plan, the memory, and the backlog stay connected. The README step surfaces it too.
 - **Stay re-runnable.** On a later run, reconcile `docs/development-plan.md` against the tracker (add issues for new features, update changed priorities, flag issues that no longer map to the plan — surface them, never delete silently), keep milestones aligned with the plan's phases, and prune `MEMORY.md` while verifying its Tracker Coordination table still points at the right place.
+- **Document style** for any grovv-authored notes about tracking: `-----` rules, `@TODO` for unknowns, tables for reference data, no emoji in headings. Project names lowercase with dashes.
 
 -----
 
 ## Deliverable Checklist
 
-- [ ] Tracker choice put to the user explicitly, with GitHub Issues stated as the recommendation
-- [ ] Chosen tracker recorded in the `MEMORY.md` Tracker Coordination table
+- [ ] Tracker choice put to the user explicitly, with both options and their reasoning presented — GitHub Issues stated as a recommendation the user was asked to weigh, not a default applied on their behalf
+- [ ] Chosen tracker recorded in the `MEMORY.md` Tracker Coordination table, along with its reference format and status source
 - [ ] (GitHub) `gh` preflight run — installed, authenticated with `repo` scope, push access confirmed; MCP fallback used if not, or the path skipped with an `@TODO` if neither was available
 - [ ] (GitHub) Full label taxonomy created before the first issue, native milestones seeded from the plan's phases
 - [ ] (GitHub) `@TODO` recorded for the out-of-scope aggregating monitoring Project
@@ -351,7 +415,7 @@ Continue the pipeline: proceed to `readme-generator.md` (Step 9). The README can
 
 | Field | Value |
 |-------|-------|
-| **Version** | 1.0.0 |
+| **Version** | 1.1.0 |
 | **Last Updated** | 2026-07-26 |
 | **Status** | Active |
 | **Author(s)** | Dan |

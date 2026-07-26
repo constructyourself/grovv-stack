@@ -74,16 +74,29 @@ Key patterns:
 
 -----
 
+## Exploratory Directions
+
+Visual design is the canonical unknown known — users cannot specify it in the abstract but recognize it on sight. Do not answer a design question with one polished proposal; one invites approval. Build three or four wildly different directions as disposable mockups, hard-coded and fed with fake data, and let the user react. The reaction is the information.
+
+These are exploratory artifacts: they live on a `proto/*` branch or in a gitignored `prototypes/` directory, they are never merged, and they are deleted once the direction is chosen and written down.
+
+The UI Standards above are the shipping standard. An exploratory direction may deliberately violate them — a different typeface, a colour, a motion — and that freedom is much of its value, which is exactly why it cannot ship. What ships returns to Alexandria, monochrome, white background, no animations.
+
+**Mockups never answer the framework question.** They decide look and feel, nothing else. Four mockups built in React is not a decision to use Next.js — the Astro + React or Next.js question above is still asked, and still answered by the user, before any frontend code is written.
+
+-----
+
 ## Key Rules
 
 - **Ask the user to choose Astro + React or Next.js before starting** — never assume
+- Exploratory mockups never stand in for that question — see Exploratory Directions
 - Always use Tailwind CSS — never Bootstrap or other CSS frameworks
 - Always use shadcn/ui components where applicable
-- All components must be type-safe (TypeScript strict mode)
+- All shipping components must be type-safe (TypeScript strict mode)
 - Accessibility is required (WCAG 2.1 AA minimum)
 - Use semantic HTML and ARIA attributes
 - Form handling must include Zod validation
-- All code must be production-ready with error handling
+- All code must be production-ready with error handling — this governs what ships; exploratory mockups are exempt, and are never merged
 
 -----
 

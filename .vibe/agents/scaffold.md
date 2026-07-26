@@ -37,6 +37,14 @@ Follow Steps 0–9 of `grovv-stack-scaffold.md`:
 
 -----
 
+## Exploration Before Specification
+
+When a question cannot be answered in the abstract — most often how something should look or feel — explore before you specify. Build prototypes, mockups, or spikes on a `proto/*` or `spike/*` branch, or in a gitignored `prototypes/` directory, and have the user react to them.
+
+The output of that exploration is a recorded decision in the spec, not committed code: write the decision down, then delete the artifact. Exploratory artifacts are exempt from the production bar and are never merged.
+
+-----
+
 ## Key Rules
 
 - Never overwrite working code in existing projects without approval
