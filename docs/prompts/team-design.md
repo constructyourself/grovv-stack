@@ -47,6 +47,7 @@ Consistent with the grovv stack non-negotiables, ask first — never assume:
 - Where does the work fan out (parallelizable) versus where is it strictly sequential?
 - Does the product need a quality gate (a reviewer/QA agent separate from the producer)?
 - Are there capabilities the six defaults do not cover?
+- Do the workers need to chain facts across sources, refer to the same real-world entities under different names, or share structured state that outlives their own context windows — or is passing results through the orchestrator sufficient? Sufficient is the usual answer; see Data Passing Between Agents below.
 
 Carry forward, do not re-litigate, the two standing grovv ask-first rules. This step must not pre-empt them:
 
@@ -89,6 +90,34 @@ Pick the one that matches the work, then confirm with the user before generating
 
 -----
 
+## Data Passing Between Agents
+
+The vendored harness skill defines four data-passing strategies in its orchestration phase. grovv adds a fifth. Extend the set here — never by editing the vendored files.
+
+| Strategy | Mechanism | Mode | Use when |
+|----------|-----------|------|----------|
+| Message-based | `SendMessage` directly between team members | Team | Real-time coordination, feedback exchange, lightweight state |
+| Task-based | `TaskCreate` / `TaskUpdate` carrying shared task state | Team | Progress tracking, dependency management |
+| File-based | Write and read at agreed paths | Team + sub | Large or structured artifacts, audit trail |
+| Return-value-based | The `Agent` tool's return message | Sub | The orchestrator collects sub-agent results directly |
+| Shared store (grovv addition) | Structured state living outside any context window, queried by slice rather than read whole | Team + sub | All three promotion conditions below hold |
+
+The fifth strategy is not a default. Promote to it only when **all three** of the following hold at once:
+
+1. Three or more agents must read state that another agent produced, not merely report it upward to the orchestrator.
+2. The state outlives a single agent's context window — a later phase, a later run, or a later session reads it.
+3. Consumers need provenance — which agent wrote a fact, from which artifact, and when — in order to act on it.
+
+Fewer than all three, and file-based passing plus return values is sufficient and cheaper. Say so explicitly in the orchestrator skill rather than leaving the choice unexamined.
+
+All three, and the orchestrator skill must name the store, its schema, and its provenance fields. A shared store earns its cost on three counts: it connects (it links the same entity across agents that never communicated), it compresses (a synthesizer reads structured facts instead of every producer's raw output), and it grounds (every fact it holds traces back to a source). A store that does not do all three is a file with extra steps.
+
+### Provenance on Cross-Agent Artifacts
+
+Whichever strategy is chosen, every artifact one agent writes for another to read carries provenance: which agent wrote it, from which source artifact, and when. This is unconditional — it applies to a file dropped at an agreed path exactly as much as to a shared store. Without it a downstream agent cannot tell a fact it should act on from a guess it should verify, and a reviewer cannot trace a conclusion back to its evidence.
+
+-----
+
 ## grovv Conventions for Generated Output
 
 The vendored harness skill is the methodology. When this step writes files into the target project, apply grovv stack conventions on top:
@@ -115,6 +144,9 @@ This step is complete when, for the target project:
 - [ ] Every agent has a `.claude/agents/{name}.md` definition (built-in types included)
 - [ ] Each agent's skills exist under `.claude/skills/{name}/SKILL.md` with pushy, trigger-rich descriptions
 - [ ] Exactly one orchestrator skill ties the team together (data flow + error handling + test scenario)
+- [ ] The data-passing strategy is named explicitly, and a shared store was adopted only where all three promotion conditions hold
+- [ ] Where a shared store was adopted, the orchestrator skill names the store, its schema, and its provenance fields
+- [ ] Every cross-agent artifact carries provenance — writing agent, source artifact, and time
 - [ ] The chosen execution mode and pattern are stated explicitly
 - [ ] Nothing was written to `.claude/commands/`
 - [ ] The target `CLAUDE.md` carries a harness pointer (trigger rule + change-log table)

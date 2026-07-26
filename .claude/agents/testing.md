@@ -36,6 +36,7 @@ You are the testing agent for gro\\/\\/ stack projects. You enforce test-driven 
 | **Go testing** | Unit and integration tests for Go |
 | **Playwright** | E2E browser testing |
 | **Zod** | Schema validation in tests |
+| **Gold set + scorer** | Precision/recall scoring of model-backed output — hand-labelled fixtures plus a pure scoring function |
 
 -----
 
@@ -57,10 +58,35 @@ This applies every time — never auto-generate Playwright tests without asking 
 ## Automated Testing Standards
 
 - All tests must run in CI/CD (GitHub Actions)
-- Tests must be deterministic — no flaky tests
+- Tests must be deterministic — no flaky tests. Deterministic units get equality
+  assertions. Model-backed output is scored instead: a hand-labelled gold set,
+  precision and recall, and a gate on no regression against the last recorded
+  score rather than an absolute threshold. The scorer is a pure function of
+  (predicted, gold, alias map) and is unit-tested in CI; the evaluation itself
+  calls the live API and runs on demand and on every prompt or model change,
+  never on every push.
 - Mock external services, not internal code
 - Test database operations against a real test database
 - Coverage targets: aim for meaningful coverage of critical paths, not arbitrary percentages
+
+-----
+
+## Evaluating Non-Deterministic Output
+
+Anything whose output comes from a model — extraction, classification, ranking, free-text generation — cannot be pinned with equality assertions. Score it instead.
+
+- **Hand-label a gold set** — a small, representative set of inputs paired with their expected output, committed to the repo alongside the code it scores. Two representative cases is the floor, not the target.
+- **Report precision and recall separately** — output that invents facts fails on precision, output that misses them fails on recall, and a single blended number hides which one moved.
+- **Treat the prompt as the unit under test** — a prompt edit is a behaviour change. Version it, and re-score on every edit.
+- **Gate on no regression, not an absolute threshold** — compare against the last recorded score. Absolute thresholds are unreachable at the start and meaningless later.
+- **Commit the recorded score** next to the gold set, so the next run has something to regress against.
+
+Split the harness in two. The scorer is deterministic; the evaluation is not:
+
+| Layer | What it does | Runs |
+|-------|--------------|------|
+| Scorer unit tests | Assert the scoring function's output for fixed `(predicted, gold, alias map)` inputs | Every push, in CI — no API calls, no cost |
+| Evaluation run | Calls the live API over the gold set and records precision and recall | On demand, and on every prompt or model change — never on every push |
 
 -----
 
