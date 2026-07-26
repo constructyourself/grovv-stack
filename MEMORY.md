@@ -72,12 +72,12 @@ Append-only, newest first, dated. One line of decision, one line of why. Prune e
 
 ## Next Steps
 
-- @TODO — **GRO-127 is done** and needs closing in Linear. The plugin has been installed and run end to end multiple times, confirmed by the repo owner on 2026-07-26. The agent session could not close it: Linear MCP calls returned `requires approval` and it was not granted. Close it by hand.
 - Run the GRO-197 smoke test (SessionStart hook fires; Step 8 generates memory in a real target project).
 - @TODO — GRO-169's description still lists "memory system" as open; editing it was approval-gated from the agent session (a comment noting the promotion was added instead). Strike it through manually or from an approved session.
 - Decide: should a scaffolded project receive tool directories for every CLI its team uses? Today it gets only the one that ran the scaffold, so a project scaffolded from Claude Code is not usable from Codex or Vibe. Agreed direction is to ask the user which tools they use and generate only those, with `.grovv/` canonical when more than one is chosen. Not yet implemented.
 - Two prose restatements of the stack cannot be checked structurally — `check_stack_tables.py` reports them without failing. Convert, point at canonical, or accept.
-- Scaffolded projects still get no CI of their own. See `docs/architecture/loop-engineering.md`.
+- Loop engineering: Layer 3 (gold-set scoring, grounding) is implemented and Layer 2 is partly covered by harness Phase 0. **Layer 1 is not built** — nothing records a target project's verify commands and nothing generates CI into it. Plan is in `docs/architecture/loop-engineering.md`: fold into Step 1 and Step 6, no new numbered step.
+- `check_step_numbers.py` now exists, which was the stated precondition for executing the Step 2 unknowns insertion (renumber 2–9 → 3–10). The map in `docs/architecture/unknowns-engineering.md` still must be re-derived against the tree first — it predates the tracker rename.
 
 -----
 gro\\/\\/ stack — Cross-Session Memory
