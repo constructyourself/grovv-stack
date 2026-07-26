@@ -26,6 +26,8 @@ build/
 out/
 
 # Logs and caches
+__pycache__/
+*.pyc
 *.log
 npm-debug.log*
 yarn-debug.log*

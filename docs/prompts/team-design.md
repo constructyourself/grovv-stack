@@ -1,6 +1,6 @@
 # Prompt: Design the Agent Team (Harness)
 
-Use this prompt to generate a project-specific **agent team and the skills they use** for the target project. It is **Step 7** of the grovv stack scaffolding pipeline — it runs **after `skills-builder.md` (Step 6) and before `linear-tracking.md` (Step 8)**. The specs (`docs/product-spec.md`, `docs/development-plan.md`, `docs/tech-spec.md`) already exist by now, and once the baseline best-practice skills exist, the team is designed to execute against them.
+Use this prompt to generate a project-specific **agent team and the skills they use** for the target project. It is **Step 7** of the grovv stack scaffolding pipeline — it runs **after `skills-builder.md` (Step 6) and before `tracker-setup.md` (Step 8)**. The specs (`docs/product-spec.md`, `docs/development-plan.md`, `docs/tech-spec.md`) already exist by now, and once the baseline best-practice skills exist, the team is designed to execute against them.
 
 This step adapts the vendored **harness** meta-skill (`.claude/skills/harness/`) to grovv stack conventions. harness is the team-architecture factory: it turns a domain description into coordinated agents plus the skills those agents use, using six proven orchestration patterns. See `.claude/skills/harness/ATTRIBUTION.md` for provenance and license.
 
@@ -47,7 +47,7 @@ Consistent with the grovv stack non-negotiables, ask first — never assume:
 - Where does the work fan out (parallelizable) versus where is it strictly sequential?
 - Does the product need a quality gate (a reviewer/QA agent separate from the producer)?
 - Are there capabilities the six defaults do not cover?
-- Do the workers need to chain facts across sources, refer to the same real-world entities under different names, or share structured state that outlives their own context windows — or is passing results through the orchestrator sufficient? Sufficient is the usual answer; see Data Passing Between Agents below.
+- Does any state one agent produces need to be read by other agents, or outlive the producing agent's context window — or is passing results through the orchestrator sufficient? Sufficient is the usual answer; see Data Passing Between Agents below.
 
 Carry forward, do not re-litigate, the two standing grovv ask-first rules. This step must not pre-empt them:
 
@@ -108,7 +108,7 @@ The fifth strategy is not a default. Promote to it only when **all three** of th
 2. The state outlives a single agent's context window — a later phase, a later run, or a later session reads it.
 3. Consumers need provenance — which agent wrote a fact, from which artifact, and when — in order to act on it.
 
-Fewer than all three, and file-based passing plus return values is sufficient and cheaper. Say so explicitly in the orchestrator skill rather than leaving the choice unexamined.
+Fewer than all three, and file-based passing — plus task-based coordination in team mode, or return values in sub-agent mode — is sufficient and cheaper. Say so explicitly in the orchestrator skill rather than leaving the choice unexamined.
 
 All three, and the orchestrator skill must name the store, its schema, and its provenance fields. A shared store earns its cost on three counts: it connects (it links the same entity across agents that never communicated), it compresses (a synthesizer reads structured facts instead of every producer's raw output), and it grounds (every fact it holds traces back to a source). A store that does not do all three is a file with extra steps.
 
@@ -157,7 +157,7 @@ This step is complete when, for the target project:
 
 ## After This Step
 
-Continue the pipeline: proceed to `linear-tracking.md` (Step 8), then `readme-generator.md` (Step 9). Surface the agent team where relevant — in the Linear backlog and the README — and revisit `docs/tech-spec.md` if it should document the team as part of the project's development workflow.
+Continue the pipeline: proceed to `tracker-setup.md` (Step 8), then `readme-generator.md` (Step 9). Surface the agent team where relevant — in the project's tracker backlog and the README — and revisit `docs/tech-spec.md` if it should document the team as part of the project's development workflow.
 
 -----
 gro\\/\\/ stack — Agent Team Design

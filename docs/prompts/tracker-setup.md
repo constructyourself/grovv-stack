@@ -31,7 +31,7 @@ Ask exactly this:
 
 > Which issue tracker should this project use?
 >
-> 1. **GitHub Issues (recommended)** — it is the gro\\/\\/ stack ecosystem default as of 2026-07-25, and it lives in the same repo as the code, so issues, branches, and PRs cross-link with no extra service.
+> 1. **GitHub Issues (recommended)** — it is the gro\\/\\/ stack recommended default for project tracking, and it lives in the same repo as the code, so issues, branches, and PRs cross-link with no extra service.
 > 2. **Linear** — worth choosing when the project needs heavy cross-referencing: multiple repos, initiatives spanning teams, or a backlog shared with people who do not live in GitHub.
 
 - Wait for an explicit answer. If the user says "whatever you think", state the recommendation (GitHub Issues) and ask them to confirm it — a stated default is still an answer they gave.
@@ -49,16 +49,20 @@ Confirm tooling **before** creating anything. Run, in the target project's root:
 ```bash
 gh --version
 gh auth status
-REPO="$(gh repo view --json nameWithOwner --jq .nameWithOwner)"
+export REPO="$(gh repo view --json nameWithOwner --jq .nameWithOwner)"
 gh api "repos/$REPO" --jq '.permissions.push'
 ```
 
-Expected: `gh auth status` reports a logged-in account whose token scopes include `repo`, `$REPO` resolves to the intended `org/repo`, and the last command prints `true` (write access — required to create labels, milestones, and issues). Then, in order:
+Expected: `gh auth status` reports a logged-in account whose token scopes include `repo`, `$REPO` resolves to the intended `org/repo`, and the last command prints `true` (write access — required to create labels, milestones, and issues).
+
+**`$REPO` does not survive between fenced blocks.** Most agents run each block as its own shell invocation, so a later `--repo "$REPO"` expands to an empty string and `gh` fails with `expected the "[HOST/]OWNER/REPO" format`. Either run all of Path A in a single shell session, or substitute the literal `org/repo` into every command below before running it.
+
+Then, in order:
 
 | Situation | Action |
 |-----------|--------|
 | `gh` present, authenticated, `push` is `true` | Proceed with the `gh` commands below. |
-| `gh` missing, unauthenticated, or lacking `repo` scope | Fall back to the **GitHub MCP server** — same workflow, MCP tools instead of `gh` (`search_issues` / `list_issues` to check for duplicates, `issue_write` to create, `get_label` to verify the taxonomy). The MCP server has no milestone-creation tool: create the issues, then write an `@TODO` in `docs/development-plan.md` asking the repo owner to add the milestones and back-fill them. |
+| `gh` missing, unauthenticated, lacking `repo` scope, or `.permissions.push` is `false` | Fall back to the **GitHub MCP server** — same workflow, MCP tools instead of `gh` (`search_issues` / `list_issues` to check for duplicates, `issue_write` to create, `get_label` to verify the taxonomy). The MCP server has no milestone-creation tool: create the issues, then write an `@TODO` in `docs/development-plan.md` asking the repo owner to add the milestones and back-fill them. |
 | Neither `gh` nor the GitHub MCP server is available | **Skip and stop.** Write an `@TODO` into the target project's `MEMORY.md` (Tracker Coordination table + Next Steps) recording that tracker setup is pending and what unblocks it (`gh auth login --scopes repo`, or connecting the GitHub MCP server), then continue the pipeline. Do **not** half-create the taxonomy or a partial issue list. |
 
 ### A1. Label taxonomy

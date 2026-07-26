@@ -1,6 +1,6 @@
 # grovv-stack
 
-**gro\/\/ stack** — Production-First Project Scaffolding (Canonical)
+**gro\\/\\/ stack** — Production-First Project Scaffolding (Canonical)
 
 -----
 
@@ -44,7 +44,7 @@ Stack-agnostic scaffolding, optimized for this default stack. Adapt per project.
 | **Payments** | Stripe | Subscriptions, one-time payments, invoicing |
 | **Usage Tracking** | Lago | Metering and usage-based billing |
 | **Observability** | PostHog | Analytics and monitoring |
-| **Project Tracking** | Linear | Issue and project tracking (via Linear MCP) |
+| **Project Tracking** | GitHub Issues (recommended) or Linear | Issue and project tracking — chosen per project |
 | **Deployment** | Vercel, Docker | Production hosting |
 
 -----
@@ -98,7 +98,7 @@ These six are the **baseline team**. During the team-design step, the scaffolder
 1. **tech-spec** → Creates the technical specification (`docs/tech-spec.md`)
 2. **skills-builder** → Generates the project's invocable skills under the tool-specific skills directory
 3. **team-design** → Designs the project-specific agent team + skills (harness); additive to grovv defaults
-4. **linear-tracking** → Creates/reuses a Linear project and seeds issues from the development plan (via Linear MCP); also creates the target project's `MEMORY.md`, its tool-specific context file (`CLAUDE.md`, `VIBE.md`, or `CODEX.md`) memory rules, and a `SessionStart` hook
+4. **tracker-setup** → Asks which tracker to use (GitHub Issues or Linear), then creates/reuses the backlog and seeds issues from the development plan; also creates the target project's `MEMORY.md`, its tool-specific context file (`CLAUDE.md`, `VIBE.md`, or `CODEX.md`) memory rules, and a `SessionStart` hook
 5. **readme-generator** → Generates project README
 
 ### For New Projects
@@ -167,7 +167,7 @@ For existing projects, analyze and match established patterns.
 - Tables for structured reference data
 - `@TODO` markers for incomplete sections
 - Colophon with version, status, author, model metadata
-- Footer (in prose): `gro\/\/ stack — [Purpose or Project Name]` — doubled backslashes so it renders as the gro\/\/ wordmark, not gro//. Inside code blocks, use single backslashes (`gro\/`).
+- Footer (in prose): `gro\\/\\/ stack — [Purpose or Project Name]` — doubled backslashes so it renders as the gro\\/\\/ wordmark, not gro//. Inside code blocks, use single backslashes (`gro\/\/`).
 - No excessive bold or emoji in headings
 
 -----
@@ -182,7 +182,7 @@ For existing projects, analyze and match established patterns.
 - **This file owns context** — decisions, rationale, gotchas, in-flight state
 - **Stay small** — keep under ~120 lines. History lives in git, the backlog lives in Linear
 
-Target projects get the same convention from the linear-tracking step.
+Target projects get the same convention from the tracker-setup step.
 
 -----
 
@@ -191,7 +191,7 @@ Target projects get the same convention from the linear-tracking step.
 - **Ask before generating** — understand the product, users, constraints, and stack first
 - **Never overwrite working code** in existing projects without approval
 - **Mark unknowns with `@TODO`** and revisit as the conversation progresses
-- **Apply gro\/\/ stack branding** to all generated documents
+- **Apply gro\\/\\/ stack branding** to all generated documents
 - **Iterate** — documents are living artifacts, revise as understanding deepens
 - **Maintain memory** — read `MEMORY.md` at session start, update it before ending meaningful work, sync with Linear
 - **Always ask what Playwright should test** — never auto-generate E2E tests
@@ -238,4 +238,4 @@ LINEAR_API_KEY="lin_api_..."
 
 -----
 
-gro\/\/ stack — Canonical Configuration
+gro\\/\\/ stack — Canonical Configuration

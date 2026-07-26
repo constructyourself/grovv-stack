@@ -1,6 +1,6 @@
 # grovv-stack
 
-**gro\/\/ stack** — Production-First Project Scaffolding for Vibe
+**gro\\/\\/ stack** — Production-First Project Scaffolding for Vibe
 
 -----
 
@@ -104,7 +104,7 @@ The six baseline agents are defined in `.vibe/agents/`:
 1. **tech-spec** → Creates the technical specification (`docs/tech-spec.md`)
 2. **skills-builder** → Generates the project's invocable skills under `.vibe/skills/`
 3. **team-design** → Designs the project-specific agent team using harness meta-skill
-4. **linear-tracking** → Creates Linear project and seeds issues via Linear MCP
+4. **tracker-setup** → Asks which tracker to use (GitHub Issues or Linear), then seeds the backlog
 5. **readme-generator** → Generates project README
 
 ### Tool-Specific Notes
@@ -134,7 +134,7 @@ Adapt per project; never assume.
 | Payments | Stripe |
 | Usage Tracking | Lago |
 | Observability | PostHog |
-| Project Tracking | Linear (via Linear MCP) |
+| Project Tracking | GitHub Issues (recommended) or Linear — chosen per project |
 | Deployment | Vercel, Docker |
 
 -----
@@ -147,7 +147,7 @@ Adapt per project; never assume.
 - **Security by default** — input validation, auth, dependency audits in every layer. Never deferred.
 - **Zero data loss** — transactions for all multi-step data operations.
 - **Never overwrite working code** in existing projects without an approved adoption plan.
-- **Apply gro\/\/ stack branding** to every generated document (footer, conventions below).
+- **Apply gro\\/\\/ stack branding** to every generated document (footer, conventions below).
 
 -----
 
@@ -160,7 +160,7 @@ Apply to every file this repo generates:
 - Tables for structured reference data.
 - `@TODO` markers for incomplete sections.
 - Colophon (version, status, author, model) on specs.
-- Footer (in prose): `gro\/\/ stack — [Purpose or Project Name]` — doubled backslashes so it renders as the gro\/\/ wordmark, not gro//. Inside code blocks, use single backslashes (`gro\/`).
+- Footer (in prose): `gro\\/\\/ stack — [Purpose or Project Name]` — doubled backslashes so it renders as the gro\\/\\/ wordmark, not gro//. Inside code blocks, use single backslashes (`gro\/\/`).
 - No emoji in headings; minimal bold.
 - Project folder names: lowercase with dashes.
 
@@ -188,4 +188,4 @@ Apply to every file this repo generates:
 
 -----
 
-gro\/\/ stack — Vibe Configuration Guide
+gro\\/\\/ stack — Vibe Configuration Guide

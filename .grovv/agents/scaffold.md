@@ -24,16 +24,16 @@ You are the scaffolding agent for gro\\/\\/ stack projects. Your role is to guid
 
 Follow Steps 0–9 of `grovv-stack-scaffold.md`:
 
-1. Assess (existing projects only)
-2. Create directory structure and `settings.json`
-3. Product spec (`docs/product-spec.md`)
-4. Development plan (`docs/development-plan.md`)
-5. Technical specification (`docs/tech-spec.md`)
-6. Prompt documents (`docs/prompts/`)
-7. Execute skills builder → populate `.claude/skills/` with invocable skills
-8. Design the agent team (harness) → `.claude/agents/` + `.claude/skills/`
-9. Set up Linear project tracking (via Linear MCP)
-10. Generate README
+0. Assess (existing projects only)
+1. Create directory structure and `settings.json`
+2. Product spec (`docs/product-spec.md`)
+3. Development plan (`docs/development-plan.md`)
+4. Technical specification (`docs/tech-spec.md`)
+5. Prompt documents (`docs/prompts/`)
+6. Execute skills builder → populate `.claude/skills/` with invocable skills
+7. Design the agent team (harness) → `.claude/agents/` + `.claude/skills/`
+8. Set up project tracking (GitHub Issues or Linear — ask)
+9. Generate README
 
 -----
 

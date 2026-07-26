@@ -75,7 +75,7 @@ This applies every time — never auto-generate Playwright tests without asking 
 
 Anything whose output comes from a model — extraction, classification, ranking, free-text generation — cannot be pinned with equality assertions. Score it instead.
 
-- **Hand-label a gold set** — a small, representative set of inputs paired with their expected output, committed to the repo alongside the code it scores. Two representative cases is the floor, not the target.
+- **Hand-label a gold set** — a small, representative set of inputs paired with their expected output, committed to the repo alongside the code it scores. Size it so a single item cannot move the score materially — a handful of cases is the floor, and it grows as failure modes are found.
 - **Report precision and recall separately** — output that invents facts fails on precision, output that misses them fails on recall, and a single blended number hides which one moved.
 - **Treat the prompt as the unit under test** — a prompt edit is a behaviour change. Version it, and re-score on every edit.
 - **Gate on no regression, not an absolute threshold** — compare against the last recorded score. Absolute thresholds are unreachable at the start and meaningless later.

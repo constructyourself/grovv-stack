@@ -2,11 +2,16 @@
 r"""Check the gro\/\/ wordmark escaping convention in every Markdown file.
 
 Prose renders Markdown, so the wordmark needs doubled backslashes to survive
-escaping. Code -- fenced blocks and inline spans alike -- takes backslashes
-literally, so it needs the single-backslash form.
+escaping. Fenced code takes backslashes literally, so it needs the
+single-backslash form.
 
     prose   gro\\/\\/ stack
-    code    gro\/\/ stack
+    fence   gro\/\/ stack
+
+Inline code spans are exempt, in both directions. A span is how these
+documents quote either form while explaining where it belongs, so both occur
+and no line-level rule can tell them apart. Spans are stripped from prose
+lines before judging them, and a fence never contains one.
 
 Standard library only. Run from anywhere:
 
@@ -25,8 +30,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 WORDMARK = re.compile(r"gro(\\+)/(\\+)/")
 # A fence opener/closer: three or more backticks or tildes.
 FENCE = re.compile(r"^\s*(`{3,}|~{3,})")
-# Inline code spans. Backslashes are literal inside them, exactly as in a
-# fence, so the single-backslash form is correct there even on a prose line.
+# Inline code spans. Not judged in either direction - see module docstring.
 INLINE_CODE = re.compile(r"`+[^`]*`+")
 
 SKIP_DIR = ".git"
@@ -68,8 +72,8 @@ def scan(path: Path, rel: str) -> list[str]:
                 r"found doubled (gro\\/\\/)"
             )
         else:
-            # Prose: doubled backslashes are correct. Inline code spans follow
-            # the fenced rule, so remove them before judging the line.
+            # Prose: doubled backslashes are correct. Inline code spans are
+            # exempt either way, so remove them before judging the line.
             haystack, bad_run = INLINE_CODE.sub("", raw), 1
             message = (
                 r"prose must use the doubled-backslash wordmark (gro\\/\\/), "
@@ -101,8 +105,9 @@ def main() -> int:
             print(problem)
         print(
             "\nFix: in Markdown prose write the wordmark with doubled "
-            r"backslashes (gro\\/\\/ stack); inside fenced code blocks and "
-            r"inline code spans write it with single backslashes (gro\/\/ stack)."
+            r"backslashes (gro\\/\\/ stack); inside a fenced code block write "
+            r"it with single backslashes (gro\/\/ stack). Inline code spans "
+            "are not checked in either direction."
         )
         return 1
 

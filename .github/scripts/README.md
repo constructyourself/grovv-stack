@@ -45,17 +45,30 @@ Each exits `0` when clean, or non-zero after printing every problem it found as 
 
 ## check_wordmark.py
 
-The wordmark needs doubled backslashes in Markdown prose to survive escaping, and single backslashes in code, where backslashes are already literal.
+The wordmark needs doubled backslashes in Markdown prose to survive escaping, and single backslashes in fenced code, where backslashes are already literal.
 
-| Context | Correct form |
-|---------|--------------|
-| Markdown prose | `gro\\/\\/ stack` |
-| Fenced code block | `gro\/\/ stack` |
-| Inline code span | `gro\/\/ stack` |
+| Context | Correct form | Checked |
+|---------|--------------|---------|
+| Markdown prose | `gro\\/\\/ stack` | Yes |
+| Fenced code block | `gro\/\/ stack` | Yes |
+| Inline code span | `gro\/\/ stack` | No — exempt in both directions |
 
-The script walks every `*.md` file, skipping `.git` and any `skills/harness/` tree, tracking fenced-code state line by line. It flags the single-backslash form in prose and the doubled form inside a fence.
+The script walks every `*.md` file, skipping `.git` and any `skills/harness/` tree, tracking fenced-code state line by line. It flags the single-backslash form in prose and the doubled form inside a fence. That is the whole of what it enforces.
 
-Inline code spans are stripped from prose lines before judging them. Backticks make backslashes literal exactly as a fence does, so the single-backslash form is correct inside them — several documents legitimately quote it that way while explaining the rule.
+Inline code spans are exempt, and the exemption runs both ways: the prose branch strips spans out of a line before judging it, and the fenced branch never meets one. Neither form is ever reported inside backticks. That is deliberate rather than an oversight — a span is how a document quotes the prose form while explaining what prose should contain, and equally how it quotes the fenced form while explaining what a fence should contain. Both uses are correct, they routinely share a sentence, and nothing at line level separates them. The check declines to guess, which also means it cannot see two documents disagreeing inside spans.
+
+Seven lines currently rely on the exemption. Each writes the single-backslash form inside a span on a prose line, so the prose branch would report it if spans were judged as prose:
+
+| File | Line(s) |
+|------|---------|
+| `.claude/CLAUDE.md` | 191 |
+| `.claude/agents/scaffold.md` | 45 |
+| `.codex/agents/scaffold.md` | 45 |
+| `.github/scripts/README.md` | 53, 54 |
+| `.grovv/agents/scaffold.md` | 45 |
+| `grovv-stack-scaffold.md` | 502 |
+
+Two of those are rows 53 and 54 of the table above, in this file. The exemption covers this document on exactly the terms it covers the others; it is not a carve-out for files nobody is fixing.
 
 -----
 
@@ -81,23 +94,24 @@ Because nothing loads the root manifest, drift there is invisible until someone 
 |------|-------|------|
 | a | `skills/harness/**` | Byte-identical across all four trees |
 | b | `agents/*.md`, `skills/grovv/SKILL.md` | Identical to `.grovv/` after normalizing tool path prefixes |
-| c | `agents/` file set | Every agent file exists in all four trees |
+| c | The tier b file set | Every tier b target exists in all four trees |
 
 Tier a is strict because harness is vendored verbatim under Apache-2.0 and its `ATTRIBUTION.md` forbids hand-editing; any byte difference is a bug, not a customization.
 
 Tier b rewrites the `.claude/`, `.vibe/`, `.codex/` and `.grovv/` path prefixes to a common placeholder on both sides before diffing, so a legitimate path adaptation passes and anything else fails. The report names the file and the first differing line, canonical side first.
 
-Tier c catches the failure mode where an agent is added to one tool directory and forgotten in the other three.
+Tier c runs over the same target list as tier b — the agents and `skills/grovv/SKILL.md` — and names the absent path. It catches the failure mode where a file is added to one tool directory and forgotten in the other three, and the mirror of it: a deleted derived file removes a tier b comparison, so without tier c, deleting a tool's plugin entry point would report fewer problems than leaving it in place.
 
 -----
 
 ## Known Open Drift
 
-@TODO — the following are real and unfixed. The checks report them; the fixes belong to whoever owns each file.
+@TODO — the following are real and unfixed. The first three are reported by the checks; the last one is invisible to them by construction. The fixes belong to whoever owns each file.
 
 - Manifest versions disagree: `.claude-plugin/plugin.json` and root `plugin.json`.
 - `.vibe/agents/scaffold.md` differs from canonical beyond path substitution.
 - `skills/grovv/SKILL.md` differs from canonical in all three tool directories — plugin-root variable names and tool-specific paragraphs. Decide whether these are legitimate per-tool adaptations that tier b should normalize, or drift to reconcile.
+- The two top-level context files write the same footer example inside an inline span with different escaping: `CLAUDE.md:194` uses the single form, `.claude/CLAUDE.md:191` the doubled one. The check cannot see that disagreement — span contents are exempt in both directions — so the pair has to be reconciled by hand. Pick one form and make both files use it.
 
 -----
 

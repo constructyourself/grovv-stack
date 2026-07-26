@@ -51,7 +51,7 @@ Stack-agnostic scaffolding, optimized for this default stack. Adapt per project.
 | **Payments** | Stripe | Subscriptions, one-time payments, invoicing |
 | **Usage Tracking** | Lago | Metering and usage-based billing |
 | **Observability** | PostHog | Analytics and monitoring |
-| **Project Tracking** | Linear | Issue and project tracking (via Linear MCP) |
+| **Project Tracking** | GitHub Issues (recommended) or Linear | Issue and project tracking — chosen per project |
 | **Deployment** | Vercel, Docker | Production hosting |
 | **Dev Environment** | VS Code, sprites.dev | Local and cloud IDE |
 | **AI CLI** | Claude Code | Agentic coding and automation |
@@ -82,7 +82,7 @@ grovv-stack/
 │   ├── prompts/                # Executable prompts for scaffolding
 │   │   ├── skills-builder.md
 │   │   ├── team-design.md
-│   │   ├── linear-tracking.md
+│   │   ├── tracker-setup.md
 │   │   ├── tech-spec.md
 │   │   ├── tech-spec-template.md
 │   │   └── readme-generator.md
@@ -119,7 +119,7 @@ These six are the **baseline team**. During the team-design step (prompt: `docs/
 1. **tech-spec** → Creates the technical specification (`docs/tech-spec.md`)
 2. **skills-builder** → Generates the project's invocable skills under `.claude/skills/` (the baseline best-practice set)
 3. **team-design** → Designs the project-specific agent team + skills (harness); additive to grovv defaults
-4. **linear-tracking** → Creates/reuses a Linear project and seeds issues from the development plan (via Linear MCP); also creates the target project's `MEMORY.md`, its `CLAUDE.md` memory rules, and a `SessionStart` hook
+4. **tracker-setup** → Asks which tracker to use (GitHub Issues or Linear), then creates/reuses the backlog and seeds issues from the development plan; also creates the target project's `MEMORY.md`, its `CLAUDE.md` memory rules, and a `SessionStart` hook
 5. **readme-generator** → Generates project README
 
 ### For New Projects
@@ -201,7 +201,7 @@ For existing projects, analyze and match established patterns.
 - **Update it before ending** any session that changed something meaningful: Current State, a dated Decision Log entry, Next Steps; prune stale content.
 - **Linear owns the backlog; `MEMORY.md` owns context** — reference Linear issues by identifier, never mirror issue lists into the file. Keep it under ~120 lines.
 
-Target projects get the same convention from the linear-tracking step (see `docs/prompts/linear-tracking.md` for the template and hook).
+Target projects get the same convention from the tracker-setup step (see `docs/prompts/tracker-setup.md` for the template and hook).
 
 -----
 

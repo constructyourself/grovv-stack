@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "grovv-stack",
   "displayName": "grovv stack",
-  "version": "0.3.0",
+  "version": "0.5.0",
   "description": "Production-first project scaffolding. Drop into any repo — new or existing — and run /grovv to generate the product spec, development plan, technical spec (under docs/), an invocable set of best-practice skills, a project-specific agent team (via the bundled harness meta-skill), and the README. Conversation-driven and ask-first: understands the product, users, constraints, and stack before generating.",
   "author": {
     "name": "grovv",
