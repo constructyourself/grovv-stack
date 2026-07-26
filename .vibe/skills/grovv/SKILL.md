@@ -17,7 +17,7 @@ Before writing any file, read the master directive:
 ${VIBE_PLUGIN_ROOT}/grovv-stack-scaffold.md
 ```
 
-When running from a clone of the grovv-stack repo rather than an installed plugin, read `grovv-stack-scaffold.md` at the repo root. It defines the full workflow (Steps 0–9) and is authoritative. Also follow the conventions in `VIBE.md` and `.vibe/CLAUDE.md`.
+When running from a clone of the grovv-stack repo rather than an installed plugin, read `grovv-stack-scaffold.md` at the repo root. It defines the full workflow (Steps 0–9) and is authoritative. Also follow the conventions in `VIBE.md`.
 
 For backward compatibility with Claude Code, if `${VIBE_PLUGIN_ROOT}` is not available, fall back to `${CLAUDE_PLUGIN_ROOT}` or the repo root.
 

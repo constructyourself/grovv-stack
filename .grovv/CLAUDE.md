@@ -57,6 +57,7 @@ Stack-agnostic scaffolding, optimized for this default stack. Adapt per project.
 | **Observability** | PostHog | Analytics and monitoring |
 | **Project Tracking** | GitHub Issues (recommended) or Linear | Issue and project tracking — chosen per project |
 | **Deployment** | Vercel, Docker | Production hosting |
+| **Dev Environment** | VS Code, sprites.dev | Local and cloud IDE |
 
 -----
 

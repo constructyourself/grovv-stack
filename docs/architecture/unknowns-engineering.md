@@ -545,7 +545,7 @@ The 27 sites carrying a step token that must **not** change: `grovv-stack-scaffo
 | Last Updated | 2026-07-26 |
 | Status | Draft |
 | Author(s) | grovv stack scaffolding agent |
-| Model | Claude Opus 5 (Claude Code) |
+| Model | Claude (Claude Code) |
 
 -----
 gro\\/\\/ stack — Unknowns Engineering

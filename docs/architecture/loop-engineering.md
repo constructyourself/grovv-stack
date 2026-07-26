@@ -323,7 +323,7 @@ The two longest arguments, in prose rather than in cells.
 | Last Updated | 2026-07-26 |
 | Status | Draft |
 | Author(s) | grovv stack scaffolding agent |
-| Model | Claude Opus 5 |
+| Model | Claude (Claude Code) |
 
 -----
 gro\\/\\/ stack — Loop Engineering

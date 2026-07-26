@@ -136,6 +136,7 @@ Adapt per project; never assume.
 | Observability | PostHog |
 | Project Tracking | GitHub Issues (recommended) or Linear — chosen per project |
 | Deployment | Vercel, Docker |
+| Dev Environment | VS Code, sprites.dev |
 
 -----
 

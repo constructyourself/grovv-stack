@@ -419,7 +419,7 @@ Continue the pipeline: proceed to `readme-generator.md` (Step 9). The README can
 | **Last Updated** | 2026-07-26 |
 | **Status** | Active |
 | **Author(s)** | Dan |
-| **Model** | Claude Opus 5 |
+| **Model** | Claude (Claude Code) |
 
 -----
 gro\\/\\/ stack — Project Tracking and Cross-Session Memory

@@ -36,6 +36,24 @@ jobs:
         if: ${{ !cancelled() }}
         run: python3 .github/scripts/check_tool_sync.py
 
+      - name: Internal references resolve
+        if: ${{ !cancelled() }}
+        run: python3 .github/scripts/check_references.py
+
+      - name: Pipeline step numbering
+        if: ${{ !cancelled() }}
+        run: python3 .github/scripts/check_step_numbers.py
+
+      - name: Stack tables agree
+        if: ${{ !cancelled() }}
+        run: python3 .github/scripts/check_stack_tables.py
+
+      # Fails on a missing ask-first rule. Its erosion heuristic only warns -
+      # a guess about intent should not be able to redden a build.
+      - name: Ask-first rules intact
+        if: ${{ !cancelled() }}
+        run: python3 .github/scripts/check_ask_first.py
+
       - name: No build tooling introduced
         if: ${{ !cancelled() }}
         run: |

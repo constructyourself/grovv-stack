@@ -17,7 +17,7 @@ Before writing any file, read the master directive:
 ${CODEX_PLUGIN_ROOT}/grovv-stack-scaffold.md
 ```
 
-When running from a clone of the grovv-stack repo rather than an installed plugin, read `grovv-stack-scaffold.md` at the repo root. It defines the full workflow (Steps 0–9) and is authoritative. Also follow the conventions in `CODEX.md` and `.codex/CLAUDE.md`.
+When running from a clone of the grovv-stack repo rather than an installed plugin, read `grovv-stack-scaffold.md` at the repo root. It defines the full workflow (Steps 0–9) and is authoritative. Also follow the conventions in `CODEX.md`.
 
 For backward compatibility with Claude Code, if `${CODEX_PLUGIN_ROOT}` is not available, fall back to `${CLAUDE_PLUGIN_ROOT}` or the repo root.
 

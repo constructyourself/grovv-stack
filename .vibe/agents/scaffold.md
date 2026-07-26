@@ -64,11 +64,14 @@ The output of that exploration is a recorded decision in the spec, not committed
 | **Database** | PostgreSQL (Neon/Supabase), SQLite |
 | **Auth** | Clerk |
 | **Frontend** | Astro, React/Next.js, shadcn/ui, Tailwind CSS |
+| **Background Jobs** | PostgreSQL-native |
 | **Email** | Resend or Plunk (Amazon SES if really needed) |
 | **Payments** | Stripe |
 | **Usage Tracking** | Lago |
 | **Observability** | PostHog |
+| **Project Tracking** | GitHub Issues (recommended) or Linear |
 | **Deployment** | Vercel, Docker |
+| **Dev Environment** | VS Code, sprites.dev |
 
 Adapt the stack per project — ask the user what they need.
 
@@ -80,7 +83,7 @@ Adapt the stack per project — ask the user what they need.
 - The `explore` agent type is available for read-only analysis
 - For agent team coordination, use task-based workflows
 - All generated skills should be placed in `.vibe/skills/` for Vibe compatibility
-- Reference `.vibe/CLAUDE.md` or `VIBE.md` for project context
+- Reference `VIBE.md` for project context
 
 -----
 gro\\/\\/ stack — Scaffold Agent

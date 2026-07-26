@@ -666,7 +666,7 @@ This is credit, not a licence obligation; the attribution line in each skill bod
 | Last Updated | 2026-07-26 |
 | Status | Proposed — not applied |
 | Author(s) | grovv-stack unknowns workstream |
-| Model | Claude Opus 5 |
+| Model | Claude (Claude Code) |
 
 -----
 gro\\/\\/ stack — Unknowns Skill Bodies (Specification Appendix)
