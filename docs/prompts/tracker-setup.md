@@ -330,6 +330,10 @@ owns the backlog; this file owns the context.
 - CI: [which of these the generated workflow runs — or that CI was offered at
   Step 6 and declined, and why]. Recording a decline is what makes a wrong one
   visible later.
+- Tool directories: [the assistants chosen at Step 1 — `.claude/`, `.vibe/`,
+  `.codex/`, and whether `.grovv/` is canonical]. Step 1 asked and could not
+  record it, because this file did not exist yet; record it here so a later
+  session writes into the right directories and does not re-ask.
 
 -----
 

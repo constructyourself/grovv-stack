@@ -220,7 +220,7 @@ Ask exactly this:
 - Wait for an explicit answer. If the user says "whatever you think", name the CLI this session is running from, say that it is the only one you can confirm they have, and ask them to confirm — a stated default is still an answer they gave.
 - **One tool chosen** — create only that tool's directory. Do **not** create `.grovv/`. A single-tool project should not carry a canonical tree nobody will open.
 - **More than one chosen** — create `.grovv/` as the canonical definitions plus each chosen tool's directory derived from it, identical apart from the tool path prefix. State in the project's context file that `.grovv/` is the source of truth and the tool directories are derived from it, so a future editor changes the canonical copy rather than one derived copy.
-- Record the answer in the project's `MEMORY.md` so Steps 6 and 7 write into the chosen directories and a later session does not re-ask.
+- State the answer back and carry it forward — Steps 6 and 7 write into the chosen directories, and Step 8 records it in the project's `MEMORY.md` so a later session does not re-ask. **Do not write it to `MEMORY.md` at this step:** that file does not exist until Step 8 creates it. This is the same carry-forward the verify commands below use, for the same reason.
 
 Derived copies drift silently — this repository keeps four in sync only because a CI check compares them. A target project that chose more than one tool has the same exposure and may want the same check. Do not generate one here; that is the verify-loop decision, and it belongs to the user.
 
@@ -296,7 +296,9 @@ It has no step number of its own deliberately. It is not a separable phase produ
 
 The fourth is the interview seed. Record the answers in `docs/unknowns.md` in the user's own words — this is calibration data, not a summary to be tidied.
 
-**Then a blind spot pass.** A research turn, not a question turn — asking someone to name what they have not considered does not work. For a new project, find out what is known about this problem domain, what its common failure modes are, what "good" looks like in this category, and what projects of this shape usually need that the user has not mentioned. For an existing project this is materially stronger, because there is real code to read: report what the code does that the user did not describe, where conventions are inconsistent, which subsystems are load-bearing and undocumented, and what a newcomer would get wrong. End by naming what you believe their blind spots are, in their own domain vocabulary, and asking whether the list is right.
+**Then a blind spot pass.** A research turn, not a question turn — asking someone to name what they have not considered does not work.
+
+**Say where the findings came from.** A pass grounded in documents the user supplied, or in a live search, is worth more than one drawn from the model's own knowledge of the category, and the reader cannot tell the difference unless it is stated. Name the source. Where no search was available and nothing was supplied, say that plainly — a list built from parametric knowledge is still useful, and passing it off as research is what makes it dangerous. Ask for anything the user already has before reasoning about what they might; discovery notes, decks, recordings and competitor material all beat inference, and the references technique exists for exactly this. For a new project, find out what is known about this problem domain, what its common failure modes are, what "good" looks like in this category, and what projects of this shape usually need that the user has not mentioned. For an existing project this is materially stronger, because there is real code to read: report what the code does that the user did not describe, where conventions are inconsistent, which subsystems are load-bearing and undocumented, and what a newcomer would get wrong. End by naming what you believe their blind spots are, in their own domain vocabulary, and asking whether the list is right.
 
 **Then interview, one question at a time.** Never batched. Prioritize by whether the answer would change the architecture — a question whose answer changes nothing can wait, and a question whose answer changes the data model cannot.
 
@@ -308,7 +310,8 @@ The throwaway tier's rules govern these artifacts in full, and one of them decid
 
 **When it stops.** An unknowns pass is exactly the kind of work that runs forever, so the bounds are explicit:
 
-- The interview stops when the architecture-changing questions are exhausted, or after eight questions, whichever comes first. What remains is written down as open, not asked.
+- The interview stops when the architecture-changing questions are exhausted, or after eight questions, or **when the user stops answering** — whichever comes first. What remains is written down as open, not asked. The third condition is the one that fires most often in practice, and it is not a failure: a question the user did not answer is recorded open, never answered on their behalf, and never quietly defaulted. Record it as *unanswered*, and only as *declined* if they actually declined — those are different facts and a later reader will act on them differently.
+- **A question that went unanswered may never have arrived.** Before recording one as unanswered, put it again, plainly, in the body of your next message. Chat interfaces drop things, and "the user refused to decide" is a serious claim to enter into a durable record on the strength of a silence.
 - The prototype limb runs one round. A second round happens only if the user asks for it.
 - The blind spot pass is one research turn producing one list.
 - The pass ends with a handoff: summarize what changed in your understanding, name what is still open, and ask for confirmation before writing the product spec.
@@ -316,7 +319,7 @@ The throwaway tier's rules govern these artifacts in full, and one of them decid
 
 **What it writes.** `docs/unknowns.md`, and the throwaway prototypes. Not the product spec — that is the rest of this step, and this pass informs it rather than pre-empting it.
 
-`docs/unknowns.md` is read again at Step 4, where the recorded defaults are restated in the tech spec as explicit choices with reasons, and at Step 8, where an open question that still blocks something becomes a tracker issue. Whoever closes an entry deletes it in the same edit, moving anything durable into the document that now owns it. Keep it under ~150 lines; history lives in git.
+`docs/unknowns.md` is read again at Step 4, where the recorded decisions and defaults are restated in the tech spec as explicit choices with their reasons and accepted consequences, and at Step 8, where an open question that still blocks something becomes a tracker issue. Whoever closes an entry deletes it in the same edit, moving anything durable into the document that now owns it. Keep it under ~150 lines; history lives in git.
 
 ```markdown
 # Unknowns: [Project Name]
@@ -341,10 +344,22 @@ in their thinking. Verbatim where possible — this is calibration data.]
 |---|----------|----------------|--------|--------|
 | Q1 | [In the user's vocabulary] | [What changes depending on the answer] | [Spec section, or nothing yet] | Open / Answered |
 
+## Decisions
+
+[Questions the user was asked and answered. Not the same as Decided Defaults
+below: that section is for a gro\/\/ stack default they accepted, this one is
+for a question they actively settled. Record the consequence they accepted
+beside the answer — the consequence is what a later session needs and what
+nobody remembers.]
+
+| # | Question | Answer | Consequence accepted |
+|---|----------|--------|---------------------|
+
 ## Recognized Constraints
 
-[Surfaced by reaction to a prototype. Record the user's own words and what they
-were reacting to. These cannot be re-derived from any other document.]
+[Surfaced by reaction to a prototype, or read from material the user supplied.
+Record their own words and what they were reacting to, or the document and page
+a fact came from. These cannot be re-derived from any other document.]
 
 | # | Constraint | Surfaced by | Confidence |
 |---|-----------|-------------|------------|
@@ -450,7 +465,7 @@ Every feature should trace back to the product spec.
 
 Create `docs/tech-spec.md`. This is the comprehensive technical document built from both product-spec and development-plan.
 
-**Read `docs/unknowns.md` first.** Its Decided Defaults section lists every place a gro\\/\\/ stack default was stated and accepted rather than actively chosen; restate each one here as an explicit choice with the reason, so the tech spec records a decision instead of an inheritance. Open questions that still block a section of this document get asked before that section is written, not flagged after.
+**Read `docs/unknowns.md` first.** Its Decided Defaults section lists every place a gro\\/\\/ stack default was stated and accepted rather than actively chosen; restate each one here as an explicit choice with the reason, so the tech spec records a decision instead of an inheritance. Its Decisions section lists what the user actively settled during the pass, with the consequence they accepted — carry both the answer and the consequence into this document rather than re-deriving the answer and losing the reason. Open questions that still block a section of this document get asked before that section is written, not flagged after; a section whose blocking question is unanswered is written up to the boundary and stopped there, with the gap named.
 
 **The agent should ask about each of these:**
 
