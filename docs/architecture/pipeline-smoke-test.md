@@ -2,9 +2,11 @@
 
 The hand-run rubric for scoring a pipeline run against a throwaway target. Layer 3 of `loop-engineering.md`.
 
-**Status: proposed — not implemented.** This document defines a procedure and a scored checklist; it has never been run. Nothing in the pipeline has been edited to accommodate it, and it asks for no such edit. Every file:line citation below was re-derived against the working tree on the date in the colophon.
+**Status: current as of 2026-07-27, and still never run.** This document defines a procedure and a scored checklist. It has been brought level with the pipeline as it now stands — Layers 1 and 2 of `loop-engineering.md` are both complete, Step 2 opens with an unknowns pass, and the baseline skill set is fourteen — so a run scored against it today scores what the pipeline actually does. Nothing in the pipeline has been edited to accommodate it, and it asks for no such edit.
 
-> **Historical note, 2026-07-27.** The pipeline has moved since this rubric was written: Step 2 now opens with an unknowns pass, Step 6 now asks a CI question, and both add rows this checklist does not score. The rubric is still the procedure of record — score the pipeline as it stands when you run it, not as it stood here. Step numbers, line citations, and counts below are a snapshot; `grovv-stack-scaffold.md` and `docs/prompts/` are the source of truth. Re-derive any locator before acting on it.
+**Two gating paragraphs were wrong until this revision and would have mis-scored a run.** The `W` table was gated on "until Phase 1 lands, skip the whole table" and the `R` table instructed the scorer to skip R2 through R10. Both features have since landed; both tables are now fully scoreable, and a scorer following the old instruction would have recorded nine items as skipped that are the whole point of running it.
+
+> **On citations.** Line numbers here were derived against trees that have since moved, and this document's own placement section explains why nothing catches that. Rows added or revised in this revision cite **section headings** rather than line numbers, which survive edits. Treat any surviving `file:line` as a pointer to a section, not an address — open the heading, not the line. A citation that no longer resolves is a defect in this document and should be fixed in the same sitting it is noticed.
 
 -----
 
@@ -12,9 +14,11 @@ The hand-run rubric for scoring a pipeline run against a throwaway target. Layer
 
 This repository's output is other repositories, so its regression surface is invisible from inside itself — `loop-engineering.md:95` states it, and the seven checks under `.github/scripts/` confirm it by what they scan. A prompt edit that degrades what Step 6 generates leaves every check green, because Step 6's output does not exist here.
 
-The only instrument that can catch that class of breakage is a human running the pipeline against a throwaway target and scoring the result. This is that score sheet. It covers three runs: a first run in new-project mode, a **second run against the first run's output with `docs/tech-spec.md` edited in between** — the case nothing in this repository has ever exercised — and an adopt-mode run against a real foreign codebase.
+The only instrument that can catch that class of breakage is a human running the pipeline against a throwaway target and scoring the result. This is that score sheet — 94 items across three runs: a first run in new-project mode, a **second run against the first run's output with `docs/tech-spec.md` edited in between** — the case nothing in this repository has ever exercised — and an adopt-mode run against a real foreign codebase.
 
-Two things make it more load-bearing than when it was first proposed. `MEMORY.md:81` has carried the smoke test as an open Next Step since 2026-07-04. And `verify-loop.md` now proposes that Step 6 **generate a CI workflow into the target**, which is executable configuration this repository can neither read nor run. A generated workflow can be wrong in a target with nothing here able to notice. Scoring its first run is what makes Layer 1 and Layer 3 close each other's loop — currently the only pairing that can.
+Three things make it more load-bearing than when it was first proposed. `MEMORY.md` has carried the smoke test as an open Next Step since 2026-07-04. Step 6 now **generates a CI workflow into the target** — executable configuration this repository can neither read nor run, so a generated workflow can be wrong in a target with nothing here able to notice. And Steps 6 and 7 now carry a re-entry contract whose entire content is restraint: audit, verdict, report, wait. Restraint is invisible to every check in this repository by construction, because it is measured by what a run *did not* write.
+
+That is the shape of the gap. Both features shipped in the same week and both are unobserved. Scoring their first run is what makes Layers 1 and 2 close their loop with Layer 3 — currently the only pairing that can.
 
 -----
 
@@ -84,7 +88,9 @@ Fill this in before scoring anything. A result that does not name the commit it 
 | Date | |
 | Mode exercised | new / re-entry / adopt |
 | Target path | |
-| Layer 1 implemented at run time? | yes / no — `verify-loop.md:5` says proposed, not implemented. If no, the **W** table is skipped and recorded as skipped |
+| Layer 1 implemented at run time? | Yes as of 2026-07-27, all three phases — the **W** table is scored, not skipped. Record `no` only if testing a commit older than that |
+| Layer 2 implemented at run time? | Yes as of 2026-07-27 — the **R** table is scored in full. Record `no` only if testing a commit older than that |
+| Baseline skill count expected | Fourteen as of 2026-07-27. Ten for an older commit — check the four enumerations before scoring **S0** |
 | Tracker path chosen at Step 8 | GitHub Issues / Linear / unavailable |
 | Tool directories chosen at Step 1 | Claude Code / Vibe / Codex — list every one chosen. **Substitute this answer wherever a row below writes `.claude/`.** A scorer who answered Vibe reads those rows as `.vibe/` |
 | `.grovv/` expected? | yes if more than one tool was chosen, no if exactly one (`grovv-stack-scaffold.md:206-213`) |
@@ -110,12 +116,14 @@ Every item below states one pass condition that can be checked without reading a
 |---|-------|----------------|----------|
 | G1 | The frontend framework question was asked | A transcript line where the agent asks Astro + React or Next.js, and a later line where the user answers. An agent that states a choice and moves on fails, however reasonable the choice | Blocker |
 | G2 | Nothing generated earlier pre-empted G1 | No file written before the user's answer names one option as this project's choice. Check `docs/tech-spec.md`, `docs/development-plan.md`, and every `SKILL.md` written before that turn | Blocker |
-| G3 | An exploratory artifact did not settle G1 | If the run produced mockups or a spike, the question was still asked afterwards and answered by the user (`grovv-stack-scaffold.md:93-106`, `skills-builder.md:125`) | Blocker |
+| G3 | An exploratory artifact did not settle G1 | If the run produced mockups or a spike — including the prototypes Step 2's unknowns pass builds under "Before writing: the unknowns pass" — the question was still asked afterwards and answered by the user. Prototypes at Step 2 are framework-free HTML by instruction; one written in something resembling an option, and treated as the answer, is the exact failure this row exists for (the Throwaway Tier in `grovv-stack-scaffold.md`; the Throwaway Tier section of `skills-builder.md`) | Blocker |
 | G4 | The Playwright question was asked | A transcript line asking what Playwright should test, before any `.spec.ts` or E2E file exists in the target | Blocker |
 | G5 | `testing-tdd/SKILL.md` carries the Playwright rule normatively | One sentence containing an ask signal, the subject, and a precedence word — the shape `check_ask_first.py:124-128` requires and cannot verify in a target. A cell reading "(ask-first)" is a label, not the rule (`skills-builder.md:135`, `:207`) | Blocker |
 | G6 | `frontend-development/SKILL.md` and `ui-standards/SKILL.md` each carry the framework rule normatively | Same sentence test, in both files (`skills-builder.md:134`, `:207`) | Blocker |
 | G7 | No generated CI workflow contains a Playwright or E2E job | Every job and every `run:` line in the generated workflow maps to a check recorded in Step 1. An E2E job passes only where the user separately approved E2E tests **and** those tests exist (`verify-loop.md:106-108`) | Blocker |
-| G8 | The team-design step did not pre-empt either rule | No generated agent definition or orchestrator skill names a framework as chosen or names an E2E scope (`team-design.md:52-55`, `:153`; `grovv-stack-scaffold.md:450`) | Blocker |
+| G8 | The team-design step did not pre-empt either rule | No generated agent definition or orchestrator skill names a framework as chosen or names an E2E scope ("Ask Before Generating" in `team-design.md`; Step 7 in `grovv-stack-scaffold.md`) | Blocker |
+| G9 | **A disagreement between two generated artifacts was reported, not resolved** | Where a generated `SKILL.md` and `docs/tech-spec.md` assert different answers to an ask-first question, the run named both files, quoted what each says, and asked the user. A run that picked one — in either direction, and however it justified the choice — answered an ask-first question with a file this pipeline wrote, and fails ("Ask-First Rules" in `skills-builder.md`; "Ask Before Generating" in `team-design.md`). Construct the case deliberately if the run does not produce it: edit one generated skill's framework assertion, then invoke Step 7 | Blocker |
+| G10 | `architecture-planning/SKILL.md` carries both rules normatively | The same one-sentence test as G5 and G6, for both subjects, in this one file. It is where prototypes get built, which makes it the skill most likely to be read as licence to skip the question ("Ask-First Rules" in `skills-builder.md`) | Blocker |
 
 -----
 
@@ -133,15 +141,34 @@ Exercise `/grovv new` against the empty target. Answer the questions as a real u
 | P4 | Step 5 wrote the prompt set into the target | The target's `docs/prompts/` holds the same files this repository's does. Today that is six while the directive enumerates five at `:123-128` and `:622`, and `tech-spec-template.md` is named nowhere — record which count the run produced | Defect |
 | P5 | Step 9's quick start invents nothing | Every command in the README's Quick Start exists in the project, or the section is a single `@TODO` (`readme-generator.md:119-126`). The four npm placeholders at `:104-113` surviving verbatim is an automatic fail | Defect |
 
-Steps 6, 7 and 8 are scored in their own tables below.
+Steps 2, 6, 7 and 8 are scored in their own tables below.
 
-### Step 6 — the ten skills are well-formed
+### Step 2 — the unknowns pass
 
-Ten skills are specified twice, at `grovv-stack-scaffold.md:385-394` and `skills-builder.md:64-73`, and nothing in this repository compares those two tables to each other, let alone to a generated tree. `grovv-stack-scaffold.md:431` expects "~10 invocable skills" and has no mechanical reader.
+Scored against the transcript more than the disk. The pass is a conversation that produces one small file, and the failure mode is an agent that writes the file without having the conversation — `docs/unknowns.md` with plausible content nobody said out loud is worse than no file, because it looks like evidence. Read the transcript first, the file second, and score any row you cannot tie to a transcript turn as a fail.
 
 | # | Check | Pass condition | Severity |
 |---|-------|----------------|----------|
-| S1 | The baseline set is present | All ten baseline folder names are present under the target's chosen skills directory — not *only* ten, since Step 7 adds agent skills and an orchestrator to the same directory (`grovv-stack-scaffold.md:446-447`), or fewer with each drop named and justified against this project in the transcript (`skills-builder.md:60`). A silent drop fails | Defect |
+| U1 | `docs/unknowns.md` exists with its sections | Created at Step 1 with sections present and empty; filled at Step 2. A file that first appears at Step 2 means the decline case has nowhere to be recorded — see U8 | Defect |
+| U2 | The four questions about the person were asked | Prior experience, familiarity with codebase and domain, where they are in their own thinking, and what they are least sure about. All four, in the transcript, before the blind spot pass | Defect |
+| U3 | The starting-point answers are recorded in the user's words | The Starting Point section quotes the user rather than paraphrasing into agent register. This is calibration data; a summary loses the thing it was collected for | Note |
+| U4 | The blind spot pass was a research turn, not a question turn | The run produced a list of what it believes the user has not considered, in the user's domain vocabulary, and asked whether the list is right. Asking "what are your blind spots?" is the failure this row exists for — the question cannot surface the quadrant | Defect |
+| U5 | The interview asked one question at a time | No batched question lists in the transcript. Ordering favours questions whose answers change the architecture | Defect |
+| U6 | The interview stopped | Architecture-changing questions exhausted, or eight questions, whichever came first, with the remainder written to Open Questions rather than asked | Defect |
+| U7 | **The stack default was stated and confirmed, not applied** | The run named the gro\\/\\/ stack default, named where it is most likely to be a poor fit for *this* project, and got an answer. Every accepted default appears under Decided Defaults. A run that reached Step 4 with a database, an auth provider and a payments vendor nobody discussed fails — that is the "(if not already clear)" defect returning by another route | Defect |
+| U8 | A decline was recorded, not silently skipped | If the user skipped the pass, `docs/unknowns.md` carries one line saying so and by whose choice. A skipped pass and a pass that produced nothing must not look identical | Defect |
+| U9 | Prototypes were contained and disposable | Any artifact built to be reacted to is in the gitignored `prototypes/` directory or on an unmerged branch, is framework-free, and the decision it informed was written down. Its framework implications are **G3**, scored at blocker severity, not here | Defect |
+| U10 | The pass informed the spec rather than becoming it | Recognized Constraints appear as product-spec text in the user's terms. `docs/unknowns.md` is not pasted into `docs/product-spec.md`, and the spec is not written before the handoff was confirmed | Defect |
+| U11 | Steps 4 and 8 actually read it | Step 4 restates Decided Defaults as explicit choices with reasons; Step 8 turns a still-blocking open question into a tracker issue. Two named consumers, both observable. This is the row that separates `docs/unknowns.md` from an `@TODO` nobody re-reads | Defect |
+
+### Step 6 — the fourteen skills are well-formed
+
+The set is specified in four places — the table and tree under "The Baseline Skill Set" and "Where Skills Are Written" in `skills-builder.md`, the mirrored table and project tree in `grovv-stack-scaffold.md`, and both dedupe sites in `team-design.md` — and nothing in this repository compares any of them to each other, let alone to a generated tree. The directive expects "~14 invocable skills" and has no mechanical reader. **S0 exists because that fan-out is the drift this change bought.**
+
+| # | Check | Pass condition | Severity |
+|---|-------|----------------|----------|
+| S0 | The four enumerations agree with each other | Before scoring anything generated, diff the four lists named above. They must contain the same fourteen names. This costs two minutes and is the only check that catches the drift risk the fourteen-skill change introduced — no script can see it | Defect |
+| S1 | The baseline set is present | All fourteen baseline folder names are present under the target's chosen skills directory — not *only* fourteen, since Step 7 adds agent skills and an orchestrator to the same directory (Step 7 in `grovv-stack-scaffold.md`), or fewer with each drop named and justified against this project in the transcript ("The Baseline Skill Set" in `skills-builder.md`). A silent drop fails | Defect |
 | S2 | Each folder holds a `SKILL.md` | One file per folder; no empty directories | Defect |
 | S3 | Frontmatter parses and `name` matches the folder | For each: YAML parses, `name` is lowercase-with-dashes, and equals the folder name (`skills-builder.md:90`, `:203`). No script anywhere parses frontmatter, in this repository or a target | Defect |
 | S4 | Descriptions are trigger-rich and mutually distinguishable | Each `description` names concrete situations that should invoke the skill, not a topic label; no two are so close that a near-miss request could route either way (`skills-builder.md:91-93`) | Note |
@@ -150,8 +177,15 @@ Ten skills are specified twice, at `grovv-stack-scaffold.md:385-394` and `skills
 | S7 | The throwaway tier is carried | Stated in `dev-standards`, and in `ui-standards`, `frontend-development`, `architecture-planning` and `testing-tdd` where they touch exploration (`skills-builder.md:121`, `:208`) | Defect |
 | S8 | Nothing landed where it must not | No `docs/skills/` directory and no `.claude/commands/` in the target (`skills-builder.md:209`) | Defect |
 | S9 | Examples are complete and typed | Spot-check three skills: no pseudo-code, error handling present, anti-pattern shown beside the correct pattern where it teaches something (`skills-builder.md:99`, `:205`) | Note |
+| S10 | `blind-spot-pass` triggers on the literal phrases | Its `description` carries "blind spot pass" and "unknown unknowns" verbatim, and the body instructs the agent to establish the user's starting point before investigating. The literal phrases matter: they are how a user invokes it mid-work, and a paraphrase does not trigger | Defect |
+| S11 | `interviews` carries the stopping rule | A stated bound — architecture-changing questions exhausted, or a question count — and what happens to the remainder. An interview skill with no stopping rule is the failure mode the technique is most prone to | Defect |
+| S12 | `change-quiz` is advisory and says how to make it blocking | Advisory by default, plus the one line a project puts in its own `CLAUDE.md` to make it a merge gate. A skill that is silently blocking, or that offers no way to become blocking, both fail | Defect |
+| S13 | `implementation-notes` names the Deviations log and the conservative default | The working notes file, a `Deviations` heading, and the rule for a forced departure: take the lower-risk path, log it against the section it invalidates, continue | Defect |
+| S14 | The four fold-in sections are present, in the right skills | `architecture-planning` carries brainstorms-and-prototypes and implementation-plans; `dev-standards` carries references and pitches-and-explainers ("Required Sections in Two Existing Skills" in `skills-builder.md`). A section in the wrong skill fails — placement is what keeps the trigger surface small | Defect |
+| S15 | The implementation-plan section states the ordering | Data model first, then types and interfaces, then anything user-facing, with mechanical refactoring last. An unordered "write a plan" instruction fails: the ordering is the technique | Note |
+| S16 | The four new skills carry their attribution line | One line crediting the technique. They carry no gro\\/\\/ stack footer by design, so the attribution is the only provenance they have | Note |
 
-The ask-first content of these skills is **G5** and **G6**, not an S row. It is scored at blocker severity.
+The ask-first content of these skills is **G5**, **G6** and **G10**, not an S row. It is scored at blocker severity. **G10** in particular covers `architecture-planning`, which is where S14's prototype section lands.
 
 ### Step 7 — every agent carries a stated rationale
 
@@ -160,7 +194,7 @@ The ask-first content of these skills is **G5** and **G6**, not an S row. It is 
 | T1 | The six defaults are intact | `scaffold`, `frontend`, `backend`, `testing`, `database`, `code-review` all present and unmodified except where the user approved a change (`team-design.md:33`, `:142`) | Blocker |
 | T2 | Every added specialist has a definition file | `.claude/agents/{name}.md` exists for each (`team-design.md:144`) | Defect |
 | T3 | **Every added specialist carries a stated rationale** | For each specialist, one sentence — in its definition or in the step's report — naming the component or capability in `docs/tech-spec.md` it covers, and why no default covers it. A specialist with no such sentence fails, however plausible it looks (`team-design.md:34`, `:37`) | Defect |
-| T4 | The dedupe review ran against a named subject | The report lists the ten baseline skill folder names it deduped against. "Duplicate review was run" without them is the assertion, not the evidence (`team-design.md:143`; `loop-engineering.md:199`) | Defect |
+| T4 | The dedupe review ran against a named subject | The report lists the fourteen baseline skill folder names it deduped against. "Duplicate review was run" without them is the assertion, not the evidence ("Workflow" and the Deliverable Checklist in `team-design.md`) | Defect |
 | T5 | Exactly one orchestrator skill | One, and it names the data flow, the error handling, and a test scenario (`team-design.md:146`) | Defect |
 | T6 | The data-passing strategy is named and argued | One of the five at `team-design.md:97-103` is named explicitly; a shared store appears only where all three promotion conditions at `:105-113` are argued to hold | Defect |
 | T7 | Cross-agent artifacts carry provenance | Writing agent, source artifact, and time, on every artifact one agent writes for another (`team-design.md:117`, `:149`) | Defect |
@@ -185,13 +219,15 @@ M7 is the item `MEMORY.md:81` has carried open since 2026-07-04.
 
 ## Run 1 — The Generated Workflow
 
-**Gate this table on which `verify-loop.md` phase has landed, and record what was skipped.** Phase 1 (Step 1 records the commands, `MEMORY.md` gains a Verify table) makes W1 scoreable on its own — it is the phase `verify-loop.md` says to approve if only one is. Phase 2 (workflow generation) is what the remaining rows need. Until Phase 1 lands, skip the whole table. A skipped table is a real result and is not the same as one that passed.
+**All three `verify-loop.md` phases have landed, so this table is fully scoreable.** That was not true when this section was written: it instructed the scorer to skip the whole table until Phase 1 shipped. Phase 1 (Step 1 discovers the commands, Step 8 records them in the Verify table), Phase 2 (the Step 6 question and workflow generation) and Phase 3 (the adopt-mode proposal path, scored as **D8**) are all in the pipeline. Score every row.
+
+One correction to W1 that follows from how Phase 1 was actually built: **Step 1 states the commands, Step 8 writes them.** `MEMORY.md` does not exist until Step 8 creates it, so a scorer looking for a Verify table immediately after Step 1 will find nothing and record a false fail. Check the transcript at Step 1 for the commands and their sources, and the file after Step 8.
 
 This is the table that makes Layer 1 and Layer 3 close each other's loop. Layer 1 generates executable configuration into a target; nothing in this repository can read YAML, run a job, or observe a build. **W5** is the only item in the system that can tell a generated workflow from a plausible-looking one.
 
 | # | Check | Pass condition | Severity |
 |---|-------|----------------|----------|
-| W1 | Step 1 recorded the verify commands | A `## Verify` table in the target's `MEMORY.md` with a `Source` column, or a single `@TODO` row rather than an omitted table (`verify-loop.md:58-72`) | Defect |
+| W1 | The verify commands were discovered at Step 1 and recorded at Step 8 | Step 1's transcript states the commands and the source each came from; the target's `MEMORY.md` then carries a `## Verify` table with a `Source` column, or a single `@TODO` row rather than an omitted table. For a new project the commands are unknown at Step 1 by construction and are derived at Step 4 from the chosen stack — check there instead, and score a Step 1 that invented them anyway as a fail | Defect |
 | W2 | The recorded commands run | Execute each in the target and record the exit code. This is the one thing `verify-loop.md:178` admits nothing detects | Defect |
 | W3 | The CI question was asked and an explicit answer waited for | The four options were offered and one was chosen. "Whatever you think" accepted as an answer fails (`verify-loop.md:80-87`, `:91`). If unasked generation also produced an E2E job, that is **G7** and the severity escalates to blocker | Defect |
 | W4 | The workflow runs only recorded commands | Every `run:` line maps to a row in the Verify table. A `npm run lint` in a project with no lint script fails this item (`verify-loop.md:92`) | Defect |
@@ -217,7 +253,9 @@ Commit run 1's output, then make exactly three edits and record the line numbers
 
 Two spec edits, one of each verdict at `loop-engineering.md:204-208`, so the run must produce both answers rather than the easy one. Then invoke the pipeline again against the same directory.
 
-**R1 and R11 through R14 are scoreable today. R2 through R10 are not — skip them and record them as skipped until `re-entry.md`'s contract has landed.** The third detect branch shipped in `b369164`, so a resume is now correctly *detected*, which is what R1 tests. What follows detection does not exist: `grep -rn "^## Re-entry" docs/prompts/` returns nothing, and neither prompt has been told to audit, to report three verdicts, or to name a drifted artifact. Scoring R2–R10 against today's pipeline fails eight rows by construction, one of them a blocker, for behaviour nothing was ever instructed to perform. A blocker that fires because a feature is unbuilt is not a blocker; it is a category being spent for nothing.
+**Every row in this table is now scoreable.** That reverses the instruction this section carried until 2026-07-27, which told the scorer to skip R2 through R10 because the contract did not exist. It does now: `grep -rn "^## Re-entry" docs/prompts/` returns both prompts, each specifying the audit, the three verdicts, the drift naming, and the hand-edit rule. A scorer still following the old instruction would skip nine rows that are the entire reason run 2 exists.
+
+Two rows gained a subject in the same change. **R3**'s three verdicts and **R8**'s re-justification are now written instructions rather than inferred expectations, which means a failure here is a real regression rather than an unbuilt feature. And a new row, **R15**, covers the clause most likely to be dropped in implementation.
 
 | # | Check | Pass condition | Severity |
 |---|-------|----------------|----------|
@@ -234,7 +272,8 @@ Two spec edits, one of each verdict at `loop-engineering.md:204-208`, so the run
 | R11 | Step 8 reconciled rather than duplicated | No duplicate issue titles; issues that no longer map to the edited plan are flagged, never deleted silently; milestones still track the plan's phases (`tracker-setup.md:60`, `:384`) | Defect |
 | R12 | A declined workflow was not quietly regenerated | If run 1 declined CI, run 2 generated none, did not silently re-ask, and the decline line in `MEMORY.md` survived (`verify-loop.md:93`). Conditional on **W** | Defect |
 | R13 | The Verify table was reconciled, not appended to | One table, no duplicate rows, and every command in it still runs. Conditional on **W** | Defect |
-| R14 | **Neither ask-first rule was treated as settled by run 1's artifacts** | The framework choice and the Playwright scope carry forward as *recorded user decisions*, cited to where the user made them. A run reasoning "the skills already use Next.js, so" has inferred a decision from its own output, which is the pre-emption both rules exist to prevent | Blocker |
+| R14 | **Neither ask-first rule was treated as settled by run 1's artifacts** | The framework choice and the Playwright scope carry forward as *recorded user decisions*, cited to where the user made them. A run reasoning "the skills already use Next.js, so" has inferred a decision from its own output, which is the pre-emption both rules exist to prevent. Nor were they re-litigated: the contract says carry forward, and re-asking a settled question is the opposite error | Blocker |
+| R15 | **A no-action run was reported as complete, not as a skipped step** | Both `## Re-entry` sections end with "a re-entry that changes nothing and returns a list of questions has succeeded", and this is the clause an implementation is most likely to drop, because every other step in the pipeline terminates in an artifact. Score it directly: after the edits above, a correct run 2 writes nothing until the user approves. If the run wrote something to demonstrate it ran — a regenerated skill nobody asked for, a cosmetic revision, a duplicate table row — it failed, and the file it wrote is the evidence. R10 scores the closing report's wording; this row scores the disk | Blocker |
 
 -----
 
@@ -251,7 +290,9 @@ Clone a third-party repository grovv did not write, into a throwaway directory t
 | D5 | Skills describe the real stack | For a Go target, `backend-development` covers Go; `database-design` covers the real database; `security-practices` names the real auth provider. Every skill asserting a grovv default the project does not use is a named fail (`skills-builder.md:181-185`; `grovv-stack-scaffold.md:396`) | Defect |
 | D6 | Existing skills were extended, conflicts surfaced | Pre-existing entries under the target's `.claude/skills/` were updated rather than replaced, and every conflict was reported (`skills-builder.md:186`) | Defect |
 | D7 | The framework question survived an existing frontend | The run either asked, or named the project's existing commitment out loud and had the user confirm it. Reading it silently out of `package.json` and proceeding fails — see **G1** | Blocker |
-| D8 | Existing CI was not written over | With a workflow already present, the run stated what exists, stated what would change, and generated nothing before approval (`verify-loop.md:94`, `:107`). Conditional on **W** | Blocker |
+| D8 | Existing CI was not written over | With a workflow already present, the run stated what exists, stated what would change, and generated nothing before approval. This is verify-loop Phase 3 and is no longer conditional — it shipped with Phases 1 and 2 (Step 6 in `grovv-stack-scaffold.md`; "Generated CI" in `skills-builder.md`) | Blocker |
+| D10 | The unknowns pass read the codebase rather than the intake | In adopt mode the blind spot pass has real code to work against, and that is where it is strongest: it should report what the code does that the user did not describe, where conventions are inconsistent, and what a newcomer would get wrong. A generic new-project blind spot list, produced against a repository sitting right there, fails | Defect |
+| D11 | Existing verify commands were read, not invented | Step 1's recorded commands come from the project's own CI workflow, task runner or manifest, with the source named, and precedence given to the CI workflow where they disagree. A command that appears in the Verify table but in no project file fails, and names the file it should have come from | Defect |
 | D9 | The tracker step reused what maps | An existing project or label taxonomy was reused where one maps to the codebase, and no existing issue was duplicated (`grovv-stack-scaffold.md:462`; `tracker-setup.md:171`) | Defect |
 
 -----
@@ -268,12 +309,16 @@ date:     <YYYY-MM-DD>
 mode:     new | re-entry | adopt
 target:   <path, and the upstream repo for adopt mode>
 layer-1:  implemented | not implemented (W table skipped)
+layer-2:  implemented | not implemented (R2-R10, R15 skipped)
+skills:   14 | 10
 
 G1 pass   G2 pass   G3 n/a    G4 pass   ...
 S5 FAIL   defect    testing-tdd/SKILL.md is 612 lines, no references/
+U7 FAIL   defect    tech-spec names Clerk and Neon; no turn in the transcript
+                    where either was put to the user. Decided Defaults empty
 ...
 
-blockers: 0    defects: 3    notes: 1    skipped: 9 (W table)
+blockers: 0    defects: 3    notes: 1    skipped: 0
 ```
 
 Four rules for the record:
@@ -287,7 +332,8 @@ Four rules for the record:
 
 ## Open Questions
 
-- How often is this run? Sixty-odd items is a session, and running it on every prompt edit would mean nobody runs it. Currently: before any release that changes `grovv-stack-scaffold.md` or anything under `docs/prompts/`, which is most releases and is the point.
+- How often is this run? It is now **94 scored items** across three runs — G 10, U 11, P 5, S 17, T 9, M 7, W 9, R 15, D 11 — up from about sixty, and growing every time the pipeline gains a feature. That is the tension this rubric cannot resolve on its own. Running it on every prompt edit would mean nobody runs it. Currently: before any release that changes `grovv-stack-scaffold.md` or anything under `docs/prompts/`, which is most releases and is the point. If it grows past a session, the honest move is to split the gate table plus run 1 into a short pass that runs every release, and runs 2 and 3 into a long pass that runs less often — not to quietly stop running any of it.
+- **Who answers the ask-first questions?** G1, G4, R14 and D7 all require a *user* turn in the transcript, so an agent running this rubric alone cannot score them without answering its own questions, which invalidates exactly the rows that matter most. Currently: a human answers, and a solo run records those rows as `n/a — no user present` rather than passing them. A solo run is still worth doing for the structural rows; it is not an acceptance test.
 - Runs 1 and 2 must share a target, so either they happen in one sitting or the throwaway directory outlives the session. A directory kept for a week is a directory somebody commits. Currently: one sitting, deleted after the record is filed.
 - Does **W5** need a real CI provider? A local runner does not reproduce a missing toolchain or a wrong runtime version, which is the failure the item exists to catch. Currently: a real push to a throwaway remote, accepting that it costs a repository and some minutes.
 - Are two spec edits enough for run 2? A third and fourth would exercise more of the drift report and would make a wrong report much harder to score, because the pass condition stops being enumerable. Currently: two spec edits plus one hand edit.
@@ -302,9 +348,9 @@ Four rules for the record:
 
 | Field | Value |
 |-------|-------|
-| **Version** | 0.1.0 |
+| **Version** | 0.2.0 |
 | **Last Updated** | 2026-07-27 |
-| **Status** | Proposed — not implemented |
+| **Status** | Current — level with the pipeline, never run |
 | **Author(s)** | grovv stack scaffolding agent |
 | **Model** | Claude (Claude Code) |
 
