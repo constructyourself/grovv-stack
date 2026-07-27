@@ -2,7 +2,7 @@
 
 Specification for what a second run of the gro\\/\\/ stack pipeline does to the first run's output. Layer 2 of `loop-engineering.md`.
 
-**Status: proposed, not implemented.** This document specifies a `## Re-entry` section for two prompt documents and nothing else. No prompt file has been edited. `grep -rn "Re-entry\|re-entry\|re-run" docs/prompts/` returns five lines at the time of writing, all of them in `tracker-setup.md` — `:60`, `:111`, `:171`, `:379` and `:384`. That is the entire re-entry vocabulary the pipeline has.
+**Status: Phase 1 implemented; Phases 2 through 4 proposed.** The ten baseline skill names are now stated in `team-design.md`, so its Phase 4-0 duplicate review has the subject it has always claimed. The `## Re-entry` sections themselves are not written. This document specifies a `## Re-entry` section for two prompt documents and nothing else. No prompt file has been edited. `grep -rn "Re-entry\|re-entry\|re-run" docs/prompts/` returns five lines at the time of writing, all of them in `tracker-setup.md` — `:60`, `:111`, `:171`, `:379` and `:384`. That is the entire re-entry vocabulary the pipeline has.
 
 One dependency **has already landed** and is deliberately not re-specified here: the third detect branch in the kickoff skill (`b369164`), so that a second `/grovv` in a project grovv itself built is recognized as a resume rather than assessed as foreign code. This document specifies what happens *after* a run has been correctly identified as a resume.
 

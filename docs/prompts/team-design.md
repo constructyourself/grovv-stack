@@ -71,6 +71,8 @@ Follow the phased workflow defined in the vendored skill `.claude/skills/harness
 | 6 — Validation | Structure check, trigger check (should / should-not), dry-run the data flow. |
 | 7 — Evolution | After each run, offer to refine; record changes in the `CLAUDE.md` change log. |
 
+**The duplicate review in Phases 3-0 and 4-0 has two subjects, and both must be named before it runs.** On the agent side it is the six grovv defaults. On the skill side it is the ten baseline skills that `skills-builder.md` (Step 6) writes: `dev-standards`, `architecture-planning`, `frontend-development`, `ui-standards`, `backend-development`, `database-design`, `security-practices`, `testing-tdd`, `deployment-ops`, and `debugging`. A skill matching one of those names is never re-created under a variant name. Anything outside those ten and outside this step's own additions belongs to the project — audit it, never rewrite it.
+
 For pattern decision trees, agent-definition structure, orchestrator templates, the QA agent guide, and skill-writing/testing methodology, read the corresponding files under `.claude/skills/harness/references/`. Do not duplicate that detail here — load it when the phase needs it.
 
 -----

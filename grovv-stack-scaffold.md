@@ -216,6 +216,24 @@ Ask exactly this:
 
 Derived copies drift silently — this repository keeps four in sync only because a CI check compares them. A target project that chose more than one tool has the same exposure and may want the same check. Do not generate one here; that is the verify-loop decision, and it belongs to the user.
 
+**Discover the commands that prove this project works.** This is not a question — it is a read, and it costs the user nothing. Every later step is better for knowing them, and the README step (Step 9) is wrong without them.
+
+For an existing project, read them from the project itself, stopping at the first source that yields commands:
+
+| Source | What to take |
+|--------|--------------|
+| An existing CI workflow | The commands its steps actually run — the most reliable source, because it is what the project already trusts |
+| `package.json` `scripts` | `test`, `lint`, `typecheck`, `build` — whichever exist, under their real names |
+| `Makefile` | Targets named `test`, `lint`, `check`, `build` |
+| `Taskfile.yml` / `justfile` | The same task names |
+| `go.mod` present | `go test ./...`, `go vet ./...`, and `golangci-lint run` if its config file is present |
+
+Where two sources disagree, prefer the CI workflow, then the task runner, then the manifest. Record which source each command came from — a command read from a stale `Makefile` is worth less than one read from a workflow that runs on every push.
+
+For a new project the stack is not chosen until Step 4, so nothing can be read here. Note that the commands are pending, and derive them at Step 4 from the stack that step selects.
+
+State the commands you found, and say plainly if you found none. **Do not write them to a file at this step** — the project's `MEMORY.md` does not exist until Step 8, which creates it. Carry them forward: Step 8 records them in that file's `Verify` table, and Step 9 uses them instead of guessing at a quick start. If nothing was found, they are carried forward as `@TODO`, because an empty table is a visible gap and a missing one is invisible.
+
 **Directories to create:**
 
 ```

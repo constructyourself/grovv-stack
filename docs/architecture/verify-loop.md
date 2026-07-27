@@ -2,7 +2,7 @@
 
 Specification for giving a scaffolded project an inner development loop. Layer 1 of `loop-engineering.md`.
 
-**Status: proposed, not implemented.** This document specifies changes to Step 1 and Step 6; no pipeline file has been edited. It exists to be approved or rejected before anything runs for a real project.
+**Status: Phase 1 implemented; Phases 2 and 3 proposed.** Step 1's discovery and the `MEMORY.md` Verify table are in the pipeline. The Step 6 CI question and workflow generation are not — they remain proposals to be approved or rejected before anything runs for a real project.
 
 -----
 
@@ -32,7 +32,7 @@ Step 1 still does the recording. Discovering a project's verify commands is chea
 
 | Step | Does | Costs the user |
 |------|------|----------------|
-| 1 | Discovers and records the project's verify commands in `MEMORY.md` | Nothing — no question is asked |
+| 1 | Discovers the project's verify commands and states them; Step 8 records them in `MEMORY.md` | Nothing — no question is asked |
 | 6 | Asks how much CI the project should have, and generates it | One question |
 
 -----
@@ -54,6 +54,8 @@ No question. The agent determines the commands that prove the project is working
 If two sources disagree, prefer the CI workflow, then the task runner, then the manifest. Record which source was used; a command read from a stale Makefile is worth less than one read from a workflow that runs on every push.
 
 **New-project mode — derive them from the stack.** The tech spec does not exist yet at Step 1, so record the commands implied by the stack once Step 4 has chosen it, and treat Step 1's entry as provisional until then. For the gro\\/\\/ stack defaults that means `vitest run`, `tsc --noEmit`, and the project's linter for TypeScript; `go test ./...` and `go vet ./...` for Go.
+
+**Correction applied during implementation.** This section originally had Step 1 write the table itself. It cannot: `MEMORY.md` does not exist until Step 8 creates it, so Step 1 has no file to write to. As built, Step 1 *discovers and states* the commands and Step 8 *records* them — which also keeps Phase 1 true to its own claim of generating nothing. The table's home is unchanged.
 
 **Where they are recorded.** A `Verify` table in the project's `MEMORY.md`, next to the Tracker Coordination table:
 
@@ -149,7 +151,7 @@ No new prompt document. No new numbered step. No stack-table row — CI is not a
 
 | Phase | Delivers | Standalone? |
 |-------|----------|-------------|
-| 1 | Step 1 discovery and the `MEMORY.md` Verify table | Yes. Costs the user no questions, adds no generated files, and is useful immediately — an agent that knows how to run the tests behaves better whether or not CI ever exists |
+| 1 | Step 1 discovery and the `MEMORY.md` Verify table | **Done.** Cost the user no questions and added no generated files | 
 | 2 | The Step 6 question and workflow generation | Needs Phase 1's recorded commands |
 | 3 | The adopt-mode proposal path for projects that already have CI | Needs Phase 2 |
 

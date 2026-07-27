@@ -316,6 +316,20 @@ owns the backlog; this file owns the context.
 
 -----
 
+## Verify
+
+| Check | Command | Source |
+|-------|---------|--------|
+| [test / typecheck / lint / build] | `[the real command]` | [where it was read from] |
+
+- These are the commands that prove this project works. Step 1 discovered them
+  by reading the project; fill this table from what it found.
+- Found none? Write one row of `@TODO` rather than omitting the table. An empty
+  table is a visible gap; a missing one is invisible.
+- A command that stops working is corrected here, not rediscovered.
+
+-----
+
 ## Current State
 
 [3-6 bullets: what is built, what is in flight, key facts a fresh session needs]
