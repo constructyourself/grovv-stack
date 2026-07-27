@@ -35,6 +35,8 @@ Follow Steps 0–9 of `grovv-stack-scaffold.md`:
 8. Set up project tracking (GitHub Issues or Linear — ask)
 9. Generate README
 
+A project grovv already scaffolded is **resuming**, not being adopted. Do not start at Step 0 or propose an adoption plan for output grovv itself wrote. Go to the `## Re-entry` contract in `docs/prompts/skills-builder.md` and `docs/prompts/team-design.md`: reconcile what exists against the current `docs/tech-spec.md`, report before writing, and treat a run that changes nothing as a successful one.
+
 -----
 
 ## Exploration Before Specification

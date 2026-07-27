@@ -1,7 +1,7 @@
 {
   "name": "grovv-stack",
   "displayName": "grovv stack",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "Production-first project scaffolding for AI coding assistants. Drop into any repo — new or existing — and run /grovv to generate the product spec, development plan, technical spec (under docs/), an invocable set of best-practice skills, a project-specific agent team (harness), and the README. Conversation-driven and ask-first: understands the product, users, constraints, and stack before generating.",
   "author": {
     "name": "grovv",

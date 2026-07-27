@@ -112,4 +112,27 @@ An exploratory artifact deletes cleanly and leaves only the decision behind. If 
 - Focus on production readiness, security, and maintainability
 
 -----
+
+## Change Comprehension
+
+Reading a diff gives a light understanding of a large change, because behaviour
+depends on code paths the diff does not show. For any change large enough that
+the author cannot narrate its behaviour from memory:
+
+- Produce a report on the change — what was done, why, what it depends on, and
+  what it now makes possible or impossible — followed by a short quiz on the
+  parts a reader could plausibly get wrong.
+- **Advisory by default.** The quiz informs the review; it does not block the
+  merge. A project that wants it to block says so in one line in its own
+  `CLAUDE.md`: "The change-comprehension quiz is blocking — no merge until the
+  author passes it." Nothing else changes.
+
+The advisory default is deliberate. A blocking quiz is a strong claim about a
+team's review culture, and grovv scaffolds for teams it has never met. The
+one-line opt-in keeps the strong version available without imposing it.
+
+Adapted from the quiz convention in Thariq Shihipar's field guide to finding
+your unknowns (Anthropic, 2026).
+
+-----
 gro\\/\\/ stack — Code Review Agent

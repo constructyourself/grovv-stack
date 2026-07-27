@@ -142,6 +142,10 @@ project-folder/
 │       ├── testing-tdd/
 │       ├── deployment-ops/
 │       ├── debugging/
+│       ├── blind-spot-pass/
+│       ├── interviews/
+│       ├── implementation-notes/
+│       ├── change-quiz/
 │       └── {orchestrator}/        # + agent skills (from team-design step)
 ├── .grovv/                    # Canonical definitions — only when more than one tool was chosen
 ├── .gitignore                 # Ignore rules — includes the gitignored prototypes/ the throwaway tier requires
@@ -509,8 +513,8 @@ Generates the target project's **invocable skills** — a set of development bes
 
 | Skill | Covers |
 |-------|--------|
-| `dev-standards` | Core philosophy, the dev workflow (red-green-refactor), the code-quality bar, when to reach for the other skills |
-| `architecture-planning` | System design, data modeling, API contracts, background-job patterns, the pre-dev checklist, ADRs |
+| `dev-standards` | Core philosophy, the dev workflow (red-green-refactor), the code-quality bar, using source code as a reference, packaging a change for review and buy-in, when to reach for the other skills |
+| `architecture-planning` | System design, data modeling, API contracts, background-job patterns, the pre-dev checklist, brainstorming and throwaway prototypes, implementation plans ordered by what is most likely to change, ADRs |
 | `frontend-development` | Framework patterns (Astro + React or Next.js), hydration, type-safe components, forms, accessibility |
 | `ui-standards` | Tailwind CSS + shadcn/ui, Alexandria font, monochrome palette, component examples |
 | `backend-development` | API standards, service/repository patterns, background jobs, webhooks, email/Stripe/Lago integrations |
@@ -519,6 +523,10 @@ Generates the target project's **invocable skills** — a set of development bes
 | `testing-tdd` | TDD workflow, Vitest, `go test`, integration tests, Playwright E2E (ask-first), CI |
 | `deployment-ops` | Docker, CI/CD, environment management, health checks, PostHog observability, backups |
 | `debugging` | Debugging methodology, profiling, error tracking, production debugging, emergency procedures |
+| `blind-spot-pass` | Pre-work reconnaissance in an unfamiliar module or domain; establishing the user's starting point, then naming what they have not considered |
+| `interviews` | One-question-at-a-time elicitation, ordered by architectural leverage, with a stopping rule |
+| `implementation-notes` | The working notes file, the Deviations log, and the conservative-default rule for a forced departure from the plan |
+| `change-quiz` | A change report plus a quiz on the parts a reader could get wrong; advisory by default |
 
 **For existing projects:** Customize each skill to the project's actual stack and patterns — Next.js instead of Astro, the real auth provider, established conventions. The skills are a reference for *this* project, not a generic template. Extend existing skills rather than overwriting them.
 
@@ -555,7 +563,7 @@ Read and execute `docs/prompts/skills-builder.md` to populate `.claude/skills/` 
 
 **Expected output:**
 
-- ~10 invocable skills (the baseline set), each a `.claude/skills/{name}/SKILL.md` with valid frontmatter
+- ~14 invocable skills (the baseline set), each a `.claude/skills/{name}/SKILL.md` with valid frontmatter
 - Production-ready, typed code examples with security built in; anti-patterns alongside correct patterns
 - Lean bodies (under 500 lines) with depth in `references/`
 - Ask-first rules embedded where relevant (frontend framework, Playwright)
@@ -582,6 +590,8 @@ Ask exactly this, substituting the commands Step 1 found:
 
 `docs/prompts/skills-builder.md` carries the generation rules — which checks are available per stack, the workflow's shape, and the adopt-mode proposal path.
 
+**On a second run, this step reconciles rather than regenerates.** `skills-builder.md`'s `## Re-entry` section is the contract: audit what exists, give each generated skill a verdict against the current `docs/tech-spec.md`, report before writing, and never overwrite a hand edit. A run that changes nothing and returns a list of questions has succeeded.
+
 ### Step 7: Design the Agent Team (Harness)
 
 Read and execute `docs/prompts/team-design.md` to design the project-specific agent team and the skills they use. This runs after the baseline skills exist in `.claude/skills/` (Step 6), because the team is designed to execute against those best practices — and it audits and dedupes against them (harness Phase 4-0) before adding any new skill.
@@ -596,6 +606,8 @@ Read and execute `docs/prompts/team-design.md` to design the project-specific ag
 - A harness pointer (trigger rule + change log) registered in the target `CLAUDE.md`
 
 **Ask-first rules are preserved:** never pick the frontend framework here (inherit the earlier choice), and never auto-generate Playwright flows. Nothing is written to `.claude/commands/`.
+
+**On a second run, this step reconciles rather than regenerates.** `team-design.md`'s `## Re-entry` section is the contract, and it is the grovv side of harness Phase 0 rather than a competing procedure: each project-specific agent is re-argued against the current spec, the six defaults are exempt from removal, and the target `CLAUDE.md` gets a dated change-log row rather than a second harness pointer.
 
 ### Step 8: Set Up Project Tracking and Cross-Session Memory
 
@@ -780,6 +792,7 @@ Scaffolding is complete when:
 - [ ] All documents carry gro\\/\\/ stack branding and style
 - [ ] All documents follow the established principles
 - [ ] (Existing projects) Adoption plan was reviewed and approved before changes were made
+- [ ] (Resume runs) Steps 6 and 7 reconciled their existing output against the current tech spec and reported before writing — a run that changed nothing and returned questions is complete, not failed
 
 -----
 gro\\/\\/ stack scaffold

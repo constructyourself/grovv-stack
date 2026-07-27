@@ -136,4 +136,27 @@ tests/
 4. **Repeat** — Next test case
 
 -----
+
+## Implementation Notes
+
+Long implementation runs discover things the plan did not anticipate. Record
+them rather than absorbing them silently.
+
+- Keep `docs/unknowns.md` open during implementation. When an edge case forces a
+  departure from the plan, choose the lower-risk path, record it under
+  **Deviations** alongside the section it invalidates, and continue. Do not stop
+  to re-plan unless the deviation invalidates the approach itself.
+- A deviation is a signal, not a defect. It means the spec was incomplete, which
+  is expected — the point of recording it is that the next attempt starts from a
+  better map.
+- Where a deviation contradicts `docs/product-spec.md`,
+  `docs/development-plan.md`, or `docs/tech-spec.md`, the spec is what gets
+  revisited. This is the opposite of the `MEMORY.md` rule, deliberately: that
+  file records session state and must yield to `docs/`; this one records that
+  `docs/` was incomplete.
+
+Adapted from the implementation-notes convention in Thariq Shihipar's field
+guide to finding your unknowns (Anthropic, 2026).
+
+-----
 gro\\/\\/ stack — Testing Agent

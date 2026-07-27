@@ -10,7 +10,7 @@ Three things drove declining the number, and none of them is the mechanical cost
 - **The position argument survives the fold intact.** This note rejected appending as Step 10 because "a pass after the specs audits documents instead of informing them." Being the first half of Step 2 is upstream of the product spec, which is all the argument ever required. The number was never what bought the position.
 - **The map does not survive contact.** Re-run on 2026-07-27 against `HEAD`, this note's own verification grep — same filter, excluding `.git`, the harness trees and `docs/architecture/` — returns **100 lines across 18 files**, against the 62 across 15 recorded here. A 61% growth in the surface, on a map whose own opening paragraph warns that its line numbers have a short shelf life. Outside that filter sit 20 more step tokens in the vendored harness trees, which are that skill's own Korean-language phase numbers (`**Step 1: 현황 감사**`) in Apache-2.0 code a mechanical pass would corrupt. Both traps this note flagged are real and confirmed: there are 13 `Steps 0–9` en-dash ranges and exactly one ASCII-hyphen range, and that one range — `grovv-stack-scaffold.md:622`, "Work through Steps 2-9 sequentially" — is precisely the site where a mechanical +1 on both ends is wrong, because the item before it covers Step 1, so its lower bound means "everything after Step 1."
 
-What is **not** implemented and remains proposed: the agent-definition changes (implementation notes into `testing.md`, the change-comprehension quiz into `code-review.md`, both across four tool trees — Phase 1 of the rollout below), and the four new baseline skills specified in `unknowns-skill-bodies.md` (Phase 3). Both are standalone and neither needs a renumber.
+**Phases 1 and 3 have since landed too, on the same day.** Phase 1: `agents/testing.md` carries the Implementation Notes section and `agents/code-review.md` the Change Comprehension section, canonical copy first and re-derived into all four trees. Phase 3: the baseline set is fourteen, with the four new skills and the four fold-in sections specified in `docs/prompts/skills-builder.md` and mirrored in the directive. The whole workstream is therefore applied, with the renumber declined rather than deferred.
 
 > **Historical note, 2026-07-27.** Everything below this block is preserved as the reasoning record, unedited except where a section says otherwise. Its step numbers, line citations, and counts are a snapshot of a working tree that has since moved — `grovv-stack-scaffold.md` and `docs/prompts/` are the source of truth for what the pipeline does now. Re-derive any locator here before acting on it, and read the renumbering section as a rejected option rather than a plan.
 
@@ -465,9 +465,9 @@ The reason to stop at 14 rather than 18: every baseline skill is a surface that 
 
 | Phase | Delivers | Size |
 |-------|----------|------|
-| 1 — Conventions into the existing agents | `testing.md` and `code-review.md` in all four trees, canonical copy first. The two sections are reproduced literally above. No renumbering, no new files, no enumeration edits, no manifest change | ~104 lines across 8 files, half a day. **Still proposed** |
+| 1 — Conventions into the existing agents | `testing.md` and `code-review.md` in all four trees, canonical copy first. The two sections are reproduced literally above. No renumbering, no new files, no enumeration edits, no manifest change | ~104 lines across 8 files, half a day. **Done 2026-07-27** |
 | 2 — The step and the renumber | ~~`docs/prompts/unknowns-pass.md`; the `### Step 2` section; all 67 renumber sites; the five arrow-chain insertions; the five Execution Order lists; the three trees; `:566`; the two Success Criteria items; the three-way version bump~~ | **Superseded 2026-07-27.** The pass landed inside Step 2 with no new prompt document, no renumber, and no enumeration edits — so none of the cascade was paid. The two Success Criteria items were added |
-| 3 — The skills | Four new baseline skills and four fold-in sections in `docs/prompts/skills-builder.md`, plus the `ui-standards` cross-reference. Bodies are specified in `unknowns-skill-bodies.md` | ~10 lines of edits here, several hundred generated into targets, two days. **Still proposed** |
+| 3 — The skills | Four new baseline skills and four fold-in sections in `docs/prompts/skills-builder.md`, plus the `ui-standards` cross-reference. Bodies are specified in `unknowns-skill-bodies.md` | ~10 lines of edits here, several hundred generated into targets, two days. **Done 2026-07-27** — and it cost more than 10 lines, because both enumerations and both of `team-design.md`'s dedupe sites name the set |
 
 **Phase 1 stands alone and is startable as written.** Its two deliverables are given in full above; nothing else needs to be decided first, and it applies to every project grovv scaffolds, including every project that would skip the Step 2 pass entirely. If exactly one phase is approved, approve this one.
 
@@ -557,7 +557,7 @@ The 27 sites carrying a step token that must **not** change: `grovv-stack-scaffo
 |-------|-------|
 | Version | 1.0.0 |
 | Last Updated | 2026-07-27 |
-| Status | Decided — pass implemented inside Step 2; renumber declined; Phases 1 and 3 still proposed |
+| Status | Implemented — pass inside Step 2, Phases 1 and 3 applied; renumber declined |
 | Author(s) | grovv stack scaffolding agent |
 | Model | Claude (Claude Code) |
 

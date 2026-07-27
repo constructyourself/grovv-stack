@@ -361,6 +361,8 @@ gro\/\/ stack — Cross-Session Memory
 
 Keep the memory file honest: it must never contradict `docs/` or the codebase. When it grows past ~120 lines, prune — move anything durable into the tech spec or an ADR, anything actionable into the tracker.
 
+**This rule is `MEMORY.md`'s alone, and `docs/unknowns.md` deliberately inverts it.** `MEMORY.md` records session state, so when it disagrees with `docs/` the memory file is what is wrong. `docs/unknowns.md` records that `docs/` was incomplete — its Deviations table exists precisely to hold things the specs did not anticipate — so when it disagrees with `docs/`, the spec is what gets revisited. Two files, two directions, and neither is a bug in the other. State both when generating the target's memory rules, or the next reader will "fix" one of them.
+
 -----
 
 ## SessionStart Hook

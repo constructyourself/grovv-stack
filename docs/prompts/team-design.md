@@ -73,7 +73,7 @@ Follow the phased workflow defined in the vendored skill `.claude/skills/harness
 | 6 — Validation | Structure check, trigger check (should / should-not), dry-run the data flow. |
 | 7 — Evolution | After each run, offer to refine; record changes in the `CLAUDE.md` change log. |
 
-**The duplicate review in Phases 3-0 and 4-0 has two subjects, and both must be named before it runs.** On the agent side it is the six grovv defaults. On the skill side it is the ten baseline skills that `skills-builder.md` (Step 6) writes: `dev-standards`, `architecture-planning`, `frontend-development`, `ui-standards`, `backend-development`, `database-design`, `security-practices`, `testing-tdd`, `deployment-ops`, and `debugging`. A skill matching one of those names is never re-created under a variant name. Anything outside those ten and outside this step's own additions belongs to the project — audit it, never rewrite it.
+**The duplicate review in Phases 3-0 and 4-0 has two subjects, and both must be named before it runs.** On the agent side it is the six grovv defaults. On the skill side it is the fourteen baseline skills that `skills-builder.md` (Step 6) writes: `dev-standards`, `architecture-planning`, `frontend-development`, `ui-standards`, `backend-development`, `database-design`, `security-practices`, `testing-tdd`, `deployment-ops`, `debugging`, `blind-spot-pass`, `interviews`, `implementation-notes`, and `change-quiz`. A skill matching one of those names is never re-created under a variant name. Anything outside those fourteen and outside this step's own additions belongs to the project — audit it, never rewrite it.
 
 For pattern decision trees, agent-definition structure, orchestrator templates, the QA agent guide, and skill-writing/testing methodology, read the corresponding files under `.claude/skills/harness/references/`. Do not duplicate that detail here — load it when the phase needs it.
 
@@ -122,6 +122,77 @@ Whichever strategy is chosen, every artifact one agent writes for another to rea
 
 -----
 
+## Re-entry
+
+Phase 0 above already audits the target's `.claude/agents/` and
+`.claude/skills/`. This section states what a later run does with what that
+audit finds. It adds no procedure to the vendored skill — it is the grovv side
+of Phase 0, and it holds on every run after the first, on run 2 and on run 12.
+
+The question a re-entry asks is one question:
+
+> Given a specification that has moved since these artifacts were generated,
+> which of them are still implied by it?
+
+Three answers, three actions:
+
+| Verdict | Meaning | Action |
+|---------|---------|--------|
+| Unchanged | The agent's rationale still maps to the spec | Leave it alone and say so |
+| Drifted | The spec changed under it — a different database, a dropped integration, a renamed component | Propose the specific revision, name the spec line that moved |
+| Orphaned | Nothing in the current spec justifies it | Surface it for removal; never delete without approval |
+
+- **Audit before writing.** List every project-specific agent in
+  `.claude/agents/` with the rationale its definition states, and every skill
+  this step added to `.claude/skills/`. Nothing is written until that list
+  exists.
+- **Name the baseline before deduping.** The duplicate review (Phases 3-0 and
+  4-0) has two subjects. On the agent side it is the six grovv defaults named
+  above. On the skill side it is the fourteen baseline skills that
+  `skills-builder.md` (Step 6) writes: `dev-standards`, `architecture-planning`,
+  `frontend-development`, `ui-standards`, `backend-development`,
+  `database-design`, `security-practices`, `testing-tdd`, `deployment-ops`,
+  `debugging`, `blind-spot-pass`, `interviews`, `implementation-notes`, and
+  `change-quiz`. Anything in `.claude/skills/` outside those fourteen and outside
+  this step's own additions belongs to the project — audit it, never rewrite it.
+- **Diff against the current spec.** Re-read `docs/tech-spec.md` and give every
+  project-specific agent and every skill this step added exactly one verdict from
+  the table above. A drifted verdict names the line of the spec that moved.
+- **Re-justify rather than inherit.** The additive rule protects the six
+  defaults, not the specialists. On a later run each project-specific agent is
+  re-argued against the current spec; an agent that exists only because an
+  earlier run added it is orphaned. "The smallest team that covers the domain" is
+  a ceiling, and a re-entry must be able to lower it as readily as raise it.
+- **The six defaults are exempt.** `scaffold`, `frontend`, `backend`, `testing`,
+  `database`, and `code-review` are never orphaned and never removed by a
+  re-entry. They are the baseline team, not a derivative of the spec.
+- **Report before acting.** Present the three lists and **wait**. Never delete
+  silently, and report the unchanged specialists too.
+- **Update, never append blindly.** An agent or skill whose name already exists
+  is revised in place, never duplicated with a suffix.
+- **One pointer, one change log.** The target `CLAUDE.md` carries a single
+  harness pointer. A re-entry adds a dated row to the existing change log and
+  leaves the trigger rule alone; it never writes a second pointer.
+- **Preserve hand edits.** A generated agent or skill that has been edited by
+  hand is reported as hand-edited and asked about. It is never overwritten and
+  never skipped.
+- **A previous run is not an answer to an ask-first rule.** The frontend
+  framework (Astro + React or Next.js) and the Playwright E2E scope are
+  inherited from the user, never from an earlier run's output. A re-entry
+  decides neither and re-litigates neither: it does not treat a generated
+  artifact as evidence that a choice was made, and it does not re-ask a
+  question the user has already answered. Where the record is genuinely
+  absent, it asks. Where two generated artifacts disagree, the rule above
+  applies — report both, resolve neither.
+- **A re-entry does not advance the pipeline on its own.** Reconciling this step
+  is a complete outcome. Continue to `tracker-setup.md` (Step 8) only if the user
+  asks for it.
+
+A re-entry that changes nothing and returns a list of questions has succeeded.
+No action is a valid result of this step.
+
+-----
+
 ## grovv Conventions for Generated Output
 
 The vendored harness skill is the methodology. When this step writes files into the target project, apply grovv stack conventions on top:
@@ -156,6 +227,9 @@ This step is complete when, for the target project:
 - [ ] The target `CLAUDE.md` carries a harness pointer (trigger rule + change-log table)
 - [ ] Frontend-framework and Playwright ask-first rules were not pre-empted
 - [ ] Any disagreement between a generated skill and `docs/tech-spec.md` about an ask-first answer was surfaced to the user and decided by them, not resolved by this step
+- [ ] On a re-entry, every project-specific agent and every skill this step added carried a verdict, and the report was presented before anything was written
+- [ ] The duplicate review named the fourteen baseline skills explicitly; the six default agents were exempt from removal
+- [ ] No hand-edited generated file was overwritten, and the `CLAUDE.md` harness pointer was updated rather than duplicated
 - [ ] Trigger validation (should-trigger + should-not-trigger) passed with no conflicts against existing skills
 
 -----

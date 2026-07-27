@@ -2,7 +2,11 @@
 
 Specification for what a second run of the gro\\/\\/ stack pipeline does to the first run's output. Layer 2 of `loop-engineering.md`.
 
-**Status: Phase 1 implemented; the ask-first clash settled and implemented; Phases 2 through 4 proposed.** The ten baseline skill names are now stated in `team-design.md`, so its Phase 4-0 duplicate review has the subject it has always claimed. The sharpest open question in this document — what happens when a generated skill and the tech spec disagree about an ask-first answer — was settled on 2026-07-27 as **report both, never pick**, and the rule is now written into `skills-builder.md` and `team-design.md` with a checklist item in each; see Open Questions. The `## Re-entry` sections themselves are still not written.
+**Status: implemented, 2026-07-27. All four phases.** The `## Re-entry` sections are written into `docs/prompts/skills-builder.md` and `docs/prompts/team-design.md`, each with its three checklist items, positioned as specified. Steps 6 and 7 of the directive point at them, `agents/scaffold.md` in all four trees routes a resume to the contract rather than to Step 0, and a Success Criteria item covers a resume run. The sharpest open question here — what happens when a generated skill and the tech spec disagree about an ask-first answer — was settled as **report both, never pick**; see Open Questions.
+
+Two things changed on application. The baseline skill list is **fourteen**, not ten: the four unknowns skills landed in the same change, so both `## Re-entry` sections and the Phase 4-0 paragraph name fourteen. And each section's ask-first clause gained one sentence deferring to that rule, because a re-entry is exactly where two generated artifacts meet.
+
+> **Historical note, 2026-07-27.** This document describes the pipeline as it stood when it was written. Step numbers, line citations, and counts below are a snapshot, not a live index — `grovv-stack-scaffold.md` and `docs/prompts/` are the source of truth for what the pipeline does now. Re-derive any locator here before acting on it. In particular, the section headed "The Dedupe Subject: Naming the Ten Baseline Skills" now describes fourteen.
 
 > **Historical note, 2026-07-27.** This document describes the pipeline as it stood when it was written. Step numbers, line citations, and counts below are a snapshot, not a live index — `grovv-stack-scaffold.md` and `docs/prompts/` are the source of truth for what the pipeline does now. Re-derive any locator here before acting on it.
 
