@@ -29,10 +29,13 @@ An optional argument forces the mode:
 - `adopt` — treat this as an existing project; start at Step 0.
 - no argument — **auto-detect** from the working directory.
 
-When auto-detecting:
+When auto-detecting, test these in order and stop at the first match:
 
-- **Existing project** — source code, configs (`package.json`, `go.mod`, `tsconfig.json`, etc.), or a populated `docs/` are present. Start at Step 0: assess the codebase, then propose an adoption plan and wait for approval before changing anything. Never overwrite or break working code.
+- **Resuming a grovv project** — `docs/prompts/skills-builder.md` is present **and** this tool's skills directory is populated. Both markers together mean grovv scaffolded this project, so a populated `docs/` proves nothing about whether the code is foreign. Do **not** start at Step 0, and do **not** propose an adoption plan for output grovv itself wrote. Resume instead: re-read `docs/tech-spec.md`, report which existing artifacts it still implies and which have drifted under it, and wait. A run that changes nothing and returns a list of questions is a successful run.
+- **Existing project** — source code, configs (`package.json`, `go.mod`, `tsconfig.json`, etc.), or a populated `docs/` are present, and the markers above are absent. Start at Step 0: assess the codebase, then propose an adoption plan and wait for approval before changing anything. Never overwrite or break working code.
 - **New project** — the directory is essentially empty. Start at Step 1.
+
+The order matters. A grovv-scaffolded project satisfies the existing-project test by construction — Step 2 writes `docs/product-spec.md` and Step 5 writes `docs/prompts/` — so testing for an existing project first sends every second run into the mode built for foreign code. `/grovv adopt` still forces Step 0 when that is genuinely what you want.
 
 State which mode you detected and why before proceeding.
 
