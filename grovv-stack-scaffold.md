@@ -619,7 +619,7 @@ When an AI agent reads this document, it should:
 1. **Determine if this is a new or existing project.** If existing, start with Step 0 (assess the codebase) and propose an adoption plan before generating anything.
 2. **Ask questions first.** Understand the product, the user, the constraints, and the stack before generating files.
 3. **Create the directory structure and `settings.json`.** For existing projects, integrate rather than overwrite.
-4. **Work through Steps 2-9 sequentially**, pausing to confirm direction as needed. Step 7 designs the project-specific agent team (harness) after the skills repository exists; Step 8 sets up Linear project tracking from the development plan and the cross-session `MEMORY.md` that coordinates with it.
+4. **Work through Steps 2-9 sequentially**, pausing to confirm direction as needed. Step 7 designs the project-specific agent team (harness) after the skills repository exists; Step 8 asks which tracker to use — GitHub Issues or Linear — then seeds that backlog from the development plan and creates the cross-session `MEMORY.md` that coordinates with it.
 5. **Mark unknowns with `@TODO`** and revisit them as the conversation progresses.
 6. **Apply gro\\/\\/ stack branding** — footers, naming conventions, and document style to all generated files.
 7. **Iterate.** Documents are living artifacts. Revise as understanding deepens.
