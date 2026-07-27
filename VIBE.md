@@ -149,6 +149,7 @@ Adapt per project; never assume.
 - **Security by default** — input validation, auth, dependency audits in every layer. Never deferred.
 - **Zero data loss** — transactions for all multi-step data operations.
 - **Never overwrite working code** in existing projects without an approved adoption plan.
+- **Ask how much CI to generate** before writing a workflow into a project, and generate only the verify commands Step 1 actually found. "None" is a valid answer; an invented command is not.
 - **Apply gro\\/\\/ stack branding** to every generated document (footer, conventions below).
 
 -----

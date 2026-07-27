@@ -65,7 +65,17 @@ This applies every time — never auto-generate Playwright tests without asking 
 
 ## Automated Testing Standards
 
-- All tests must run in CI/CD (GitHub Actions)
+- The project's verify commands live in `MEMORY.md`'s Verify table, recorded
+  when the project was scaffolded. They are the definition of done: run them
+  before reporting any task complete. If one is missing or wrong, say so and
+  correct the table — never substitute a command you guessed.
+- All tests must run in CI/CD (GitHub Actions), through the workflow the
+  scaffolding step generated from exactly those commands. If no workflow
+  exists, CI was declined; the Verify table records that, and the commands are
+  still the bar for done.
+- A generated CI workflow never contains an end-to-end job the user did not
+  approve. Bundling one in asserts that those flows exist and should gate
+  merges, which is not a decision a workflow file gets to make for the user.
 - Tests must be deterministic — no flaky tests. Deterministic units get equality
   assertions. Model-backed output is scored instead: a hand-labelled gold set,
   precision and recall, and a gate on no regression against the last recorded

@@ -226,6 +226,7 @@ Target projects get the same convention from the tracker-setup step (see `docs/p
 - **Maintain memory** — read `MEMORY.md` at session start, update it before ending meaningful work, sync with Linear
 - **Always ask what Playwright should test** — never auto-generate E2E tests
 - **Always ask which frontend framework** — Astro + React or Next.js — before writing frontend code
+- **Record the verify commands, ask before generating CI** — Step 1 discovers what proves the project works and Step 8 records it in `MEMORY.md`; how much CI to generate from those commands is a Step 6 question with four answers, and "none" is one of them
 
 -----
 

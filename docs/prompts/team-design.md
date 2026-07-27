@@ -54,6 +54,8 @@ Carry forward, do not re-litigate, the two standing grovv ask-first rules. This 
 - **Frontend framework** (Astro + React or Next.js) — if the team includes a frontend agent, it inherits whatever was already chosen; do not pick here.
 - **Playwright** — never auto-generate E2E flows. A testing/QA agent must still ask what Playwright should test before writing any E2E test.
 
+Phase 0's audit reads artifacts that Step 6 generated, and those can disagree with the spec. **When a generated skill and `docs/tech-spec.md` disagree about an ask-first answer, report it and let the user decide.** A skill asserting Astro while the spec names Next.js is a conflict between two generated files, so neither is the source — the user is. Deferring to the spec because it sounds authoritative answers the framework question with an artifact this pipeline wrote, and deferring to the skill is the same mistake in the other direction. Name both files, quote what each asserts, and design no agent that depends on the answer until the user has given one.
+
 -----
 
 ## Workflow
@@ -153,6 +155,7 @@ This step is complete when, for the target project:
 - [ ] Nothing was written to `.claude/commands/`
 - [ ] The target `CLAUDE.md` carries a harness pointer (trigger rule + change-log table)
 - [ ] Frontend-framework and Playwright ask-first rules were not pre-empted
+- [ ] Any disagreement between a generated skill and `docs/tech-spec.md` about an ask-first answer was surfaced to the user and decided by them, not resolved by this step
 - [ ] Trigger validation (should-trigger + should-not-trigger) passed with no conflicts against existing skills
 
 -----

@@ -134,6 +134,8 @@ These standing grovv non-negotiables must live inside the relevant skills so the
 - `frontend-development` and `ui-standards` must instruct the agent to **ask which frontend framework** (Astro + React or Next.js) before writing frontend code, unless the project has already committed to one.
 - `testing-tdd` must instruct the agent to **ask what Playwright should test** before writing any E2E test — never auto-generate E2E flows.
 
+**When two generated artifacts disagree about an ask-first answer, report the disagreement — never resolve it.** A skill asserting Astro while `docs/tech-spec.md` names Next.js is a real conflict, and both files are generated, so neither settles it. Picking the spec because it is "more authoritative" answers the framework question with an artifact this pipeline wrote, which is the exact pre-emption the rule exists to prevent — and picking the skill is the same error facing the other way. Name both files, quote what each asserts, and ask the user which is right. Write nothing to either until they answer. The same holds for Playwright scope.
+
 ### Quality Bar (one illustration)
 
 ```typescript
@@ -176,6 +178,34 @@ async function createUser(email, name, role) {
 
 -----
 
+## Generated CI
+
+After the skills exist, this step asks how much continuous integration the project should have and generates it. The question, its four options, and the rules governing the answer are in `grovv-stack-scaffold.md` under Step 6 — ask it there, in those words. What follows is how to build what the answer asks for.
+
+**Only from recorded commands.** Step 1 discovered the project's verify commands and their sources. Those are the only commands that may appear in a generated workflow. If the user picks a check Step 1 did not find, say so and offer to add the underlying script first — do not write a job that invokes a command the project cannot run.
+
+| Stack | Checks available | Notes |
+|-------|-----------------|-------|
+| TypeScript | the project's test runner, `tsc --noEmit`, the project's linter, `build` | Use whatever the project actually uses. Do not substitute Vitest into a project on another runner, or `npm` into a project on pnpm |
+| Go | `go test ./...`, `go vet ./...`, `golangci-lint run` | Include `golangci-lint` only when its config file is present |
+| Both | The union, as separate jobs | A Go failure and a TypeScript failure should be separately legible |
+
+**Workflow shape:**
+
+- Each check is its own named step, so a failure names itself in the interface rather than requiring a log read.
+- Later steps run even after an earlier one fails, so one run reports every problem instead of only the first.
+- Triggers are push and pull request, unless the user says otherwise.
+- Install and cache dependencies. A generated workflow runs against a real toolchain and must actually be able to run.
+- Pin actions to major version tags.
+
+**Never generate:** a Playwright or E2E job (the ask-first rule is not answered by a workflow file — see Step 6), or any deploy, release, or publish job. This is a verification loop, not a delivery pipeline, and a generated deploy job touches credentials and live systems.
+
+**When the project already has CI**, this becomes a proposal. Report what the existing workflow runs, name the specific gap the addition would close, and write nothing until the user approves. Preserving an existing job — including an existing E2E job — is the user's prior decision standing, not this step generating one.
+
+Record the outcome either way: the commands wired up, or that CI was offered and declined and why. Step 8 writes it into the project's `MEMORY.md` Verify table.
+
+-----
+
 ## Existing Projects
 
 Customize, don't templatize. Before generating:
@@ -208,6 +238,9 @@ This step is complete when, for the target project:
 - [ ] The throwaway tier is stated in `dev-standards` and in every other skill that would otherwise imply everything built must clear the production bar
 - [ ] Nothing was written to `docs/skills/` or `.claude/commands/`
 - [ ] Baseline skill names are stable so the team-design audit can dedupe against them
+- [ ] Any disagreement between a generated artifact and `docs/tech-spec.md` about an ask-first answer was reported to the user and resolved by them, not by this step
+- [ ] The CI question was asked with the project's real commands, and the generated workflow runs only commands Step 1 recorded — or CI was explicitly declined and the reason carried forward
+- [ ] The generated workflow contains no Playwright/E2E job and no deploy, release, or publish job
 
 -----
 gro\\/\\/ stack — Skills Builder

@@ -327,6 +327,9 @@ owns the backlog; this file owns the context.
 - Found none? Write one row of `@TODO` rather than omitting the table. An empty
   table is a visible gap; a missing one is invisible.
 - A command that stops working is corrected here, not rediscovered.
+- CI: [which of these the generated workflow runs — or that CI was offered at
+  Step 6 and declined, and why]. Recording a decline is what makes a wrong one
+  visible later.
 
 -----
 
