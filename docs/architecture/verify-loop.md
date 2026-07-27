@@ -2,7 +2,11 @@
 
 Specification for giving a scaffolded project an inner development loop. Layer 1 of `loop-engineering.md`.
 
-**Status: Phase 1 implemented; Phases 2 and 3 proposed.** Step 1's discovery and the `MEMORY.md` Verify table are in the pipeline. The Step 6 CI question and workflow generation are not — they remain proposals to be approved or rejected before anything runs for a real project.
+**Status: implemented, 2026-07-27.** All three phases are in the pipeline. Step 1 discovers the verify commands and Step 8 records them in the `MEMORY.md` Verify table (Phase 1). Step 6 asks the four-option CI question and `skills-builder.md` carries the generation rules (Phase 2). The adopt-mode proposal path for a project that already has CI is stated in both (Phase 3).
+
+Two things changed between this specification and what was built, both recorded in place below: Step 1 states the commands rather than writing them, because `MEMORY.md` does not exist until Step 8; and the per-stack table names the project's own runner rather than naming Vitest, so the never-substitute rule is visible in the table rather than only in the note beside it.
+
+> **Historical note, 2026-07-27.** This document describes the pipeline as it stood when it was written, and it is kept as the reasoning record for a decision already taken — not as a live index. Step numbers, line citations, and counts below are a snapshot; `grovv-stack-scaffold.md` and `docs/prompts/` are the source of truth for what the pipeline does now. Re-derive any locator here before acting on it.
 
 -----
 
@@ -151,11 +155,11 @@ No new prompt document. No new numbered step. No stack-table row — CI is not a
 
 | Phase | Delivers | Standalone? |
 |-------|----------|-------------|
-| 1 | Step 1 discovery and the `MEMORY.md` Verify table | **Done.** Cost the user no questions and added no generated files | 
-| 2 | The Step 6 question and workflow generation | Needs Phase 1's recorded commands |
-| 3 | The adopt-mode proposal path for projects that already have CI | Needs Phase 2 |
+| 1 | Step 1 discovery and the `MEMORY.md` Verify table | **Done.** Cost the user no questions and added no generated files |
+| 2 | The Step 6 question and workflow generation | **Done.** Needed Phase 1's recorded commands |
+| 3 | The adopt-mode proposal path for projects that already have CI | **Done.** Needed Phase 2 |
 
-Phase 1 is the one to approve if only one is approved. It is the smallest change with the widest benefit and it cannot generate anything wrong, because it generates nothing.
+Phase 1 was the one to approve if only one were approved: the smallest change with the widest benefit, and it could not generate anything wrong because it generated nothing. All three landed together on 2026-07-27.
 
 -----
 
@@ -188,9 +192,9 @@ Phase 1 is the one to approve if only one is approved. It is the smallest change
 
 | Field | Value |
 |-------|-------|
-| **Version** | 0.1.0 |
-| **Last Updated** | 2026-07-26 |
-| **Status** | Proposed — not implemented |
+| **Version** | 1.0.0 |
+| **Last Updated** | 2026-07-27 |
+| **Status** | Implemented — Phases 1, 2 and 3 |
 | **Author(s)** | grovv stack scaffolding agent |
 | **Model** | Claude (Claude Code) |
 

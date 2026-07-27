@@ -2,6 +2,18 @@
 
 An assessment of the finding-your-unknowns field guide and a scoped plan for absorbing it into the scaffolding pipeline.
 
+**Status, 2026-07-27: the substance landed; the renumber was declined.** The Unknowns Pass is implemented as the opening phase of Step 2, before the product spec is written, rather than as a new numbered Step 2 that pushes Steps 2 through 9 to 3 through 10. The starting-point questions, the blind spot pass, the one-question-at-a-time interview, the prototype limb, the stopping rules, the escape hatch, and `docs/unknowns.md` with its four named consumers are all in `grovv-stack-scaffold.md`. Step 1 creates the file; Step 2 fills it; Steps 4 and 8 read it. `grovv-stack-scaffold.md:346`'s "(if not already clear)" hedge — contradiction 3, the note's sharpest single finding — is gone, replaced by an instruction to state each default and ask.
+
+Three things drove declining the number, and none of them is the mechanical cost on its own:
+
+- **Two of the three findings the step existed for were already closed by the Throwaway Tier**, which landed between this note being written and being executed. Contradiction 1 (production-first forbids the disposable artifact) and the standing-ask-first clause the prototype limb needed are both stated there in full. What remained was the discovery work, which is a phase of understanding the product — not a separate artifact-producing step.
+- **The position argument survives the fold intact.** This note rejected appending as Step 10 because "a pass after the specs audits documents instead of informing them." Being the first half of Step 2 is upstream of the product spec, which is all the argument ever required. The number was never what bought the position.
+- **The map does not survive contact.** Re-run on 2026-07-27 against `HEAD`, this note's own verification grep — same filter, excluding `.git`, the harness trees and `docs/architecture/` — returns **100 lines across 18 files**, against the 62 across 15 recorded here. A 61% growth in the surface, on a map whose own opening paragraph warns that its line numbers have a short shelf life. Outside that filter sit 20 more step tokens in the vendored harness trees, which are that skill's own Korean-language phase numbers (`**Step 1: 현황 감사**`) in Apache-2.0 code a mechanical pass would corrupt. Both traps this note flagged are real and confirmed: there are 13 `Steps 0–9` en-dash ranges and exactly one ASCII-hyphen range, and that one range — `grovv-stack-scaffold.md:622`, "Work through Steps 2-9 sequentially" — is precisely the site where a mechanical +1 on both ends is wrong, because the item before it covers Step 1, so its lower bound means "everything after Step 1."
+
+What is **not** implemented and remains proposed: the agent-definition changes (implementation notes into `testing.md`, the change-comprehension quiz into `code-review.md`, both across four tool trees — Phase 1 of the rollout below), and the four new baseline skills specified in `unknowns-skill-bodies.md` (Phase 3). Both are standalone and neither needs a renumber.
+
+> **Historical note, 2026-07-27.** Everything below this block is preserved as the reasoning record, unedited except where a section says otherwise. Its step numbers, line citations, and counts are a snapshot of a working tree that has since moved — `grovv-stack-scaffold.md` and `docs/prompts/` are the source of truth for what the pipeline does now. Re-derive any locator here before acting on it, and read the renumbering section as a rejected option rather than a plan.
+
 This file is the architecture note of record for the decision. Part One is a fidelity pass over the source. Part Two is the plan. This round produces a decision document, not applied edits: every change below is specified precisely enough for a later session to apply, and no pipeline file is touched by this workstream. Every repository count in Part Two was re-derived by grep against this repository on the date in the colophon and is cited with the command or paths that produced it. Where re-derivation contradicted a number this note was handed, the note states the contradiction and keeps the derived figure.
 
 **Baseline for every line number below.** The map is derived against the working tree as of the colophon date — that is, with the `docs/prompts/linear-tracking.md` → `docs/prompts/tracker-setup.md` rename applied. That rename is staged but not yet committed, so the same grep run against `HEAD` returns different figures: 16 files rather than 15, `grovv-stack-scaffold.md` at 576 lines rather than 578, and four `MEMORY.md` step-token lines rather than five. Line numbers are therefore load-bearing on a baseline that has not landed. A later session must re-run the verification grep in the renumbering section, confirm it matches this map, and reconcile any difference **before** applying anything — not apply the map blind and reconcile after.
@@ -304,7 +316,9 @@ gro\/\/ stack — Unknowns
 
 **The back-flow rule, which is the point.** When a Deviation contradicts something in `docs/product-spec.md`, `docs/development-plan.md`, or `docs/tech-spec.md`, the *spec* is what gets revisited. This is a deliberate inversion of `docs/prompts/tracker-setup.md:276` ("it must never contradict `docs/` or the codebase"), which today requires the memory file to yield to `docs/` unconditionally. That rule is correct for `MEMORY.md`, which records session state; it is wrong for a file whose entire purpose is recording that the map was incomplete. The two rules must be stated as distinct, in both files, or the next reader will read one as a bug.
 
-### The renumbering
+### The renumbering — declined, 2026-07-27
+
+**This section is a rejected option, kept for its map and its traps.** The pass landed inside Step 2 and nothing was renumbered; see the Status block at the top of this file. Two findings here proved out on re-derivation and are worth keeping for whoever next proposes a pipeline insertion: the ASCII-hyphen range — at `:548` when this was written, `:622` at `HEAD` on 2026-07-27 — is real, is the repository's only one against 13 en-dash ranges, and is exactly the site where a mechanical +1 on both ends is wrong; and applying the harness exclusion to the path field rather than the whole line is the only filter that neither drops a real reference nor admits 20 vendored ones. The counts below are stale: the same grep now returns 100 lines across 18 files.
 
 **Verified counts, re-derived.** A literal step-token grep over Markdown, JSON, and YAML, excluding `.git`, every vendored `skills/harness/` tree, and `docs/architecture/`:
 
@@ -325,7 +339,7 @@ Add **32 lines that carry no step token at all** — the ordered-list ordinals a
 
 **The one place a mechanical +1 is wrong.** `grovv-stack-scaffold.md:548` reads "Work through Steps 2-9 sequentially." The preceding list item covers Step 1, so the lower bound encodes "everything after Step 1," not "old Step 2." It becomes **Steps 2-10**, not 3-10. It is also the only step range in the repository written with an ASCII hyphen; the other eleven ranges all use an en dash, so a `sed` for one form misses the other entirely.
 
-**Why this earns a number when the knowledge-graph note argued a capability must not.**
+**Why this earns a number when the knowledge-graph note argued a capability must not.** *(The argument below is sound and was still not decisive — see the Status block. PR #10's test asks whether every project should run the step, and the pass passes it. What the argument does not establish is that passing that test requires a **number**: a phase every project runs is equally well expressed as the opening of a step every project runs, and Step 2 already was one. The number would have bought visibility in the directive's step list, and cost 100 step-token sites across 18 files — plus the 32 untokened ordinals this note found, and the risk of a half-applied renumber. The `#### Before writing: the unknowns pass` heading inside Step 2 buys most of the visibility for none of the cost.)*
 
 The prior architecture note in this repository (PR #10, `docs/architecture/knowledge-graph-engineering.md`) rejected a numbered pipeline step for the knowledge-graph capability, and its reasoning was not about cost. It was semantic: `grovv-stack-scaffold.md` is read end-to-end before any file is written, on every invocation, for every project, so a number is a promise that the step runs. Giving a default-off capability a number would tell every future agent that a knowledge graph is part of the expected shape of a grovv project — which is exactly what the gate existed to prevent. It also observed, correctly, that the mechanical cost was a supporting argument only.
 
@@ -451,9 +465,9 @@ The reason to stop at 14 rather than 18: every baseline skill is a surface that 
 
 | Phase | Delivers | Size |
 |-------|----------|------|
-| 1 — Conventions into the existing agents | `testing.md` and `code-review.md` in all four trees, canonical copy first. The two sections are reproduced literally above. No renumbering, no new files, no enumeration edits, no manifest change | ~104 lines across 8 files, half a day |
-| 2 — The step and the renumber | `docs/prompts/unknowns-pass.md`; the `### Step 2` section; all 67 renumber sites; the five arrow-chain insertions; the five Execution Order lists; the three trees; `:566`; the two Success Criteria items; the three-way version bump; the `MEMORY.md` entry | ~190 new lines plus ~90 lines of edits across 22 files, two to three days |
-| 3 — The skills | Four new baseline skills and four fold-in sections in `docs/prompts/skills-builder.md`, plus the `ui-standards` cross-reference | ~10 lines of edits here, several hundred generated into targets, two days |
+| 1 — Conventions into the existing agents | `testing.md` and `code-review.md` in all four trees, canonical copy first. The two sections are reproduced literally above. No renumbering, no new files, no enumeration edits, no manifest change | ~104 lines across 8 files, half a day. **Still proposed** |
+| 2 — The step and the renumber | ~~`docs/prompts/unknowns-pass.md`; the `### Step 2` section; all 67 renumber sites; the five arrow-chain insertions; the five Execution Order lists; the three trees; `:566`; the two Success Criteria items; the three-way version bump~~ | **Superseded 2026-07-27.** The pass landed inside Step 2 with no new prompt document, no renumber, and no enumeration edits — so none of the cascade was paid. The two Success Criteria items were added |
+| 3 — The skills | Four new baseline skills and four fold-in sections in `docs/prompts/skills-builder.md`, plus the `ui-standards` cross-reference. Bodies are specified in `unknowns-skill-bodies.md` | ~10 lines of edits here, several hundred generated into targets, two days. **Still proposed** |
 
 **Phase 1 stands alone and is startable as written.** Its two deliverables are given in full above; nothing else needs to be decided first, and it applies to every project grovv scaffolds, including every project that would skip the Step 2 pass entirely. If exactly one phase is approved, approve this one.
 
@@ -541,9 +555,9 @@ The 27 sites carrying a step token that must **not** change: `grovv-stack-scaffo
 
 | Field | Value |
 |-------|-------|
-| Version | 0.1.0 |
-| Last Updated | 2026-07-26 |
-| Status | Draft |
+| Version | 1.0.0 |
+| Last Updated | 2026-07-27 |
+| Status | Decided — pass implemented inside Step 2; renumber declined; Phases 1 and 3 still proposed |
 | Author(s) | grovv stack scaffolding agent |
 | Model | Claude (Claude Code) |
 

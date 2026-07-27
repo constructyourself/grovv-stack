@@ -4,6 +4,8 @@ The hand-run rubric for scoring a pipeline run against a throwaway target. Layer
 
 **Status: proposed — not implemented.** This document defines a procedure and a scored checklist; it has never been run. Nothing in the pipeline has been edited to accommodate it, and it asks for no such edit. Every file:line citation below was re-derived against the working tree on the date in the colophon.
 
+> **Historical note, 2026-07-27.** The pipeline has moved since this rubric was written: Step 2 now opens with an unknowns pass, Step 6 now asks a CI question, and both add rows this checklist does not score. The rubric is still the procedure of record — score the pipeline as it stands when you run it, not as it stood here. Step numbers, line citations, and counts below are a snapshot; `grovv-stack-scaffold.md` and `docs/prompts/` are the source of truth. Re-derive any locator before acting on it.
+
 -----
 
 ## Summary

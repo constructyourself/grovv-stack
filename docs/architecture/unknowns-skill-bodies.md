@@ -4,6 +4,10 @@ Specification appendix. This document contains the **proposed content** for four
 
 Scope of this document: content only. It writes no pipeline edits and changes no step numbers; a later session executes it mechanically against the files named below. The single edit made outside this file is the folder-name reconciliation in `docs/architecture/unknowns-engineering.md`, recorded in Part 1.
 
+**Status, 2026-07-27: still proposed, and still applicable.** The unknowns workstream's pipeline half landed — the pass runs inside Step 2 rather than as a new numbered step, and no renumber was paid. That changes nothing here: these four skills and four insertions never depended on the step number, and the ask-first register they extend is where it always was. What did change is one of the two `ask-first` bullets this document proposes replacing — `docs/prompts/skills-builder.md`'s Ask-First Rules section has since gained a third rule, on reporting rather than resolving a disagreement between generated artifacts. Read that section before applying the replacements in Part 4, and add to it rather than overwriting it.
+
+> **Historical note, 2026-07-27.** Step numbers, line citations, and counts below are a snapshot of the working tree when this was written, not a live index. `grovv-stack-scaffold.md` and `docs/prompts/` are the source of truth. Re-derive any locator here before acting on it.
+
 -----
 
 ## How a Later Session Executes This
