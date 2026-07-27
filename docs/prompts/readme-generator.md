@@ -114,6 +114,17 @@ npm run dev
 \`\`\`
 ```
 
+**Every command in that block is a placeholder, and shipping it unchecked is the single most likely defect in a generated README.** It is the first thing a new contributor runs, and the template above assumes npm, a `.env.example`, and a script named `db:migrate` — none of which a Go project, a pnpm project, or a project whose migration script is named anything else will have. Four commands that fail on first use, in the document read first.
+
+Before writing this section, replace every line with a command this project actually has:
+
+- Take the build, test, and run commands from the `Verify` table in the project's `MEMORY.md` if Step 1 recorded one, since those were read from the project rather than assumed.
+- Otherwise read them from the project directly — `package.json` scripts, a `Makefile`, a `Taskfile.yml`, or `go.mod` — using the same precedence Step 1 uses.
+- Drop any line you cannot substantiate. A missing migration step is a gap someone fills; a wrong one is a bug they debug.
+- Name the package manager the project actually uses. A lockfile settles it: `pnpm-lock.yaml`, `yarn.lock`, `bun.lockb`, or `package-lock.json`.
+
+If the project has no runnable commands yet — a fresh scaffold with no code — write the section with a single `@TODO` line rather than plausible-looking commands. An empty quick start is honest; a fictional one is not.
+
 ### Technology Stack Table
 
 ```markdown
