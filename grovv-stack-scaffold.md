@@ -86,6 +86,29 @@ Whether new or existing, the agent should **ask questions before generating**. T
 
 The agent should not assume. If information is missing or ambiguous, ask. Mark incomplete sections with `@TODO` and return to them as the conversation progresses.
 
+Some questions cannot be answered in the abstract. The user recognizes the answer on sight but cannot specify it — visual design is the canonical case. When a question is of that shape, asking harder does not help; build something disposable for the user to react to, under the rules below.
+
+These questions are all about the artifact. Step 2 opens with four about the *person* — what they have built before, how well they know this domain, where they are in their own thinking, and what they are least sure about — because the right depth for everything above depends on answers this list never asks for.
+
+-----
+
+## The Throwaway Tier
+
+Production-first governs what ships. It does not govern what you build to find out what should ship.
+
+An **exploratory artifact** — a prototype, mockup, brainstorm, or spike — exists to be reacted to and then deleted. It is exempt from the production bar: it may be untyped, unwired, hard-coded, styled by hand, and built from fake data. What it may never be is merged.
+
+| Rule | Detail |
+|------|--------|
+| Name it | Prototype, mockup, brainstorm, or spike. Never a "first pass" or "draft implementation" — those read as production code that is not finished yet, which is the thing this tier exists to avoid |
+| Where it lives | Multi-file exploration goes on a `proto/*` or `spike/*` branch that is never merged. A single-file mockup goes in a gitignored `prototypes/` directory |
+| How long it lives | Until the decision it exists to inform is recorded. Then it is deleted |
+| What survives it | The decision, not the artifact. Write it down before deleting |
+| What it cannot decide | An exploratory artifact never satisfies an ask-first rule. Four mockups built in React is not a decision to use Next.js — that question is still asked, and still answered by the user |
+| How it is reviewed | Code review does not apply the production checklist to an exploratory artifact. It checks three things: that the artifact is unmerged, that it is gitignored or on a throwaway branch, and that the decision it informed was recorded |
+
+Build several at once when the question is one of taste rather than fact. One mockup invites approval; three or four wildly different directions invite a reaction, and the reaction is the information.
+
 -----
 
 ## Directory Structure
@@ -95,6 +118,7 @@ The scaffolding process creates or integrates the following structure:
 ```
 project-folder/
 ├── docs/
+│   ├── unknowns.md            # What is still open — written by Step 2's unknowns pass
 │   ├── product-spec.md        # Product-level definition
 │   ├── development-plan.md    # Engineering plan based on product-spec
 │   ├── tech-spec.md           # Complete technical specification
@@ -102,10 +126,10 @@ project-folder/
 │   └── prompts/               # Prompt specs for building docs and skills
 │       ├── skills-builder.md
 │       ├── team-design.md
-│       ├── linear-tracking.md
+│       ├── tracker-setup.md
 │       ├── tech-spec.md
 │       └── readme-generator.md
-├── .claude/
+├── .claude/                   # One directory per tool the team chose in Step 1 (.claude/, .vibe/, .codex/)
 │   ├── agents/                # Project-specific agent team (from team-design step)
 │   └── skills/                # Invocable skills — best-practice set + agent skills + orchestrator
 │       ├── dev-standards/         # Core philosophy + workflow (from skills-builder)
@@ -118,8 +142,14 @@ project-folder/
 │       ├── testing-tdd/
 │       ├── deployment-ops/
 │       ├── debugging/
+│       ├── blind-spot-pass/
+│       ├── interviews/
+│       ├── implementation-notes/
+│       ├── change-quiz/
 │       └── {orchestrator}/        # + agent skills (from team-design step)
-├── MEMORY.md                  # Cross-session memory, coordinated with Linear (from linear-tracking step)
+├── .grovv/                    # Canonical definitions — only when more than one tool was chosen
+├── .gitignore                 # Ignore rules — includes the gitignored prototypes/ the throwaway tier requires
+├── MEMORY.md                  # Cross-session memory, coordinated with the tracker (from tracker-setup step)
 ├── settings.json              # Claude Code agent configuration
 └── README.md                  # Project README (generated last)
 ```
@@ -134,14 +164,17 @@ project-folder/
 | `docs/` | Primary docs folder, built out over time through scaffolding |
 | `docs/architecture/` | Architecture Decision Records documenting key technical choices |
 | `docs/prompts/` | Prompt specifications for generating project-specific documents and skills |
+| `docs/unknowns.md` | Living record of what is still open: starting point, blind spots, open questions, recognized constraints, decided defaults, deviations. Written by Step 2's unknowns pass, read at Steps 4 and 8 |
 | `docs/product-spec.md` | Product-level definition: what, who, why |
 | `docs/development-plan.md` | Engineering development plan derived from product-spec |
 | `docs/tech-spec.md` | Complete technical specification built from product-spec + development-plan |
 | `docs/prompts/team-design.md` | Prompt that designs the project-specific agent team and its skills (harness) |
-| `docs/prompts/linear-tracking.md` | Prompt that sets up Linear project tracking — seeds a project and issues from the development plan |
+| `docs/prompts/tracker-setup.md` | Prompt that sets up the project's issue tracker — asks for GitHub Issues or Linear, then seeds the backlog from the development plan |
 | `.claude/agents/` | Project-specific agent team generated by the team-design step (additive to grovv defaults) |
 | `.claude/skills/` | Invocable skills: the best-practice set from skills-builder, plus the agent team's skills and the orchestrator from team-design |
-| `MEMORY.md` | Cross-session memory — decisions, gotchas, in-flight state; coordinates with the Linear project (Linear owns the backlog) |
+| `.gitignore` | Ignore rules, including the gitignored `prototypes/` directory the throwaway tier's containment rule depends on |
+| `CLAUDE.md` / `VIBE.md` / `CODEX.md` | The project's context file, one per chosen tool — loaded at the start of every session in that project. Created as a stub at Step 1, which is where the tool choice is made; Step 7 registers the harness pointer in it and Step 8 appends the memory rules |
+| `MEMORY.md` | Cross-session memory — decisions, gotchas, in-flight state; coordinates with the project's tracker (the tracker owns the backlog) |
 | `settings.json` | Claude Code configuration |
 | `README.md` | Project README, generated or updated as the final step |
 
@@ -171,7 +204,44 @@ The adoption plan should clearly state:
 
 ### Step 1: Create Structure and Configuration
 
-Create directories and the `settings.json` configuration file.
+Create directories, the `settings.json` configuration file, and the project's `.gitignore` entries.
+
+**Which tool directories to create is a question, not an assumption.** The scaffolder runs from one CLI, but the project outlives the session that created it, and a teammate may open it from a different one. Generating only the running CLI's directory is how a project ends up usable from exactly one tool by accident rather than by choice. Ask before creating any of them; never infer the answer from which CLI happens to be running.
+
+Ask exactly this:
+
+> Which AI coding assistants will be used in this project? Pick every one your team works in — I will generate configuration for those and no others.
+>
+> 1. **Claude Code** — `.claude/`
+> 2. **Vibe** — `.vibe/`
+> 3. **Codex** — `.codex/`
+>
+> I am running from one of these already, so that one is a safe answer on its own. Adding another costs one directory and means a teammate on that tool can pick this project up with no migration. Leaving it out keeps the project smaller. Adding one later is possible but more work than adding it now, while the skills and agents are being generated.
+
+- Wait for an explicit answer. If the user says "whatever you think", name the CLI this session is running from, say that it is the only one you can confirm they have, and ask them to confirm — a stated default is still an answer they gave.
+- **One tool chosen** — create only that tool's directory. Do **not** create `.grovv/`. A single-tool project should not carry a canonical tree nobody will open.
+- **More than one chosen** — create `.grovv/` as the canonical definitions plus each chosen tool's directory derived from it, identical apart from the tool path prefix. State in the project's context file that `.grovv/` is the source of truth and the tool directories are derived from it, so a future editor changes the canonical copy rather than one derived copy.
+- State the answer back and carry it forward — Steps 6 and 7 write into the chosen directories, and Step 8 records it in the project's `MEMORY.md` so a later session does not re-ask. **Do not write it to `MEMORY.md` at this step:** that file does not exist until Step 8 creates it. This is the same carry-forward the verify commands below use, for the same reason.
+
+Derived copies drift silently — this repository keeps four in sync only because a CI check compares them. A target project that chose more than one tool has the same exposure and may want the same check. Do not generate one here; that is the verify-loop decision, and it belongs to the user.
+
+**Discover the commands that prove this project works.** This is not a question — it is a read, and it costs the user nothing. Every later step is better for knowing them, and the README step (Step 9) is wrong without them.
+
+For an existing project, read them from the project itself, stopping at the first source that yields commands:
+
+| Source | What to take |
+|--------|--------------|
+| An existing CI workflow | The commands its steps actually run — the most reliable source, because it is what the project already trusts |
+| `package.json` `scripts` | `test`, `lint`, `typecheck`, `build` — whichever exist, under their real names |
+| `Makefile` | Targets named `test`, `lint`, `check`, `build` |
+| `Taskfile.yml` / `justfile` | The same task names |
+| `go.mod` present | `go test ./...`, `go vet ./...`, and `golangci-lint run` if its config file is present |
+
+Where two sources disagree, prefer the CI workflow, then the task runner, then the manifest. Record which source each command came from — a command read from a stale `Makefile` is worth less than one read from a workflow that runs on every push.
+
+For a new project the stack is not chosen until Step 4, so nothing can be read here. Note that the commands are pending, and derive them at Step 4 from the stack that step selects.
+
+State the commands you found, and say plainly if you found none. **Do not write them to a file at this step** — the project's `MEMORY.md` does not exist until Step 8, which creates it. Carry them forward: Step 8 records them in that file's `Verify` table, and Step 9 uses them instead of guessing at a quick start. If nothing was found, they are carried forward as `@TODO`, because an empty table is a visible gap and a missing one is invisible.
 
 **Directories to create:**
 
@@ -181,7 +251,9 @@ docs/architecture/
 docs/prompts/
 ```
 
-The `.claude/skills/` directory is created later by the skills-builder step (Step 6) and the team-design step (Step 7). For existing projects, only create directories that don't already exist. If the project has an existing `docs/` folder, integrate into it rather than replacing it.
+The `skills/` directory inside each chosen tool directory is created later by the skills-builder step (Step 6) and the team-design step (Step 7). For existing projects, only create directories that don't already exist. If the project has an existing `docs/` folder, integrate into it rather than replacing it.
+
+**Create `docs/unknowns.md`** from the template in Step 2, with its sections present and empty. Step 2's unknowns pass fills it before the product spec is written, and Steps 4 and 8 read it. Creating the file here rather than there is deliberate: an empty section is a visible prompt to fill it, and a file that only exists when the pass ran cannot record that the pass was declined.
 
 **Create `settings.json`** in the project root:
 
@@ -195,9 +267,143 @@ The `.claude/skills/` directory is created later by the skills-builder step (Ste
 
 For existing projects that already have a `settings.json`, merge the `env` block into the existing file.
 
+**Create or append to `.gitignore`** in the project root. Without this the throwaway tier's containment rule has nothing enforcing it — mockups built in `prototypes/` are tracked, committable, and code review's containment check can never pass. Add an exploratory-artifacts section:
+
+```gitignore
+# Exploratory artifacts — prototypes, mockups, brainstorms and spikes are
+# throwaway by definition and are never committed. Multi-file exploration
+# belongs on an unmerged proto/* or spike/* branch instead.
+prototypes/
+```
+
+For existing projects, append this section rather than replacing the file, and skip it if `prototypes/` is already ignored.
+
+**Create the project's context file** — one per chosen tool: `CLAUDE.md` for Claude Code, `VIBE.md` for Vibe, `CODEX.md` for Codex. This step owns its creation because this step is where the tool choice is made, and because three later instructions write into it and none of them creates it: Step 7 registers the harness pointer, Step 8 appends the memory rules, and the tool-directory answer above states which tree is canonical. A file three steps write to and no step creates is a file that either silently loses those writes or gets invented by whichever agent notices first.
+
+At this step it is a stub, not a finished document. It carries only what is already known:
+
+- The project name and one sentence about what it is.
+- Where canonical definitions live, if more than one tool was chosen — the statement from the tool-directory answer above.
+- The document conventions, including the wordmark's **two forms in a two-row table** (see Branding and Document Style below).
+- A `@TODO` for everything the later steps fill in.
+
+For existing projects with a context file already present, append to it and never replace it — the standing rule against overwriting working code covers a context file exactly as it covers source.
+
 ### Step 2: Product Spec
 
 Create `docs/product-spec.md`. This is the foundation — everything downstream traces back to it.
+
+#### Before writing: the unknowns pass
+
+The product spec is where guesses become permanent. Everything after it — the development plan, the tech spec, ten generated skills, an agent team, a seeded backlog — is a derivative, so a wrong assumption here is discovered four layers deep and costs a rewrite of all four. This pass is the cheapest available way to find out what nobody has said yet, and it runs before the first spec line rather than as an audit afterwards.
+
+It has no step number of its own deliberately. It is not a separable phase producing its own artifact — it is how this step starts.
+
+**Ask about the person first.** Four questions, asked once, that the thirteen intake questions above never cover. They calibrate everything after: whether this pass should teach, challenge, or get out of the way.
+
+1. Have you built this kind of thing before? If so, what did you learn that you would not want to repeat?
+2. How well do you know this codebase or this domain — intimately, partially, or not at all?
+3. Where are you in your own thinking: exploring what to build, deciding between approaches, or executing a decision you have already made?
+4. What is the part of this you are least sure about?
+
+The fourth is the interview seed. Record the answers in `docs/unknowns.md` in the user's own words — this is calibration data, not a summary to be tidied.
+
+**Then a blind spot pass.** A research turn, not a question turn — asking someone to name what they have not considered does not work.
+
+**Say where the findings came from.** A pass grounded in documents the user supplied, or in a live search, is worth more than one drawn from the model's own knowledge of the category, and the reader cannot tell the difference unless it is stated. Name the source. Where no search was available and nothing was supplied, say that plainly — a list built from parametric knowledge is still useful, and passing it off as research is what makes it dangerous. Ask for anything the user already has before reasoning about what they might; discovery notes, decks, recordings and competitor material all beat inference, and the references technique exists for exactly this. For a new project, find out what is known about this problem domain, what its common failure modes are, what "good" looks like in this category, and what projects of this shape usually need that the user has not mentioned. For an existing project this is materially stronger, because there is real code to read: report what the code does that the user did not describe, where conventions are inconsistent, which subsystems are load-bearing and undocumented, and what a newcomer would get wrong. End by naming what you believe their blind spots are, in their own domain vocabulary, and asking whether the list is right.
+
+**Then interview, one question at a time.** Never batched. Prioritize by whether the answer would change the architecture — a question whose answer changes nothing can wait, and a question whose answer changes the data model cannot.
+
+The technology stack is one of these questions, and it is asked rather than assumed. The gro\\/\\/ stack defaults exist and are good, but a default nobody was told about is indistinguishable from a decision nobody made. State the default, name the two or three places it is most likely to be wrong for *this* project, and ask. A stated default the user accepts is still an answer they gave; a silent one is not.
+
+**Where a question cannot be answered in the abstract, build something to react to.** Visual direction is the canonical case, and the instrument is the throwaway tier: several deliberately different directions, fake data, nothing wired up, deleted once the reaction is recorded. Include at least one direction that departs from the monochrome default, so the default becomes a choice rather than an inheritance. The reactions go into `docs/unknowns.md` in the user's words — those entries are the ones no later session can re-derive from any other document.
+
+The throwaway tier's rules govern these artifacts in full, and one of them decides the question most likely to be misread here: **an exploratory artifact never answers an ask-first rule.** Prototypes at this step are framework-free HTML. Building four of them does not choose a frontend framework and must never be read as having chosen one — that question is still asked, at the point frontend code is first written, and still answered by the user.
+
+**When it stops.** An unknowns pass is exactly the kind of work that runs forever, so the bounds are explicit:
+
+- The interview stops when the architecture-changing questions are exhausted, or after eight questions, or **when the user stops answering** — whichever comes first. What remains is written down as open, not asked. The third condition is the one that fires most often in practice, and it is not a failure: a question the user did not answer is recorded open, never answered on their behalf, and never quietly defaulted. Record it as *unanswered*, and only as *declined* if they actually declined — those are different facts and a later reader will act on them differently.
+- **A question that went unanswered may never have arrived.** Before recording one as unanswered, put it again, plainly, in the body of your next message. Chat interfaces drop things, and "the user refused to decide" is a serious claim to enter into a durable record on the strength of a silence.
+- The prototype limb runs one round. A second round happens only if the user asks for it.
+- The blind spot pass is one research turn producing one list.
+- The pass ends with a handoff: summarize what changed in your understanding, name what is still open, and ask for confirmation before writing the product spec.
+- **It can be declined.** A user who says "skip this" gets it skipped, with one line in `docs/unknowns.md` recording that it was skipped and by whose choice. Propose skipping it yourself when the intake describes something small and well-understood. A step that cannot be declined gets worked around instead of declined.
+
+**What it writes.** `docs/unknowns.md`, and the throwaway prototypes. Not the product spec — that is the rest of this step, and this pass informs it rather than pre-empting it.
+
+`docs/unknowns.md` is read again at Step 4, where the recorded decisions and defaults are restated in the tech spec as explicit choices with their reasons and accepted consequences, and at Step 8, where an open question that still blocks something becomes a tracker issue. Whoever closes an entry deletes it in the same edit, moving anything durable into the document that now owns it. Keep it under ~150 lines; history lives in git.
+
+```markdown
+# Unknowns: [Project Name]
+
+> Living document. Written at Step 2, read at Steps 4 and 8, appended to during
+> implementation. Pruned by whoever closes an entry.
+
+## Starting Point
+
+[The user's own answers about prior experience, familiarity, and where they are
+in their thinking. Verbatim where possible — this is calibration data.]
+
+## Blind Spots Identified
+
+| # | Blind spot | How it surfaced | Status |
+|---|-----------|-----------------|--------|
+| B1 | [What the user did not know they did not know] | Blind spot pass / interview / reaction | Open / Closed / Accepted |
+
+## Open Questions
+
+| # | Question | Why it matters | Blocks | Status |
+|---|----------|----------------|--------|--------|
+| Q1 | [In the user's vocabulary] | [What changes depending on the answer] | [Spec section, or nothing yet] | Open / Answered |
+
+## Decisions
+
+[Questions the user was asked and answered. Not the same as Decided Defaults
+below: that section is for a gro\/\/ stack default they accepted, this one is
+for a question they actively settled. Record the consequence they accepted
+beside the answer — the consequence is what a later session needs and what
+nobody remembers.]
+
+| # | Question | Answer | Consequence accepted |
+|---|----------|--------|---------------------|
+
+## Recognized Constraints
+
+[Surfaced by reaction to a prototype, or read from material the user supplied.
+Record their own words and what they were reacting to, or the document and page
+a fact came from. These cannot be re-derived from any other document.]
+
+| # | Constraint | Surfaced by | Confidence |
+|---|-----------|-------------|------------|
+
+## Prototype Directions
+
+| Direction | File | Reaction | Carried into spec |
+|-----------|------|----------|-------------------|
+
+## Decided Defaults
+
+[Every place a gro\/\/ stack default was stated and accepted rather than chosen.
+One line each. This is what makes a wrong default visible later.]
+
+## Deviations
+
+[Appended during implementation: what forced a departure from the plan, which
+conservative option was taken, and which section above it invalidates. Where a
+deviation contradicts docs/, the spec is what gets revisited — the opposite of
+the MEMORY.md rule, deliberately. That file records session state and yields to
+docs/; this one records that docs/ was incomplete.]
+
+| Date | Deviation | Conservative choice made | Invalidates |
+|------|-----------|--------------------------|-------------|
+
+-----
+gro\/\/ stack — Unknowns
+```
+
+The techniques in this pass — the blind spot pass, one-question-at-a-time interviews, reacting to prototypes rather than specifying, and implementation notes — are adapted from Thariq Shihipar's field guide to finding your unknowns (Anthropic, 2026).
+
+#### Writing the spec
 
 **Before writing, the agent should ask the user:**
 
@@ -271,7 +477,9 @@ Every feature should trace back to the product spec.
 
 Create `docs/tech-spec.md`. This is the comprehensive technical document built from both product-spec and development-plan.
 
-**The agent should ask (if not already clear):**
+**Read `docs/unknowns.md` first.** Its Decided Defaults section lists every place a gro\\/\\/ stack default was stated and accepted rather than actively chosen; restate each one here as an explicit choice with the reason, so the tech spec records a decision instead of an inheritance. Its Decisions section lists what the user actively settled during the pass, with the consequence they accepted — carry both the answer and the consequence into this document rather than re-deriving the answer and losing the reason. Open questions that still block a section of this document get asked before that section is written, not flagged after; a section whose blocking question is unanswered is written up to the boundary and stopped there, with the gap named.
+
+**The agent should ask about each of these:**
 
 - What is the preferred technology stack? Or should the agent recommend one?
 - What database provider? (Neon, Supabase, self-hosted)
@@ -279,6 +487,10 @@ Create `docs/tech-spec.md`. This is the comprehensive technical document built f
 - Are there background jobs or event-driven requirements?
 - What is the deployment target? (Vercel, Docker, sprites.dev)
 - What are the observability requirements?
+
+State the gro\\/\\/ stack default alongside each question rather than applying it silently. "If not already clear" is not the test — the Core Technology Stack Reference below always makes it clear, so a conditional ask is an ask that never happens, and the project inherits Clerk, Neon, Stripe, Lago, PostHog and Vercel without anyone having weighed them. Name the default, say where it is most likely to be a poor fit for this project, and let the user confirm or override. Record what they accepted in `docs/unknowns.md` under Decided Defaults.
+
+**For a new project, this is also where the verify commands become knowable.** Step 1 could not read them because the stack did not exist yet. Derive them from the stack chosen here — the project's test runner, typechecker, linter and build — and carry them forward to Step 8's `MEMORY.md` Verify table.
 
 **For existing projects:** The tech spec documents the current architecture and the target architecture. If the project needs to evolve from its current state, include a migration path.
 
@@ -328,8 +540,8 @@ Generates the target project's **invocable skills** — a set of development bes
 
 | Skill | Covers |
 |-------|--------|
-| `dev-standards` | Core philosophy, the dev workflow (red-green-refactor), the code-quality bar, when to reach for the other skills |
-| `architecture-planning` | System design, data modeling, API contracts, background-job patterns, the pre-dev checklist, ADRs |
+| `dev-standards` | Core philosophy, the dev workflow (red-green-refactor), the code-quality bar, using source code as a reference, packaging a change for review and buy-in, when to reach for the other skills |
+| `architecture-planning` | System design, data modeling, API contracts, background-job patterns, the pre-dev checklist, brainstorming and throwaway prototypes, implementation plans ordered by what is most likely to change, ADRs |
 | `frontend-development` | Framework patterns (Astro + React or Next.js), hydration, type-safe components, forms, accessibility |
 | `ui-standards` | Tailwind CSS + shadcn/ui, Alexandria font, monochrome palette, component examples |
 | `backend-development` | API standards, service/repository patterns, background jobs, webhooks, email/Stripe/Lago integrations |
@@ -338,14 +550,19 @@ Generates the target project's **invocable skills** — a set of development bes
 | `testing-tdd` | TDD workflow, Vitest, `go test`, integration tests, Playwright E2E (ask-first), CI |
 | `deployment-ops` | Docker, CI/CD, environment management, health checks, PostHog observability, backups |
 | `debugging` | Debugging methodology, profiling, error tracking, production debugging, emergency procedures |
+| `blind-spot-pass` | Pre-work reconnaissance in an unfamiliar module or domain; establishing the user's starting point, then naming what they have not considered |
+| `interviews` | One-question-at-a-time elicitation, ordered by architectural leverage, with a stopping rule |
+| `implementation-notes` | The working notes file, the Deviations log, and the conservative-default rule for a forced departure from the plan |
+| `change-quiz` | A change report plus a quiz on the parts a reader could get wrong; advisory by default |
 
 **For existing projects:** Customize each skill to the project's actual stack and patterns — Next.js instead of Astro, the real auth provider, established conventions. The skills are a reference for *this* project, not a generic template. Extend existing skills rather than overwriting them.
 
 **Content requirements:**
 
 - Each skill is invocable: valid frontmatter (`name` matching the folder, a pushy trigger-rich `description`), a body under 500 lines, with depth pushed to `references/`
-- Technology agnostic but primarily TypeScript and Go; PostgreSQL/SQLite via Neon or Supabase; Node.js (LTS); Clerk for identity; Astro + React or Next.js with shadcn/ui and Tailwind; Resend or Plunk for email (Amazon SES only if regulatory/volume requires it); Stripe for payments; Lago for usage metering; PostHog for observability
-- All code examples complete, typed, and production-ready (not pseudo-code), with error handling and security built in; anti-patterns shown alongside correct patterns
+- Technology agnostic, defaulting to the Core Technology Stack Reference below — read it there rather than restating it here, so there is one copy to keep current
+- All code examples complete, typed, and production-ready (not pseudo-code), with error handling and security built in; anti-patterns shown alongside correct patterns. This governs generated code and documentation; exploratory artifacts in the throwaway tier are exempt by definition
+- The throwaway tier is stated wherever a generated skill would otherwise imply that everything built must clear the production bar — in `dev-standards` above all, and in `ui-standards`, `frontend-development`, `architecture-planning`, and `testing-tdd` where they touch exploration. Keep the wording consistent with the tier as stated above rather than inventing a second rule set
 - The frontend-framework ask-first rule lives in `frontend-development` / `ui-standards`; the Playwright ask-first rule lives in `testing-tdd`
 - Reference the project's `docs/tech-spec.md` for project-specific customization
 
@@ -355,9 +572,9 @@ See `docs/prompts/skills-builder.md` for the full authoring rules and deliverabl
 
 Instructions for designing the project-specific **agent team and the skills they use** (the harness step). Adapts the vendored harness meta-skill (`.claude/skills/harness/`) to grovv conventions. It is executed in Step 7, after the skills repository exists, and is additive to grovv's six default agents — it generates only the specialists the domain actually needs. See the prompt for the full phase workflow, the six architecture patterns, and the deliverable checklist.
 
-#### `docs/prompts/linear-tracking.md`
+#### `docs/prompts/tracker-setup.md`
 
-Instructions for setting up **Linear** project tracking — the gro\\/\\/ stack default for issue and project tracking — and the project's **`MEMORY.md`** cross-session memory. Executed in Step 8 via the Linear MCP server: it creates (or reuses) a Linear project for the codebase, seeds milestones and issues from `docs/development-plan.md` and `docs/tech-spec.md`, and creates the root `MEMORY.md` (plus its `CLAUDE.md` rules and `SessionStart` hook) that coordinates with the Linear project. It is ask-first — confirm the team and the proposed issue list before bulk-creating, and never duplicate existing issues. See the prompt for the workflow and deliverable checklist.
+Instructions for setting up the project's **issue tracker** and its **`MEMORY.md`** cross-session memory. Executed in Step 8. It opens by asking which tracker the project should use — **GitHub Issues** (the recommended default, since it lives in the same repo as the code) or **Linear** (via the Linear MCP, for multi-repo or cross-team backlogs) — then creates or reuses that backlog, seeds milestones and issues from `docs/development-plan.md` and `docs/tech-spec.md`, and creates the root `MEMORY.md` (plus its `CLAUDE.md` rules and `SessionStart` hook) that coordinates with the chosen tracker. It is ask-first — confirm the tracker and the proposed issue list before bulk-creating, and never duplicate existing issues. See the prompt for both paths, the workflow, and the deliverable checklist.
 
 #### `docs/prompts/tech-spec.md`
 
@@ -373,10 +590,38 @@ Read and execute `docs/prompts/skills-builder.md` to populate `.claude/skills/` 
 
 **Expected output:**
 
-- ~10 invocable skills (the baseline set), each a `.claude/skills/{name}/SKILL.md` with valid frontmatter
+- ~14 invocable skills (the baseline set), each a `.claude/skills/{name}/SKILL.md` with valid frontmatter
+- **Verify every skill folder actually contains a `SKILL.md` before reporting this step complete.** A skill generated as `references/` with no `SKILL.md` is invisible: the folder exists, the depth is there, and the skill will never load or trigger. Count the folders, count the `SKILL.md` files, and if they differ say which folders are short rather than reporting a number that was never checked. Nothing else in the pipeline reads these files, so nothing else will notice
+- **A missing `SKILL.md` may mean unfinished rather than failed.** Where skills are generated concurrently, a folder often appears when its first `references/` file lands, well before its `SKILL.md`. Confirm generation has actually finished before concluding anything is missing — an absence observed mid-flight is not evidence of a defect, and reporting it as one puts a false claim into the record
+- **Keep each skill's `description` short enough to survive.** It is the only trigger mechanism a skill has: if it is truncated or rejected, the skill silently never loads. Prefer a few hundred characters of literal trigger phrases over a thousand characters of prose, and put the explanation in the body where there is room for it
+- **When tool directories are derived from `.grovv/`, re-mirror after generation settles and verify it.** `.grovv/` is canonical but `.claude/` and `.codex/` are what the tools load. A mirror taken while generation is still running leaves the loadable copy stale, and every later audit reads the copy that does not run
 - Production-ready, typed code examples with security built in; anti-patterns alongside correct patterns
 - Lean bodies (under 500 lines) with depth in `references/`
 - Ask-first rules embedded where relevant (frontend framework, Playwright)
+- The throwaway tier stated in `dev-standards` and in every other skill that would otherwise imply everything built must clear the production bar
+
+**Then ask how much continuous integration this project should have.** Step 1 discovered the commands that prove the project works; this is where they become a signal somebody sees. By now the tech spec names the stack and the skills-builder step is already writing configuration, so the question can name the project's real commands rather than a generic list.
+
+Ask exactly this, substituting the commands Step 1 found:
+
+> This project has no continuous integration. I can add a workflow that runs your checks on every push and pull request, so a break is caught before review rather than after merge.
+>
+> 1. **Everything** — test, typecheck, lint, and build. The strongest signal; also the slowest, and the most likely to need tuning in the first week.
+> 2. **Minimal** — tests only. Catches the failures that matter most, stays fast, and is the easiest to keep green. A good starting point if linting is not yet settled.
+> 3. **Pick them** — I list the checks I found and you choose. Right when some of these are not ready to gate a merge yet.
+> 4. **None** — no workflow. Correct for a spike, a project whose CI lives somewhere I cannot see, or a team that will wire this up themselves.
+>
+> I found these commands in this project: [list them with their sources]. If any is wrong, say so — a wrong command is worse than no workflow.
+
+- **Wait for an explicit answer.** "Whatever you think" is not an answer. Name the recommendation for *this* project, say what would change it, and ask them to confirm — a stated default is still an answer they gave.
+- **Never generate a check the project cannot run.** Only commands recorded at Step 1 may appear in the workflow. A workflow that runs `npm run lint` in a project with no lint script fails on its first run and teaches the team to ignore red builds.
+- **Declining is a successful outcome, not a skipped step.** On "None", carry one line forward to `MEMORY.md`'s Verify table at Step 8 recording that CI was offered, declined, and why. That line is what makes a wrong decline visible to a human later.
+- **If the project already has CI, this is a proposal, not a question.** State what exists, state what would change, and generate nothing until the user approves. The standing rule against overwriting working code covers a workflow file exactly as it covers source.
+- **A generated workflow never contains a Playwright or E2E job.** "Everything" means everything among the commands Step 1 recorded, and E2E is not one of them. Generating an E2E job asserts that end-to-end tests exist and should gate merges — a scope decision only the user makes, and the Playwright ask-first rule is not answered by a workflow file. Where E2E tests already exist with CI that runs them, adopt mode preserves that; where they exist without CI, the job is offered as its own separate question.
+
+`docs/prompts/skills-builder.md` carries the generation rules — which checks are available per stack, the workflow's shape, and the adopt-mode proposal path.
+
+**On a second run, this step reconciles rather than regenerates.** `skills-builder.md`'s `## Re-entry` section is the contract: audit what exists, give each generated skill a verdict against the current `docs/tech-spec.md`, report before writing, and never overwrite a hand edit. A run that changes nothing and returns a list of questions has succeeded.
 
 ### Step 7: Design the Agent Team (Harness)
 
@@ -393,15 +638,19 @@ Read and execute `docs/prompts/team-design.md` to design the project-specific ag
 
 **Ask-first rules are preserved:** never pick the frontend framework here (inherit the earlier choice), and never auto-generate Playwright flows. Nothing is written to `.claude/commands/`.
 
-### Step 8: Set Up Project Tracking (Linear) and Cross-Session Memory
+**On a second run, this step reconciles rather than regenerates.** `team-design.md`'s `## Re-entry` section is the contract, and it is the grovv side of harness Phase 0 rather than a competing procedure: each project-specific agent is re-argued against the current spec, the six defaults are exempt from removal, and the target `CLAUDE.md` gets a dated change-log row rather than a second harness pointer.
 
-Read and execute `docs/prompts/linear-tracking.md` to stand up Linear project tracking and the project's cross-session memory. By now the development plan, tech spec, and agent team all exist, so the work can be seeded into a live backlog.
+### Step 8: Set Up Project Tracking and Cross-Session Memory
 
-This step uses the **Linear MCP server** to create or reuse a Linear project for the codebase, mirror the development plan's phases as milestones, and seed issues from the plan's features and the tech spec's components.
+Read and execute `docs/prompts/tracker-setup.md` to stand up the project's issue tracker and its cross-session memory. By now the development plan, tech spec, and agent team all exist, so the work can be seeded into a live backlog.
 
-It also creates **`MEMORY.md`** in the project root — the durable cross-session memory that coordinates with the Linear project. The division of responsibility: **Linear owns the backlog** (tasks, priorities, status); **`MEMORY.md` owns session context** (decisions, gotchas, in-flight state, referencing Linear issues by identifier). The step wires up maintenance so the file is actually used: memory rules in the project's `CLAUDE.md` (read at session start, update before ending) and a `SessionStart` hook merged into `.claude/settings.json` that surfaces the file automatically.
+**Ask which tracker first.** The step opens with an explicit question — **GitHub Issues** (recommended: it lives in the same repo as the code, so issues, branches, and PRs cross-link with no extra service) or **Linear** (worth choosing for multi-repo work, cross-team initiatives, or a backlog shared with people who do not live in GitHub). Never infer the answer from a `.git` remote or an available MCP connection, and create nothing until the user has answered. GitHub Issues runs through `gh` (or the GitHub MCP server as a fallback); Linear runs through the Linear MCP server.
 
-**It is ask-first and external:** confirm the target team and present the proposed project name, milestones, and issue list before creating anything; never duplicate existing issues; reuse an existing project when one already maps to the codebase. If the Linear MCP is unavailable, skip the Linear portion with an `@TODO` in `docs/development-plan.md` and tell the user how to connect Linear — but still create `MEMORY.md` with its Linear table marked `@TODO`. Standing ask-first rules (frontend framework, Playwright) are not pre-empted by any issue or memory entry.
+Either way the step mirrors the development plan's phases as milestones and seeds issues from the plan's features and the tech spec's components. It also reads `docs/unknowns.md`: any question still open and still blocking becomes a tracker issue, so it is owned by someone rather than sitting in a file. `MEMORY.md` gets a one-line pointer to that file, never a copy of it.
+
+It also creates **`MEMORY.md`** in the project root — the durable cross-session memory that coordinates with the chosen tracker. The division of responsibility: **the tracker owns the backlog** (tasks, priorities, status); **`MEMORY.md` owns session context** (decisions, gotchas, in-flight state, referencing issues by the tracker's reference format). The step wires up maintenance so the file is actually used: memory rules in the project's `CLAUDE.md` (read at session start, update before ending) and a `SessionStart` hook merged into `.claude/settings.json` that surfaces the file automatically.
+
+**It is ask-first and external:** present the proposed milestones and issue list before creating anything; never duplicate existing issues; reuse an existing project or label taxonomy when one already maps to the codebase. If the required tooling is unavailable, skip that path with an `@TODO` in `docs/development-plan.md` and tell the user what unblocks it — but still create `MEMORY.md` with its Tracker Coordination table marked `@TODO`. Standing ask-first rules (frontend framework, Playwright) are not pre-empted by any issue or memory entry.
 
 ### Step 9: Generate README
 
@@ -460,7 +709,7 @@ Stack-agnostic scaffolding, optimized for this default stack. Adapt per project.
 | **Payments** | Stripe | Subscriptions, one-time payments, invoicing |
 | **Usage Tracking** | Lago | Metering and usage-based billing |
 | **Observability** | PostHog | Analytics and monitoring |
-| **Project Tracking** | Linear | Issue and project tracking (via Linear MCP) |
+| **Project Tracking** | GitHub Issues (recommended) or Linear | Issue and project tracking — chosen per project |
 | **Deployment** | Vercel, Docker | Production hosting |
 | **Dev Environment** | VS Code, sprites.dev | Local and cloud IDE |
 
@@ -499,6 +748,8 @@ gro\/\/ stack — my-saas-app
 
 **Escaping the wordmark.** The footer normally sits in Markdown prose, not a code block. In prose, double the backslashes — `gro\\/\\/ stack — …` — so it renders as the gro\\/\\/ wordmark rather than gro//. The fenced examples above use the single-backslash `gro\/\/` form because backslashes are already literal inside code blocks.
 
+**When restating this rule in a generated project, give both forms in a table.** A one-line restatement is how the rule gets corrupted: it names a single form, that form is wrong for the context the next agent writes in, and because the wrong form sits inside an inline code span a checker will not flag it. This repo's own convention statements were wrong in exactly this way twice. The target's context file gets the two-row table — prose form and fenced form, labelled — never a single example.
+
 ### Document Conventions
 
 - `-----` (five dashes) for horizontal rules
@@ -527,7 +778,7 @@ Project READMEs generated through grovv stack should include:
 
 Every document generated through this scaffolding follows:
 
-- **Production-first** — Production readiness is the default, not aspirational
+- **Production-first** — Production readiness is the default for everything that ships, not aspirational. Exploratory artifacts (prototypes, mockups, spikes) are explicitly exempt and are never merged. See the Throwaway Tier.
 - **Zero data loss** — Transactional integrity in every data operation
 - **Security by default** — Auth, validation, and secure patterns in every layer
 - **Test-driven development** — Critical tests first, comprehensive coverage
@@ -543,7 +794,7 @@ When an AI agent reads this document, it should:
 1. **Determine if this is a new or existing project.** If existing, start with Step 0 (assess the codebase) and propose an adoption plan before generating anything.
 2. **Ask questions first.** Understand the product, the user, the constraints, and the stack before generating files.
 3. **Create the directory structure and `settings.json`.** For existing projects, integrate rather than overwrite.
-4. **Work through Steps 2-9 sequentially**, pausing to confirm direction as needed. Step 7 designs the project-specific agent team (harness) after the skills repository exists; Step 8 sets up Linear project tracking from the development plan and the cross-session `MEMORY.md` that coordinates with it.
+4. **Work through Steps 2-9 sequentially**, pausing to confirm direction as needed. Step 7 designs the project-specific agent team (harness) after the skills repository exists; Step 8 asks which tracker to use — GitHub Issues or Linear — then seeds that backlog from the development plan and creates the cross-session `MEMORY.md` that coordinates with it.
 5. **Mark unknowns with `@TODO`** and revisit them as the conversation progresses.
 6. **Apply gro\\/\\/ stack branding** — footers, naming conventions, and document style to all generated files.
 7. **Iterate.** Documents are living artifacts. Revise as understanding deepens.
@@ -558,19 +809,23 @@ Scaffolding is complete when:
 
 - [ ] Directory structure matches the specification (integrated with existing project if applicable)
 - [ ] `settings.json` exists with correct configuration
+- [ ] `docs/unknowns.md` exists, and either records the unknowns pass — starting point, blind spots, open questions, decided defaults — or records that the pass was declined and by whose choice
+- [ ] Every stack default the project accepted was stated and confirmed rather than applied silently, and is listed under Decided Defaults
 - [ ] `docs/product-spec.md` clearly defines the product
 - [ ] `docs/development-plan.md` provides an actionable engineering plan
 - [ ] `docs/tech-spec.md` is comprehensive and traceable to product spec
-- [ ] `docs/prompts/` contains all five prompt documents (skills-builder, team-design, linear-tracking, tech-spec, readme-generator)
+- [ ] `docs/prompts/` contains all five prompt documents (skills-builder, team-design, tracker-setup, tech-spec, readme-generator)
 - [ ] `.claude/skills/` is populated with the invocable baseline best-practice skills (each a `SKILL.md` with valid frontmatter)
 - [ ] `.claude/agents/` and `.claude/skills/` also hold the project-specific agent team, its skills, and the orchestrator (grovv defaults intact)
-- [ ] Linear project tracking is set up (project + milestones + issues seeded from the development plan), or skipped with an `@TODO` if the Linear MCP is unavailable
-- [ ] `MEMORY.md` exists in the project root with the Linear Coordination table, memory rules are in the project's `CLAUDE.md`, and the `SessionStart` hook is merged into `.claude/settings.json`
+- [ ] Tracker choice put to the user explicitly, and project tracking is set up in the chosen tracker (backlog + milestones + issues seeded from the development plan), or skipped with an `@TODO` if the required tooling is unavailable
+- [ ] `MEMORY.md` exists in the project root with the Tracker Coordination table, memory rules are in the project's `CLAUDE.md`, and the `SessionStart` hook is merged into `.claude/settings.json`
+- [ ] `MEMORY.md`'s Verify table holds the commands that prove the project works, and the CI question was put to the user explicitly — a workflow generated from exactly those commands, or CI declined with the reason recorded
 - [ ] `docs/architecture/` exists for future ADRs
 - [ ] Root `README.md` reflects the actual project
 - [ ] All documents carry gro\\/\\/ stack branding and style
 - [ ] All documents follow the established principles
 - [ ] (Existing projects) Adoption plan was reviewed and approved before changes were made
+- [ ] (Resume runs) Steps 6 and 7 reconciled their existing output against the current tech spec and reported before writing — a run that changed nothing and returned questions is complete, not failed
 
 -----
 gro\\/\\/ stack scaffold

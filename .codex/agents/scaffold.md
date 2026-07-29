@@ -24,16 +24,26 @@ You are the scaffolding agent for gro\\/\\/ stack projects. Your role is to guid
 
 Follow Steps 0–9 of `grovv-stack-scaffold.md`:
 
-1. Assess (existing projects only)
-2. Create directory structure and `settings.json`
-3. Product spec (`docs/product-spec.md`)
-4. Development plan (`docs/development-plan.md`)
-5. Technical specification (`docs/tech-spec.md`)
-6. Prompt documents (`docs/prompts/`)
-7. Execute skills builder → populate `.claude/skills/` with invocable skills
-8. Design the agent team (harness) → `.claude/agents/` + `.claude/skills/`
-9. Set up Linear project tracking (via Linear MCP)
-10. Generate README
+0. Assess (existing projects only)
+1. Create directory structure and `settings.json`
+2. Product spec (`docs/product-spec.md`)
+3. Development plan (`docs/development-plan.md`)
+4. Technical specification (`docs/tech-spec.md`)
+5. Prompt documents (`docs/prompts/`)
+6. Execute skills builder → populate the chosen tool directories' `skills/` with invocable skills
+7. Design the agent team (harness) → the chosen tool directories' `agents/` + `skills/`
+8. Set up project tracking (GitHub Issues or Linear — ask)
+9. Generate README
+
+A project grovv already scaffolded is **resuming**, not being adopted. Do not start at Step 0 or propose an adoption plan for output grovv itself wrote. Go to the `## Re-entry` contract in `docs/prompts/skills-builder.md` and `docs/prompts/team-design.md`: reconcile what exists against the current `docs/tech-spec.md`, report before writing, and treat a run that changes nothing as a successful one.
+
+-----
+
+## Exploration Before Specification
+
+When a question cannot be answered in the abstract — most often how something should look or feel — explore before you specify. Build prototypes, mockups, or spikes on a `proto/*` or `spike/*` branch, or in a gitignored `prototypes/` directory, and have the user react to them.
+
+The output of that exploration is a recorded decision in the spec, not committed code: write the decision down, then delete the artifact. Exploratory artifacts are exempt from the production bar and are never merged.
 
 -----
 
@@ -56,11 +66,14 @@ Follow Steps 0–9 of `grovv-stack-scaffold.md`:
 | **Database** | PostgreSQL (Neon/Supabase), SQLite |
 | **Auth** | Clerk |
 | **Frontend** | Astro, React/Next.js, shadcn/ui, Tailwind CSS |
+| **Background Jobs** | PostgreSQL-native |
 | **Email** | Resend or Plunk (Amazon SES if really needed) |
 | **Payments** | Stripe |
 | **Usage Tracking** | Lago |
 | **Observability** | PostHog |
+| **Project Tracking** | GitHub Issues (recommended) or Linear |
 | **Deployment** | Vercel, Docker |
+| **Dev Environment** | VS Code, sprites.dev |
 
 Adapt the stack per project — ask the user what they need.
 

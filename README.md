@@ -9,7 +9,7 @@
  ╚═════╝ ╚═╝  ╚═╝ ╚═════╝   ╚═══╝    ╚═══╝
 ```
 
-**gro\/\/ stack** — Production-First Project Scaffolding
+**gro\\/\\/ stack** — Production-First Project Scaffolding
 
 A prompt-driven scaffolding system that an AI agent uses to generate production-ready codebases (new projects) or layer documentation, skills, conventions, and an agent team onto existing ones. It is conversation-driven and ask-first: it understands the product, users, constraints, and stack before generating anything.
 
@@ -32,8 +32,9 @@ This repository is **not an application**. Its output is documents, configuratio
 | Feature | Description |
 |---------|-------------|
 | **Multi-Tool Support** | Works with Claude Code, Vibe, and Codex |
-| **Production-First** | Generates production-ready code with built-in best practices |
+| **Production-First** | Everything that ships is production-ready from the start. Exploratory artifacts are exempt, and never ship |
 | **Conversation-Driven** | Asks questions to understand your project before generating |
+| **Throwaway Tier** | Prototypes, mockups, brainstorms and spikes on unmerged `proto/*` branches — exempt from the production bar, deleted once they have informed a decision |
 | **Agent Team** | Creates a team of specialized agents for your project |
 | **Invocable Skills** | Generates best-practice skills for common tasks |
 | **Linear Integration** | Seeds Linear project and issues from development plan |
@@ -80,6 +81,75 @@ Working from a clone of this repo (without installing) also works: the agents an
 
 -----
 
+## How a run works
+
+Ten steps, run once, in order. Rectangles are what the agent produces; hexagons are where it stops and asks you. It does not proceed past a hexagon on an assumption — a recommendation is a starting position, not an answer.
+
+```mermaid
+flowchart TD
+    K["/grovv &nbsp; or &nbsp; 'build out this project'"] --> D{"Existing code, or<br/>a populated docs/?"}
+
+    D -->|yes| S0["Step 0 &middot; Assess<br/><i>read the codebase, map it, find gaps</i>"]
+    D -->|no| S1
+
+    S0 --> G0{{"You approve the<br/>adoption plan"}}
+    G0 --> S1["Step 1 &middot; Structure<br/><i>directories, settings.json, .gitignore</i>"]
+
+    S1 --> G1{{"Which AI assistants<br/>does your team use?"}}
+    G1 --> S2["Step 2 &middot; Product spec<br/><i>docs/product-spec.md</i>"]
+
+    S2 --> S3["Step 3 &middot; Development plan<br/><i>docs/development-plan.md</i>"]
+    S3 --> S4["Step 4 &middot; Tech spec<br/><i>docs/tech-spec.md</i>"]
+
+    S4 --> G2{{"Astro + React<br/>or Next.js?"}}
+    G2 --> S5["Step 5 &middot; Prompt docs<br/><i>docs/prompts/</i>"]
+
+    S5 --> S6["Step 6 &middot; skills-builder.md<br/><i>the ten best-practice skills</i>"]
+    S6 --> S7["Step 7 &middot; team-design.md &nbsp;(harness)<br/><i>project-specific agents + their skills</i>"]
+
+    S7 --> G3{{"GitHub Issues<br/>or Linear?"}}
+    G3 --> S8["Step 8 &middot; tracker-setup.md<br/><i>backlog seeded from the plan, MEMORY.md</i>"]
+
+    S8 --> S9["Step 9 &middot; readme-generator.md<br/><i>README.md</i>"]
+
+    classDef produce fill:#ffffff,stroke:#111111,stroke-width:1px,color:#111111
+    classDef ask fill:#111111,stroke:#111111,stroke-width:1px,color:#ffffff
+    classDef branch fill:#f4f4f4,stroke:#777777,stroke-width:1px,color:#111111
+    class S0,S1,S2,S3,S4,S5,S6,S7,S8,S9,K produce
+    class G0,G1,G2,G3 ask
+    class D branch
+```
+
+A fifth question has no fixed position, because it is triggered by work rather than by a step: **what should Playwright test?** No end-to-end test is ever written until you have answered it. Steps 0 and 4 also ask whatever they need to understand the product — the four hexagons above are the ones that are always asked, in every run.
+
+### Where the generated files land
+
+Step 1's answer decides this. Pick one assistant and you get that directory and nothing else; pick more and `.grovv/` becomes the canonical copy the others are derived from.
+
+```mermaid
+flowchart LR
+    subgraph ONE["One assistant chosen"]
+        direction TB
+        C1[".claude/<br/><i>agents + skills</i>"]
+    end
+    subgraph MANY["More than one chosen"]
+        direction TB
+        G[".grovv/<br/><i>canonical definitions</i>"]
+        G --> C2[".claude/"]
+        G --> V2[".vibe/"]
+        G --> X2[".codex/"]
+    end
+
+    classDef box fill:#ffffff,stroke:#111111,stroke-width:1px,color:#111111
+    classDef canon fill:#111111,stroke:#111111,stroke-width:1px,color:#ffffff
+    class C1,C2,V2,X2 box
+    class G canon
+```
+
+No `.grovv/` is created for a single-tool project — a canonical tree nobody opens is overhead, not structure.
+
+-----
+
 ## What it generates
 
 Into the target project:
@@ -88,15 +158,15 @@ Into the target project:
 docs/product-spec.md       # What, who, why
 docs/development-plan.md    # Engineering plan
 docs/tech-spec.md          # Complete technical specification
-docs/prompts/              # Prompt specs (skills-builder, team-design, linear-tracking, tech-spec, readme)
+docs/prompts/              # Prompt specs (skills-builder, team-design, tracker-setup, tech-spec, readme)
 docs/architecture/         # Architecture decision records
 [.claude|.vibe|.codex]/agents/    # Project-specific agent team (additive to the six defaults)
 [.claude|.vibe|.codex]/skills/    # Invocable skills — best-practice set + the agents' skills + an orchestrator
-MEMORY.md                  # Cross-session memory, coordinated with the Linear project
+MEMORY.md                  # Cross-session memory, coordinated with the project's tracker
 README.md                  # Project README
 ```
 
-The pipeline runs: structure + config → product spec → development plan → tech spec → prompt docs → **skills-builder** → **team-design (harness)** → **linear-tracking** → readme. The team-design step uses the bundled [harness](.grovv/skills/harness/ATTRIBUTION.md) meta-skill to design a project-specific agent team, additive to the six grovv defaults. The linear-tracking step uses the Linear MCP to create a project and seed issues from the development plan, and creates `MEMORY.md` — durable cross-session memory that coordinates with the Linear backlog (Linear owns the tasks; MEMORY.md owns decisions, gotchas, and in-flight context), kept alive by tool-specific context file rules (`CLAUDE.md`, `VIBE.md`, or `CODEX.md`) and a SessionStart hook.
+The team-design step uses the bundled [harness](.grovv/skills/harness/ATTRIBUTION.md) meta-skill to design a project-specific agent team, additive to the six grovv defaults. The tracker-setup step asks which tracker the project should use — GitHub Issues or Linear — then creates the backlog and seeds issues from the development plan, and creates `MEMORY.md` — durable cross-session memory that coordinates with that backlog (the tracker owns the tasks; MEMORY.md owns decisions, gotchas, and in-flight context), kept alive by tool-specific context file rules (`CLAUDE.md`, `VIBE.md`, or `CODEX.md`) and a SessionStart hook.
 
 -----
 
@@ -153,7 +223,7 @@ grovv-stack/
 
 ## Non-negotiables
 
-- Ask which frontend framework (Astro + React or Next.js) before any frontend code.
+- Ask which frontend framework (Astro + React or Next.js) before any frontend code — a prototype built in one of them is not the answer.
 - Ask what Playwright should test before writing any E2E test.
 - Production-first, security by default, zero data loss (transactions for multi-step data ops).
 - Never overwrite working code in existing projects without an approved adoption plan.
@@ -171,4 +241,4 @@ Existing Claude Code users are not affected. All original `.claude/` files and s
 grovv stack is licensed under the [MIT License](LICENSE). Vendored third-party components keep their own licenses — the bundled harness meta-skill is Apache-2.0; see [`.grovv/skills/harness/ATTRIBUTION.md`](.grovv/skills/harness/ATTRIBUTION.md).
 
 -----
-gro\/\/ stack — Production-First Project Scaffolding
+gro\\/\\/ stack — Production-First Project Scaffolding

@@ -1,6 +1,6 @@
 # grovv-stack
 
-**gro\/\/ stack** — Production-First Project Scaffolding (Claude Code)
+**gro\\/\\/ stack** — Production-First Project Scaffolding (Claude Code)
 
 -----
 
@@ -31,12 +31,23 @@ Both routes are the one `grovv` skill (no separate command); both read `grovv-st
 
 | Principle | Description |
 |-----------|-------------|
-| **Production-First** | Every implementation is production-ready from start |
+| **Production-First** | Everything that ships is production-ready from the start. Exploratory artifacts are exempt, and never ship |
 | **Zero Data Loss** | Transactional integrity is non-negotiable |
 | **Security by Default** | Security considerations never deferred |
 | **Test-Driven** | Tests define contracts and prevent regressions |
 | **Documentation as Code** | Docs maintained alongside code |
 | **Conversation-Driven** | Ask questions, understand deeply, then build |
+
+-----
+
+## The Throwaway Tier
+
+Production-first governs what ships, not what you build to find out what should ship. An exploratory artifact — prototype, mockup, brainstorm, or spike — is exempt from the production bar and is never merged.
+
+- Multi-file exploration goes on an unmerged `proto/*` or `spike/*` branch; a single-file mockup goes in the gitignored `prototypes/` directory. Delete it once the decision it informed is recorded.
+- An exploratory artifact never satisfies an ask-first rule. Four mockups built in React is not a decision to use Next.js — that question is still asked, and still answered by the user.
+
+Full rules: the Throwaway Tier section in `grovv-stack-scaffold.md`.
 
 -----
 
@@ -56,7 +67,7 @@ Stack-agnostic scaffolding, optimized for this default stack. Adapt per project.
 | **Payments** | Stripe | Subscriptions, one-time payments, invoicing |
 | **Usage Tracking** | Lago | Metering and usage-based billing |
 | **Observability** | PostHog | Analytics and monitoring |
-| **Project Tracking** | Linear | Issue and project tracking (via Linear MCP) |
+| **Project Tracking** | GitHub Issues (recommended) or Linear | Issue and project tracking — chosen per project |
 | **Deployment** | Vercel, Docker | Production hosting |
 | **Dev Environment** | VS Code, sprites.dev | Local and cloud IDE |
 | **AI CLI** | Claude Code | Agentic coding and automation |
@@ -120,7 +131,7 @@ These six are the **baseline team**. During the team-design step (prompt: `docs/
 1. **tech-spec** → Creates the technical specification (`docs/tech-spec.md`)
 2. **skills-builder** → Generates the project's invocable skills under `.claude/skills/` (the baseline best-practice set)
 3. **team-design** → Designs the project-specific agent team + skills (harness); additive to grovv defaults
-4. **linear-tracking** → Creates/reuses a Linear project and seeds issues from the development plan (via Linear MCP); also creates the target project's `MEMORY.md`, its `CLAUDE.md` maintenance rules, and a `SessionStart` hook
+4. **tracker-setup** → Asks which tracker to use (GitHub Issues or Linear), then creates/reuses the backlog and seeds issues from the development plan; also creates the target project's `MEMORY.md`, its `CLAUDE.md` maintenance rules, and a `SessionStart` hook
 5. **readme-generator** → Generates project README
 
 ### For New Projects
@@ -143,7 +154,7 @@ These six are the **baseline team**. During the team-design step (prompt: `docs/
 - All code must be production-ready, fully typed, with comprehensive error handling
 - Security considerations in every layer (input validation, auth, XSS/CSRF/SQLi prevention)
 - Test-driven development — critical tests first, then integration, then E2E
-- Complete code examples only — no pseudo-code
+- Complete code examples only — no pseudo-code. This governs generated code and documentation; exploratory artifacts in the throwaway tier are exempt by definition.
 - Anti-patterns documented alongside correct patterns
 
 -----
@@ -191,7 +202,7 @@ Apply to every file this repo generates:
 - Tables for structured reference data
 - `@TODO` markers for incomplete sections
 - Colophon with version, status, author, model metadata
-- Footer (in prose): `gro\/\/ stack — [Purpose or Project Name]` — doubled backslashes so it renders as the gro\/\/ wordmark, not gro//. Inside code blocks, use single backslashes (`gro\/`).
+- Footer (in prose): `gro\\/\\/ stack — [Purpose or Project Name]` — doubled backslashes so it renders as the gro\\/\\/ wordmark, not gro//. Inside code blocks, use single backslashes (`gro\/\/`).
 - No excessive bold or emoji in headings
 
 -----
@@ -206,7 +217,7 @@ Apply to every file this repo generates:
 - **This file owns context** — Decisions and rationale, gotchas, in-flight state, and anything a fresh session needs that does not fit a Linear issue.
 - **Stay small** — Keep this file under ~120 lines. It is loaded into context every session; verbosity here is a tax on every future session. Prune aggressively — history lives in git.
 
-Target projects get the same convention: the linear-tracking step (Step 8) generates their `MEMORY.md`, `CLAUDE.md` rules, and `SessionStart` hook.
+Target projects get the same convention: the tracker-setup step (Step 8) generates their `MEMORY.md`, `CLAUDE.md` rules, and `SessionStart` hook.
 
 -----
 
@@ -215,11 +226,12 @@ Target projects get the same convention: the linear-tracking step (Step 8) gener
 - **Ask before generating** — understand the product, users, constraints, and stack first
 - **Never overwrite working code** in existing projects without approval
 - **Mark unknowns with `@TODO`** and revisit as the conversation progresses
-- **Apply gro\/\/ stack branding** to all generated documents
+- **Apply gro\\/\\/ stack branding** to all generated documents
 - **Iterate** — documents are living artifacts, revise as understanding deepens
 - **Maintain memory** — read `MEMORY.md` at session start, update it before ending meaningful work, sync with Linear
 - **Always ask what Playwright should test** — never auto-generate E2E tests
 - **Always ask which frontend framework** — Astro + React or Next.js — before writing frontend code
+- **Record the verify commands, ask before generating CI** — Step 1 discovers what proves the project works and Step 8 records it in `MEMORY.md`; how much CI to generate from those commands is a Step 6 question with four answers, and "none" is one of them
 
 -----
 
@@ -260,4 +272,4 @@ This repository now supports multiple AI coding assistants:
 All tool-specific directories mirror the canonical `.grovv/` structure with tool-specific adaptations. The existing Claude Code setup is **unchanged and fully backward compatible**.
 
 -----
-gro\/\/ stack — Repository Guide (Claude Code)
+gro\\/\\/ stack — Repository Guide (Claude Code)

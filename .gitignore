@@ -26,12 +26,19 @@ build/
 out/
 
 # Logs and caches
+__pycache__/
+*.pyc
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .cache/
 coverage/
+
+# Exploratory artifacts — prototypes, mockups, brainstorms and spikes are
+# throwaway by definition and are never committed. Multi-file exploration
+# belongs on an unmerged proto/* or spike/* branch instead.
+prototypes/
 
 # Editor and local config
 .idea/

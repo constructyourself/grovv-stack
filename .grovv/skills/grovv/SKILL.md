@@ -1,11 +1,11 @@
 ---
 name: grovv
-description: "Scaffolds a project with the grovv stack production-first process — generates the product spec, development plan, technical spec, an invocable set of best-practice skills, a project-specific agent team (harness), Linear tracking, and the README. This is the single entry point for grovv stack: invoke it explicitly as /grovv (optionally /grovv new or /grovv adopt to force the mode), or let it trigger on intent. Use whenever the user wants to: 'build out this project', 'scaffold with grovv', 'set up grovv stack', 'grovv stack this repo', 'adopt grovv stack' in an existing codebase, or start a new production-ready project from scratch. Also triggers on requests to lay down docs/specs/skills foundations or an agent team for a new or existing project."
+description: "Scaffolds a project with the grovv stack production-first process — generates the product spec, development plan, technical spec, an invocable set of best-practice skills, a project-specific agent team (harness), issue tracking, and the README. This is the single entry point for grovv stack: invoke it explicitly as /grovv (optionally /grovv new or /grovv adopt to force the mode), or let it trigger on intent. Use whenever the user wants to: 'build out this project', 'scaffold with grovv', 'set up grovv stack', 'grovv stack this repo', 'adopt grovv stack' in an existing codebase, or start a new production-ready project from scratch. Also triggers on requests to lay down docs/specs/skills foundations or an agent team for a new or existing project."
 ---
 
-# grovv — start the gro\/\/ stack process
+# grovv — start the gro\\/\\/ stack process
 
-Runs the gro\/\/ stack production-first scaffolding process against the project in the current working directory. The output is documents, configuration, and an agent team in the target project — never code in the grovv-stack repo itself.
+Runs the gro\\/\\/ stack production-first scaffolding process against the project in the current working directory. The output is documents, configuration, and an agent team in the target project — never code in the grovv-stack repo itself.
 
 This skill is the single entry point for grovv stack. It is invocable explicitly as `/grovv` and also triggers on natural-language intent ("build out this project", "adopt grovv stack here") — there is no separate command.
 
@@ -27,10 +27,13 @@ An optional argument forces the mode:
 - `adopt` — treat this as an existing project; start at Step 0.
 - no argument — **auto-detect** from the working directory.
 
-When auto-detecting:
+When auto-detecting, test these in order and stop at the first match:
 
-- **Existing project** — source code, configs (`package.json`, `go.mod`, `tsconfig.json`, etc.), or a populated `docs/` are present. Start at Step 0: assess the codebase, then propose an adoption plan and wait for approval before changing anything. Never overwrite or break working code.
+- **Resuming a grovv project** — `docs/prompts/skills-builder.md` is present **and** this tool's skills directory is populated. Both markers together mean grovv scaffolded this project, so a populated `docs/` proves nothing about whether the code is foreign. Do **not** start at Step 0, and do **not** propose an adoption plan for output grovv itself wrote. Resume instead: re-read `docs/tech-spec.md`, report which existing artifacts it still implies and which have drifted under it, and wait. A run that changes nothing and returns a list of questions is a successful run.
+- **Existing project** — source code, configs (`package.json`, `go.mod`, `tsconfig.json`, etc.), or a populated `docs/` are present, and the markers above are absent. Start at Step 0: assess the codebase, then propose an adoption plan and wait for approval before changing anything. Never overwrite or break working code.
 - **New project** — the directory is essentially empty. Start at Step 1.
+
+The order matters. A grovv-scaffolded project satisfies the existing-project test by construction — Step 2 writes `docs/product-spec.md` and Step 5 writes `docs/prompts/` — so testing for an existing project first sends every second run into the mode built for foreign code. `/grovv adopt` still forces Step 0 when that is genuinely what you want.
 
 State which mode you detected and why before proceeding.
 
@@ -41,11 +44,11 @@ Follow the directive's steps in order, pausing for confirmation at each major ar
 - Ask about the product, users, core features, constraints, stack, and deployment target before generating specs.
 - Standing ask-first rules: ask which frontend framework (Astro + React or Next.js) before any frontend work, and ask what Playwright should test before writing any E2E test. Do not pre-empt these.
 - Mark unknowns with `@TODO` and revisit them.
-- Apply gro\/\/ stack branding and document conventions to everything generated.
+- Apply gro\\/\\/ stack branding and document conventions to everything generated.
 
 ## Pipeline
 
-The directive runs: structure + config → product spec → development plan → tech spec → prompt docs → **skills-builder** → **team-design (harness)** → **linear-tracking** → readme-generator. The team-design step (`docs/prompts/team-design.md`) designs a project-specific agent team additive to the six grovv default agents, using the bundled harness meta-skill. The linear-tracking step (`docs/prompts/linear-tracking.md`) seeds a Linear project and issues from the development plan via the Linear MCP, and creates the project's root `MEMORY.md` — cross-session memory coordinated with the Linear project (Linear owns the backlog; MEMORY.md owns session context) — plus its tool-specific context file maintenance rules and `SessionStart` hook.
+The directive runs: structure + config → product spec → development plan → tech spec → prompt docs → **skills-builder** → **team-design (harness)** → **tracker-setup** → readme-generator. The team-design step (`docs/prompts/team-design.md`) designs a project-specific agent team additive to the six grovv default agents, using the bundled harness meta-skill. The tracker-setup step (`docs/prompts/tracker-setup.md`) asks which tracker the project should use — GitHub Issues or Linear — then seeds the backlog and its issues from the development plan, and creates the project's root `MEMORY.md` — cross-session memory coordinated with that tracker (the tracker owns the backlog; MEMORY.md owns session context) — plus its tool-specific context file maintenance rules and `SessionStart` hook.
 
 ## Tool Detection
 

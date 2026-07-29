@@ -1,0 +1,71 @@
+name: checks
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  documents:
+    name: Document checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Check-only. Python standard library and grep, nothing installed:
+      # this repo produces documents, so CI validates them and builds nothing.
+      # Every check runs even after an earlier one fails, so a single run
+      # reports every problem instead of only the first.
+      - name: Wordmark escaping
+        run: python3 .github/scripts/check_wordmark.py
+
+      - name: Manifest version parity
+        if: ${{ !cancelled() }}
+        run: python3 .github/scripts/check_versions.py
+
+      - name: Tool directory sync
+        if: ${{ !cancelled() }}
+        run: python3 .github/scripts/check_tool_sync.py
+
+      - name: Internal references resolve
+        if: ${{ !cancelled() }}
+        run: python3 .github/scripts/check_references.py
+
+      - name: Pipeline step numbering
+        if: ${{ !cancelled() }}
+        run: python3 .github/scripts/check_step_numbers.py
+
+      - name: Stack tables agree
+        if: ${{ !cancelled() }}
+        run: python3 .github/scripts/check_stack_tables.py
+
+      # Fails on a missing ask-first rule. Its erosion heuristic only warns -
+      # a guess about intent should not be able to redden a build.
+      - name: Ask-first rules intact
+        if: ${{ !cancelled() }}
+        run: python3 .github/scripts/check_ask_first.py
+
+      - name: No build tooling introduced
+        if: ${{ !cancelled() }}
+        run: |
+          set -euo pipefail
+          found=$(find . -path ./.git -prune -o \
+            \( -name 'package.json' -o -name 'package-lock.json' \
+               -o -name 'pnpm-lock.yaml' -o -name 'yarn.lock' \
+               -o -name 'node_modules' -o -name 'requirements.txt' \) \
+            -print)
+          if [ -n "$found" ]; then
+            echo "This repo has no dependencies and no build step. Remove:"
+            echo "$found"
+            exit 1
+          fi
+          echo "No dependency manifests, lockfiles or build tooling found."
