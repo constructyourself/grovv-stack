@@ -231,6 +231,8 @@ This step is complete when, for the target project:
 - [ ] The duplicate review named the fourteen baseline skills explicitly; the six default agents were exempt from removal
 - [ ] No hand-edited generated file was overwritten, and the `CLAUDE.md` harness pointer was updated rather than duplicated
 - [ ] Trigger validation (should-trigger + should-not-trigger) passed with no conflicts against existing skills
+- [ ] Every agent definition and every skill this step added has valid frontmatter, a `name` matching its folder or filename exactly, and a `description` short enough to carry literal triggers rather than prose
+- [ ] **Where tool directories are derived from `.grovv/`, the mirrors were refreshed after this step and the refresh was verified** — this step writes agents and an orchestrator after Step 6 already mirrored, so a mirror taken then is now stale, and `.claude/`, `.vibe/` and `.codex/` are what the tools actually load. Where the project adapts per tool rather than copying byte for byte, confirm only the deliberate adaptations differ; a plain byte-comparison reports intended per-tool content as drift
 
 -----
 

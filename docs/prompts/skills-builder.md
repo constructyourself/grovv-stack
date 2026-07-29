@@ -81,8 +81,8 @@ Generate these skills by default. Drop one only if it is clearly irrelevant to t
 | `testing-tdd` | Writing tests, TDD, coverage, CI test wiring | Red-green-refactor, Vitest, `go test`, integration tests, Playwright E2E (ask-first), CI execution, coverage targets |
 | `deployment-ops` | Deploying, CI/CD, environments, monitoring | Docker, GitHub Actions, environment management, health checks, PostHog observability, backups, rollback |
 | `debugging` | Bugs, errors, performance issues, incidents | Debugging methodology, profiling, error tracking, production debugging, emergency procedures |
-| `blind-spot-pass` | "blind spot pass", "unknown unknowns", "what am I missing", entering an unfamiliar module or domain | Pre-work reconnaissance; establishing the user's starting point before investigating, then naming what they have not considered |
-| `interviews` | "interview me", "ask me questions", an underspecified request, open `@TODO`s | One-question-at-a-time elicitation, ordered by architectural leverage, with an explicit stopping rule |
+| `blind-spot-pass` | "blind spot pass", "unknown unknowns", "what am I missing", entering an unfamiliar module or domain | Pre-work reconnaissance; establishing the user's starting point before investigating, then naming what they have not considered. **Must state where its findings came from** — supplied documents, a live search, or the model's own knowledge of the category — and say plainly when it had none of the first two. A pass that presents parametric knowledge as research is indistinguishable from one that read something, and is the more dangerous artifact. Ask for material the user already has before reasoning about what they might |
+| `interviews` | "interview me", "ask me questions", an underspecified request, open `@TODO`s | One-question-at-a-time elicitation, ordered by architectural leverage, with an explicit stopping rule — questions exhausted, eight asked, or **the user stops answering**, whichever comes first; the third fires most often. Unanswered questions are recorded open, never answered on the user's behalf. **A question that went unanswered may never have arrived**: re-put it in plain prose before recording it, and record *unanswered* separately from *declined* — those are different facts and a later reader acts on them differently |
 | `implementation-notes` | Starting a build from a plan; "keep implementation notes", "log deviations" | The working notes file, the Deviations log, and the conservative-default rule for a forced departure |
 | `change-quiz` | "quiz me", "explain this change", pre-merge review after a long session | A change report plus a quiz on the parts a reader could get wrong; advisory by default |
 
@@ -105,10 +105,11 @@ description: "..."
 ---
 ```
 
-- `name` — lowercase with dashes, matching the folder name.
+- `name` — lowercase with dashes, **matching the folder name exactly**. A mismatch means the skill never loads.
 - `description` — the **only** trigger mechanism. Write it actively ("pushy"): state what the skill does **and** the concrete situations that should trigger it, so Claude reaches for it instead of guessing. Distinguish it from sibling skills so near-miss requests route correctly.
   - Weak: `"Backend development guidance."`
   - Strong: `"Building APIs, services, background jobs, or third-party integrations (email, Stripe, Lago) in TypeScript or Go. Covers REST design, service/repository patterns, PostgreSQL-native job queues, webhook verification, and idempotency. Use whenever adding or changing a server-side endpoint, job, or integration."`
+  - **Keep it short enough to survive.** A few hundred characters of literal trigger phrases beats a thousand characters of prose. Because the description is the only trigger mechanism, one long enough to be truncated or rejected does not degrade the skill — it silently switches the skill off, and nothing reports that. Put the explanation in the body, where there is room for it. A smoke-test run produced four descriptions over 1024 characters, and the two worst were the skills owning the Playwright ask-first rule and the authorization gate: the two rules most expensive to lose, sitting in the two skills least likely to load.
 
 ### Body (`SKILL.md`, under 500 lines)
 
@@ -326,8 +327,11 @@ No action is a valid result of this step.
 This step is complete when, for the target project:
 
 - [ ] Each baseline skill exists at `.claude/skills/{name}/SKILL.md` (irrelevant ones consciously dropped, project-specific ones added)
-- [ ] Every `SKILL.md` has valid frontmatter (`name` matching the folder, a pushy trigger-rich `description`)
+- [ ] Every `SKILL.md` has valid frontmatter (`name` matching the folder **exactly**, a pushy trigger-rich `description`)
+- [ ] **Every skill folder actually contains a `SKILL.md`** — count the folders, count the files, compare. A folder holding only `references/` is a skill that never loads. If generation ran concurrently, confirm it has *finished* before concluding anything is missing: a folder appears when its first reference file lands, well before its skill, and an absence observed mid-flight is not evidence of a defect
+- [ ] No `description` is long enough to risk truncation — literal triggers, not prose
 - [ ] Every body is under 500 lines, with depth pushed to `references/`
+- [ ] **Where tool directories are derived from `.grovv/`, they were refreshed after generation settled and the refresh was verified** — `.grovv/` is canonical but `.claude/`, `.vibe/` and `.codex/` are what the tools load, so a mirror taken mid-generation leaves the loadable copy stale and every later audit reads the copy that does not run. Compare canonical against each derived tree; where the project adapts files per tool rather than copying them byte for byte, confirm that the *only* differences are those deliberate adaptations. A plain byte-comparison will flag intended per-tool content as drift, so decide which model the project uses before treating any difference as a fault
 - [ ] Examples are complete, typed, and production-ready, with anti-patterns shown where useful
 - [ ] Skills reflect the project's actual stack (existing projects) and reference `docs/tech-spec.md`
 - [ ] The frontend-framework ask-first rule lives in `frontend-development`, `ui-standards` and `architecture-planning`; the Playwright ask-first rule lives in `testing-tdd` and `architecture-planning`
