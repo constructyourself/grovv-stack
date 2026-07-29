@@ -579,6 +579,7 @@ Read and execute `docs/prompts/skills-builder.md` to populate `.claude/skills/` 
 **Expected output:**
 
 - ~14 invocable skills (the baseline set), each a `.claude/skills/{name}/SKILL.md` with valid frontmatter
+- **Verify every skill folder actually contains a `SKILL.md` before reporting this step complete.** A skill generated as `references/` with no `SKILL.md` is invisible: the folder exists, the depth is there, and the skill will never load or trigger. Count the folders, count the `SKILL.md` files, and if they differ say which folders are short rather than reporting a number that was never checked. This failure is silent by construction — nothing else in the pipeline reads these files
 - Production-ready, typed code examples with security built in; anti-patterns alongside correct patterns
 - Lean bodies (under 500 lines) with depth in `references/`
 - Ask-first rules embedded where relevant (frontend framework, Playwright)
@@ -731,6 +732,8 @@ gro\/\/ stack — my-saas-app
 ```
 
 **Escaping the wordmark.** The footer normally sits in Markdown prose, not a code block. In prose, double the backslashes — `gro\\/\\/ stack — …` — so it renders as the gro\\/\\/ wordmark rather than gro//. The fenced examples above use the single-backslash `gro\/\/` form because backslashes are already literal inside code blocks.
+
+**When restating this rule in a generated project, give both forms in a table.** A one-line restatement is how the rule gets corrupted: it names a single form, that form is wrong for the context the next agent writes in, and because the wrong form sits inside an inline code span a checker will not flag it. This repo's own convention statements were wrong in exactly this way twice. The target's context file gets the two-row table — prose form and fenced form, labelled — never a single example.
 
 ### Document Conventions
 
