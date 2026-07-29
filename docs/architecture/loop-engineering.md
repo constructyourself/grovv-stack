@@ -163,6 +163,8 @@ Two edits to existing steps, no new step, no new artifact in the target beyond a
 
 **Step 1 records the verify commands.** After the `settings.json` block at `:196`, Step 1 gains a short subsection: determine the project's build, test and lint commands and write them into the target's `CLAUDE.md` as a three-row table. In adopt mode the commands are read from `package.json`, `go.mod`, `Makefile` or the CI config that Step 0 already opened, and each one is run once to record whether the project is currently green or red — a baseline, not a gate. In new mode the stack is not yet chosen, so the table is created with `@TODO` in each cell and reconciled at Step 6. `CLAUDE.md` is the right home because it is the one file loaded into every future session in that project; the tech spec links to it rather than duplicating it.
 
+**Correction applied during implementation.** As built, Step 1 *discovers and states* the commands and Step 8 *records* them in the `MEMORY.md` Verify table — not the target's `CLAUDE.md`, and not at Step 1. The paragraph above describes the design as planned, and is left in place as the record of what was intended; it is not what shipped. See `verify-loop.md:62`. A later change made from the paragraph above rather than this note re-introduces the original defect, which is a write to a file that does not exist yet at that point in the sequence. The two Open Questions below about where the table lives are answered by this correction and are no longer open.
+
 The table is three rows and one rule, and it is the smallest artifact in this plan:
 
 ```markdown
@@ -308,7 +310,7 @@ The two longest arguments, in prose rather than in cells.
 
 ## Open Questions
 
-- Where does the verify table live in the target — `CLAUDE.md`, loaded every session but not currently written at Step 1, or `docs/tech-spec.md`, the right home for project facts but read only on demand? Currently: `CLAUDE.md`, with the tech spec linking to it. This makes Step 1 responsible for creating the target's `CLAUDE.md`, which today is first written at Step 7.
+- ~~Where does the verify table live in the target?~~ **Answered by the implementation: `MEMORY.md`, written at Step 8.** Step 1 states the commands and carries them forward. Separately, the question exposed a real structural gap — the target's context file was written by Steps 7 and 8 and created by nothing, so Step 1 now creates it as a stub, which is where the tool choice that decides *which* context files exist is made.
 - New projects have no commands at Step 1. Step 6 is nominated to reconcile the `@TODO`, but Step 4 is where the stack is actually decided. Currently: recorded empty at Step 1, filled at Step 6, because Step 6 is where the workflow that runs them is written.
 - What happens on re-entry when a generated skill was edited by hand? Overwriting destroys work; skipping preserves drift forever. Currently: report and ask, matching the never-overwrite rule — at the cost of a re-entry run that can end with nothing changed and a list of questions.
 - Should the smoke-test rubric ever be run by an agent on a schedule rather than by a human? That needs a live API budget and a runtime, and it turns a rubric into a harness. Currently: manual, tracked as a tracker issue.
@@ -316,7 +318,7 @@ The two longest arguments, in prose rather than in cells.
 - Does the third detect branch risk a false positive — a project with a `docs/prompts/skills-builder.md` copied in by hand but never run? Currently accepted: the branch reports what it detected and why before acting, so a wrong detection costs one correction turn.
 - Who owns the three drifts recorded under Known Open Drift in `.github/scripts/README.md`, and the 34 wordmark occurrences the checker reports? All are flagged with `@TODO` and no issue identifier. Leaving them unowned is how they became drift in the first place, and a check whose failures nobody owns trains people to ignore the check.
 - Does the generated workflow run on push, on pull request, or both? Copying this repository's own `checks.yml` (`on: push` and `on: pull_request`) is the obvious default, but a target project with a paid CI budget may want otherwise. Currently: both, stated in the prompt as a default the user can change during Step 6.
-- Should Layer 1's verify table travel into `MEMORY.md` as well, so a session that skips `CLAUDE.md` still sees it? That risks a third place for the same three rows. Currently: no — one home, referenced from the tech spec.
+- ~~Should Layer 1's verify table travel into `MEMORY.md` as well?~~ **Answered: `MEMORY.md` is its only home**, written at Step 8, referenced from the tech spec. The premise of the question — that `CLAUDE.md` held it — was corrected during implementation.
 - @TODO — Confirm the tracker identifier before this is cited in a commit message. The brief for this note named GRO-127; `GRO-127` appears nowhere in this repository on `main`, `pr-10`, `pr-11`, `pr-17` or `HEAD`. The only smoke-test identifier present is GRO-197, at `MEMORY.md:72`. The Linear MCP was not reachable from this session to check whether GRO-127 exists under a different description.
 
 -----

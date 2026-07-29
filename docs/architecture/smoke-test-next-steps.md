@@ -28,7 +28,13 @@ discovery deck supplied by the user. 229 files generated.
 | Rubric rows **never exercised** | **R1–R15** (re-entry), **D1–D11** (adopt) |
 | Target survival | **None.** The container was ephemeral; the target is gone |
 
-Every defect is fixed. The rubric gained U12–U14, S17–S20.
+Every defect is fixed. The rubric gained P6, P7, U12–U14, S17–S20.
+
+A propagation audit run afterwards found the F1 defect a **fourth** time, in the
+bullet immediately above the one that had just been fixed — and behind it a real
+structural gap: the target's context file was written by three separate
+instructions and created by none of them. Run 1's target ended up with one only
+because the run invented it. Step 1 now owns its creation.
 
 **The most instructive finding was not a pipeline defect at all.** Twice in one
 session the run asserted a fact from an absence: a question recorded as *refused*
