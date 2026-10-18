@@ -85,7 +85,10 @@ grovv-stack/
 │       └── harness/           # harness meta-skill (Apache-2.0, vendored)
 ├── .vibe/                    # Vibe specific configuration
 ├── .codex/                   # Codex specific configuration
+├── .github/workflows/         # consistency check + reusable agent PR review
+├── scripts/                   # check-consistency.sh (bash + jq, no deps)
 ├── plugin.json                # Unified plugin manifest
+├── REVIEW.md                  # PR review checklist (agent + human)
 ├── VIBE.md                   # Vibe-specific documentation
 ├── CODEX.md                  # Codex-specific documentation
 ├── grovv-stack-scaffold.md    # Main scaffolding directive
@@ -231,7 +234,8 @@ These files are the source of truth that downstream projects depend on. Treat ch
 - The sub-agent definitions in `.claude/agents/` and the prompts in `docs/prompts/` are read by future agent runs. A small wording change here changes behavior at scale — review with care.
 - Don't introduce dependencies or build steps in this repo. It still produces documents, not compiled artifacts. The plugin manifests (`.claude-plugin/*.json`) and the skills (including the `grovv` kickoff skill) are configuration, not a build pipeline — keep it that way.
 - This repo is also an **installable plugin**. The single source of truth for agents and skills stays under `.claude/` for Claude; the canonical versions are in `.grovv/`. When you add or rename an agent, update the `agents` array in `.claude-plugin/plugin.json` too.
-- Bump `version` in `.claude-plugin/plugin.json` when you change behavior that installed users should receive.
+- Bump `version` in `.claude-plugin/plugin.json` **and** `plugin.json` when you change behavior that installed users should receive.
+- Run `scripts/check-consistency.sh` before pushing; CI runs it too. PRs get an agent review against [`REVIEW.md`](REVIEW.md) via `.github/workflows/agent-review.yml` — the same reusable workflow every grovv project calls. Agents comment; humans merge.
 
 -----
 

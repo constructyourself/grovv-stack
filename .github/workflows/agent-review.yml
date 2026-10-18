@@ -1,0 +1,90 @@
+name: Agent PR Review
+
+# Runs on grovv-stack's own PRs, and is reusable from any grovv project:
+#
+#   jobs:
+#     review:
+#       uses: constructyourself/grovv-stack/.github/workflows/agent-review.yml@main
+#       secrets: inherit
+#
+# Auth: set ONE of these repo/org secrets — CLAUDE_CODE_OAUTH_TOKEN (Claude
+# subscription, from `claude setup-token`) or ANTHROPIC_API_KEY (metered API).
+# With neither set the job skips with a notice instead of failing.
+#
+# The review reads the repo's review guide (REVIEW.md by default) plus its
+# CLAUDE.md. It comments only; merging stays a human decision.
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review, reopened]
+  workflow_call:
+    inputs:
+      review_guide:
+        description: Path to the repo's review checklist
+        type: string
+        default: REVIEW.md
+      model:
+        description: Claude model for the review (empty = action default)
+        type: string
+        default: ""
+    secrets:
+      CLAUDE_CODE_OAUTH_TOKEN:
+        required: false
+      ANTHROPIC_API_KEY:
+        required: false
+
+concurrency:
+  group: agent-review-${{ github.repository }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: Claude review
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      id-token: write
+    env:
+      HAS_AUTH: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN != '' || secrets.ANTHROPIC_API_KEY != '' }}
+      REVIEW_GUIDE: ${{ inputs.review_guide || 'REVIEW.md' }}
+      MODEL_ARG: ${{ inputs.model && format('--model {0}', inputs.model) || '' }}
+    steps:
+      - name: Skip without credentials
+        if: env.HAS_AUTH != 'true'
+        run: echo "::notice::No CLAUDE_CODE_OAUTH_TOKEN or ANTHROPIC_API_KEY secret; skipping agent review."
+
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        if: env.HAS_AUTH == 'true'
+        with:
+          fetch-depth: 1
+
+      - name: Review
+        if: env.HAS_AUTH == 'true'
+        uses: anthropics/claude-code-action@f27be6b65a4652f08a2ba3cff79114829b588967 # v1.0.252
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          track_progress: true
+          prompt: |
+            REPO: ${{ github.repository }}
+            PR NUMBER: ${{ github.event.pull_request.number }}
+
+            You are the grovv REVIEWER. Review this pull request.
+
+            1. Read CLAUDE.md (and .claude/CLAUDE.md if present) for the repo's rules.
+            2. Read ${{ env.REVIEW_GUIDE }} if it exists; it is the checklist for this repo
+               and outranks generic advice. If it is missing, review for correctness,
+               security, and consistency with CLAUDE.md.
+            3. Read the diff with `gh pr diff` and the description with `gh pr view`.
+
+            Report only real problems: bugs, security issues, broken repo rules, missing
+            propagation of a change to the files that must mirror it. Use inline comments
+            for specific lines. Prefix each finding with its severity: [blocking], [should-fix]
+            or [nit]. Finish with one top-level comment: a verdict line
+            (`Verdict: ready for human merge` or `Verdict: changes needed`) and the list of
+            blocking findings. Do not approve or merge; a human merges.
+          claude_args: |
+            ${{ env.MODEL_ARG }} --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Read,Grep,Glob"
