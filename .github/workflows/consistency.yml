@@ -1,0 +1,21 @@
+name: Consistency
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Agents, skills and manifests in sync
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          fetch-depth: 0
+
+      - name: Check consistency
+        run: scripts/check-consistency.sh "${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || '' }}"

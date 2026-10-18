@@ -41,6 +41,7 @@ Sync rules:
 - harness meta-skill vendored under `.grovv/skills/harness/` (Apache-2.0) powers the team-design step, mirrored to tool directories.
 - No build steps, no dependencies — documents and configuration only.
 - Backward compatible: existing Claude Code users unaffected.
+- **CI + agent review**: `scripts/check-consistency.sh` (tool-dir parity, manifest agents, version parity) runs in `.github/workflows/consistency.yml`; `.github/workflows/agent-review.yml` reviews PRs against `REVIEW.md` and is reusable by every grovv project (`uses: constructyourself/grovv-stack/.github/workflows/agent-review.yml@main`). Needs repo secret `CLAUDE_CODE_OAUTH_TOKEN` or `ANTHROPIC_API_KEY`; skips without one.
 
 -----
 
@@ -48,6 +49,7 @@ Sync rules:
 
 Append-only, newest first, dated. One line of decision, one line of why. Prune entries older than a few months if no longer load-bearing.
 
+- **2026-10-18** — Added CI: consistency check + reusable agent PR review (`REVIEW.md` checklist). grovv-stack is the review standard for the clavv agent factory (clavv `docs/architecture/agent-factory.md`): every project calls the same workflow; agents comment, humans merge. The check immediately caught `.claude-plugin/plugin.json` stuck at 0.3.0 vs `plugin.json` 0.4.0 — aligned to 0.4.0.
 - **2026-07-25** — Added multi-tool support for Vibe and Codex. Created `.vibe/`, `.codex/`, and `.grovv/` directories with tool-specific and canonical configurations. Updated all documentation (README.md, CLAUDE.md, created VIBE.md, CODEX.md). Created unified plugin.json. All tool-specific skills and agents adapted for their respective platforms. Backward compatible with existing Claude Code installations.
 - **2026-07-04** — Adopted the MEMORY.md convention, both for this repo and as scaffold output (GRO-196, PR #9; promoted from GRO-169). Maintained via tool-specific context file rules plus a `SessionStart` hook; generated in target projects by the linear-tracking step (Step 8), since the two artifacts coordinate: Linear = backlog, MEMORY.md = session context.
 - **2026-07-04** — Division of responsibility fixed: never mirror Linear issue lists into memory files; reference identifiers only.
@@ -67,7 +69,8 @@ Append-only, newest first, dated. One line of decision, one line of why. Prune e
 
 ## Next Steps
 
-- Merge PR #9, then move GRO-196 to Done.
+- Add `CLAUDE_CODE_OAUTH_TOKEN` (or `ANTHROPIC_API_KEY`) as a repo/org secret so agent review runs.
+- Have the scaffold (Step 8 / tracker step) emit a caller workflow + `REVIEW.md` in target projects — tracked in GitHub Issues.
 - Run the GRO-197 smoke test (SessionStart hook fires; Step 8 generates memory in a real target project).
 - @TODO — GRO-169's description still lists "memory system" as open; editing it was approval-gated from the agent session (a comment noting the promotion was added instead). Strike it through manually or from an approved session.
 
